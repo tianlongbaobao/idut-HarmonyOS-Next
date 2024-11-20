@@ -1,0 +1,55 @@
+{
+  "app": {
+    "signingConfigs": [
+      {
+        "name": "default",
+        "type": "HarmonyOS",
+        "material": {
+          "storePassword": "0000001B2173C0FEA7B0DBECBE874519E0378E784CF41C41FFCE89F038E8B37B4DD42178EFF792BFC85515",
+          "certpath": "L:/Harmony/idutcommunity/idut_debug.cer",
+          "keyAlias": "idut_debug",
+          "keyPassword": "0000001BA761A887F0B43CE4631407F02D97AC99D91909CF3F8A7A7E358E3636124FEBD42455EC69DA618E",
+          "profile": "L:/Harmony/idutcommunity/idut_debugRelease.p7b",
+          "signAlg": "SHA256withECDSA",
+          "storeFile": "L:/Harmony/idut_debug.p12"
+        }
+      }
+    ],
+    "products": [
+      {
+        "name": "default",
+        "signingConfig": "default",
+        "compatibleSdkVersion": "5.0.1(13)",
+        "runtimeOS": "HarmonyOS",
+        "buildOption": {
+          "strictMode": {
+            "caseSensitiveCheck": true,
+            "useNormalizedOHMUrl": true
+          }
+        }
+      }
+    ],
+    "buildModeSet": [
+      {
+        "name": "debug",
+      },
+      {
+        "name": "release"
+      }
+    ]
+  },
+  "modules": [
+    {
+      "name": "entry",
+      "srcPath": "./entry",
+      "targets": [
+        {
+          "name": "default",
+          "applyToProducts": [
+            "default"
+          ]
+        }
+      ]
+    }
+  ]
+}
