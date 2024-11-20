@@ -1,0 +1,184 @@
+{
+  "ohos-module-entry": {
+    "SELECT_TARGET": "default",
+    "MODULE_BUILD_DIR": "L:\\Harmony\\idutcommunity\\entry\\build",
+    "DEPENDENCY_INFO": {},
+    "TARGETS": {
+      "default": {
+        "SOURCE_ROOT": "L:\\Harmony\\idutcommunity\\entry\\src\\main",
+        "RESOURCES_PATH": [
+          "L:\\Harmony\\idutcommunity\\entry\\src\\main\\resources"
+        ],
+        "BUILD_PATH": {
+          "OUTPUT_PATH": "L:\\Harmony\\idutcommunity\\entry\\build\\default\\outputs\\default",
+          "INTERMEDIA_PATH": "L:\\Harmony\\idutcommunity\\entry\\build\\default\\intermediates",
+          "JS_ASSETS_PATH": "L:\\Harmony\\idutcommunity\\entry\\build\\default\\intermediates\\loader_out\\default",
+          "JS_LITE_ASSETS_PATH": "L:\\Harmony\\idutcommunity\\entry\\build\\default\\intermediates\\loader_out_lite\\default",
+          "RES_PATH": "L:\\Harmony\\idutcommunity\\entry\\build\\default\\intermediates\\res\\default",
+          "RES_PROFILE_PATH": "L:\\Harmony\\idutcommunity\\entry\\build\\default\\intermediates\\res\\default\\resources\\base\\profile",
+          "ETS_SUPER_VISUAL_PATH": "L:\\Harmony\\idutcommunity\\entry\\build\\default\\cache\\default\\default@CompileArkTS\\esmodule",
+          "JS_SUPER_VISUAL_PATH": "L:\\Harmony\\idutcommunity\\entry\\build\\default\\cache\\default\\default@CompileJS\\jsbundle",
+          "WORKER_LOADER": "L:\\Harmony\\idutcommunity\\entry\\build\\default\\intermediates\\loader\\default\\loader.json",
+          "MANIFEST_JSON": "L:\\Harmony\\idutcommunity\\entry\\build\\default\\intermediates\\manifest\\default",
+          "OUTPUT_METADATA_JSON": "L:\\Harmony\\idutcommunity\\entry\\build\\default\\intermediates\\hap_metadata\\default\\output_metadata.json"
+        },
+        "BUILD_OPTION": {
+          "debuggable": true
+        }
+      },
+      "ohosTest": {
+        "SOURCE_ROOT": "L:\\Harmony\\idutcommunity\\entry\\src\\ohosTest",
+        "RESOURCES_PATH": [
+          "L:\\Harmony\\idutcommunity\\entry\\src\\ohosTest\\resources"
+        ],
+        "BUILD_PATH": {
+          "OUTPUT_PATH": "L:\\Harmony\\idutcommunity\\entry\\build\\default\\outputs\\ohosTest",
+          "INTERMEDIA_PATH": "L:\\Harmony\\idutcommunity\\entry\\build\\default\\intermediates",
+          "JS_ASSETS_PATH": "L:\\Harmony\\idutcommunity\\entry\\build\\default\\intermediates\\loader_out\\ohosTest",
+          "JS_LITE_ASSETS_PATH": "L:\\Harmony\\idutcommunity\\entry\\build\\default\\intermediates\\loader_out_lite\\ohosTest",
+          "RES_PATH": "L:\\Harmony\\idutcommunity\\entry\\build\\default\\intermediates\\res\\ohosTest",
+          "RES_PROFILE_PATH": "L:\\Harmony\\idutcommunity\\entry\\build\\default\\intermediates\\res\\ohosTest\\resources\\base\\profile",
+          "ETS_SUPER_VISUAL_PATH": "L:\\Harmony\\idutcommunity\\entry\\build\\default\\cache\\ohosTest\\ohosTest@OhosTestCompileArkTS\\esmodule",
+          "JS_SUPER_VISUAL_PATH": "L:\\Harmony\\idutcommunity\\entry\\build\\default\\cache\\ohosTest\\ohosTest@OhosTestCompileJS\\jsbundle",
+          "WORKER_LOADER": "L:\\Harmony\\idutcommunity\\entry\\build\\default\\intermediates\\loader\\ohosTest\\loader.json",
+          "MANIFEST_JSON": "L:\\Harmony\\idutcommunity\\entry\\build\\default\\intermediates\\manifest\\ohosTest",
+          "OUTPUT_METADATA_JSON": "L:\\Harmony\\idutcommunity\\entry\\build\\default\\intermediates\\hap_metadata\\ohosTest\\output_metadata.json"
+        },
+        "BUILD_OPTION": {
+          "debuggable": true
+        }
+      }
+    },
+    "BUILD_OPTION": {
+      "default-default": {
+        "debuggable": true,
+        "copyFrom": "default",
+        "strictMode": {
+          "caseSensitiveCheck": true,
+          "useNormalizedOHMUrl": true
+        },
+        "name": "debug"
+      }
+    },
+    "BUILD_PROFILE_OPT": {
+      "apiType": "stageMode",
+      "buildOption": {},
+      "buildOptionSet": [
+        {
+          "name": "release",
+          "arkOptions": {
+            "obfuscation": {
+              "ruleOptions": {
+                "enable": false,
+                "files": [
+                  "./obfuscation-rules.txt"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "default"
+        },
+        {
+          "name": "debug"
+        }
+      ],
+      "targets": [
+        {
+          "name": "default"
+        },
+        {
+          "name": "ohosTest"
+        }
+      ]
+    }
+  },
+  "ohos-project": {
+    "SELECT_PRODUCT_NAME": "default",
+    "MODULE_BUILD_DIR": "L:\\Harmony\\idutcommunity\\build",
+    "BUNDLE_NAME": "com.tianlongbaobao.idut",
+    "BUILD_PATH": {
+      "OUTPUT_PATH": "L:\\Harmony\\idutcommunity\\build\\outputs\\default"
+    },
+    "MODULES": [
+      {
+        "name": "entry",
+        "srcPath": "L:\\Harmony\\idutcommunity\\entry",
+        "targets": [
+          {
+            "name": "default",
+            "applyToProducts": [
+              "default"
+            ]
+          }
+        ],
+        "belongProjectPath": "L:\\Harmony\\idutcommunity"
+      }
+    ],
+    "PROFILE_OPT": {
+      "app": {
+        "signingConfigs": [
+          {
+            "name": "default",
+            "type": "HarmonyOS",
+            "material": {
+              "storePassword": "0000001B2173C0FEA7B0DBECBE874519E0378E784CF41C41FFCE89F038E8B37B4DD42178EFF792BFC85515",
+              "certpath": "L:/Harmony/idutcommunity/idut_debug.cer",
+              "keyAlias": "idut_debug",
+              "keyPassword": "0000001BA761A887F0B43CE4631407F02D97AC99D91909CF3F8A7A7E358E3636124FEBD42455EC69DA618E",
+              "profile": "L:/Harmony/idutcommunity/idut_debugRelease.p7b",
+              "signAlg": "SHA256withECDSA",
+              "storeFile": "L:/Harmony/idut_debug.p12"
+            }
+          }
+        ],
+        "products": [
+          {
+            "name": "default",
+            "signingConfig": "default",
+            "compatibleSdkVersion": "5.0.1(13)",
+            "runtimeOS": "HarmonyOS",
+            "buildOption": {
+              "strictMode": {
+                "caseSensitiveCheck": true,
+                "useNormalizedOHMUrl": true
+              }
+            }
+          }
+        ],
+        "buildModeSet": [
+          {
+            "name": "debug"
+          },
+          {
+            "name": "release"
+          }
+        ]
+      },
+      "modules": [
+        {
+          "name": "entry",
+          "srcPath": "./entry",
+          "targets": [
+            {
+              "name": "default",
+              "applyToProducts": [
+                "default"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "CONFIG_PROPERTIES": {
+      "enableSignTask": true,
+      "skipNativeIncremental": false,
+      "hvigor.keepDependency": true
+    },
+    "OVERALL_PROJECT_PATHS": [
+      "L:\\Harmony\\idutcommunity"
+    ]
+  },
+  "version": 1
+}

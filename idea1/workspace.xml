@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="ff0c7b05-60f0-4835-a337-6b049a7b76a0" name="Changes" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 2
+}</component>
+  <component name="ProjectId" id="2p4feuFF4ONxHmC4v98t3WFEEhC" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "33Z0224528032492": "5372595601732097942690",
+    "Application.entry.executor": "Run",
+    "MODULE_HAP_TIME": "{\"33Z0224528032492entry\":\"2024-11-20T10:18:58.712517600Z\"}",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "ace.nodejs.version": "18.20.1",
+    "auto_debug_bundleName": "00000027F0365D098B0AEC5C83533D7201444C9164B802F98C184B2E27E69EE6B7857D999B86E6053CACC704DD87F196195B4F7244B9E6",
+    "auto_debug_cert_list": "00000023572BAA112D7075F7156F8BE08E126B3599F4FB723BCE82AACA342A6AB707B2499A19E1BAA1635CB025FF6F0C3C9AA4",
+    "auto_debug_device_list": "00000023BB174AE0C476B65F12906500E7B9D027196BC0F6AFA3DFCFE47498289818102D4485E932A098D98A196CC659B98F34",
+    "auto_debug_package_name": "00000027F0351861B5CBB4F1DFE8DD506588AC0592BCFDF72B18092AA0F210BD2E74A9E1905B256E4FE39F28EE4694D2ACB5E1FB8B0E78",
+    "auto_debug_team_id": "000000211E7224C502AF18DCD9F5D12EF2A5FF15B05C4AD911B7EB3D9701DB1F6FDED4E56FA8D639A5F3CACF1939B5A86E",
+    "last_csr_path": "C:\\Users\\luzhiyi\\Desktop\\.csr",
+    "last_keystore_path": "L:\\Harmony\\idut_debug.p12",
+    "last_opened_file_path": "C:/Users/luzhiyi/Desktop/微信图片_20241120184914(1).png",
+    "settings.editor.selected.configurable": "preferences.lookFeel"
+  },
+  "keyToStringList": {
+    "reqPermissions": [
+    ]
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="L:\Harmony\idutcommunity\entry\src\main\resources\rawfile" />
+      <recent name="L:\Harmony\idutcommunity\entry\src\main\ets\pages" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.entry">
+    <configuration name="entry" type="HotReLoadTask" factoryName="Hot Reload">
+      <MODULE_NAME />
+      <REINSTALL_APPLICATION>true</REINSTALL_APPLICATION>
+      <ENVIRONMENT_VARIABLES>[]</ENVIRONMENT_VARIABLES>
+      <DEBUG_LINE_ENABLE_DATA>false</DEBUG_LINE_ENABLE_DATA>
+      <AUTO_DEPENDENCIES_DATA>true</AUTO_DEPENDENCIES_DATA>
+      <INSTALL_FLAGS_CONFIG_KEY />
+      <LAUNCH_FLAGS_CONFIG_KEY />
+      <LAUNCH_ABILITY_CONFIG_TYPE>Default Ability</LAUNCH_ABILITY_CONFIG_TYPE>
+      <LAUNCH_ABILITY_CONFIG_VALUE />
+      <SYMBOL_DIRS>[]</SYMBOL_DIRS>
+      <DEBUGGER_TYPE>Detect Automatically</DEBUGGER_TYPE>
+      <MULTI_HAP_MODULE_DATA>[]</MULTI_HAP_MODULE_DATA>
+      <SHOW_STATIC_VARIABLES>true</SHOW_STATIC_VARIABLES>
+      <LOGGING_TARGET_CHANNELS>lldb process:gdb-remote packets</LOGGING_TARGET_CHANNELS>
+      <USER_POST_ATTACH_COMMANDS>[]</USER_POST_ATTACH_COMMANDS>
+      <USER_STARTUP_COMMANDS>[]</USER_STARTUP_COMMANDS>
+      <ETS_SOURCE_PARIS>[]</ETS_SOURCE_PARIS>
+      <DEPLOY_MULTI_HAP>false</DEPLOY_MULTI_HAP>
+      <ASAN_ENABLE_DATA>false</ASAN_ENABLE_DATA>
+      <TSAN_ENABLE_DATA>false</TSAN_ENABLE_DATA>
+      <ERROR_INFO_ENHANCE_ENABLE_DATA>false</ERROR_INFO_ENHANCE_ENABLE_DATA>
+      <MULTI_THREAD_CHECK_SELECTED_DATA>false</MULTI_THREAD_CHECK_SELECTED_DATA>
+      <UBSAN_ENABLE_DATA>false</UBSAN_ENABLE_DATA>
+      <HWASAN_ENABLE_DATA>false</HWASAN_ENABLE_DATA>
+      <HOT_RELOAD_MODULE_NAME>entry</HOT_RELOAD_MODULE_NAME>
+      <method v="2">
+        <option name="Build.Hvigor.HotReloadBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="idutcommunity [assembleApp]" type="HvigorRunConfiguration" factoryName="HvigorRunConfiguration" temporary="true">
+      <option name="applicationParameters" value="--mode project -p product=default assembleApp --analyze=normal --parallel --incremental" />
+      <option name="nodeInterpreter" value="$APPLICATION_HOME_DIR$\tools\node" />
+      <option name="scriptFile" value="$APPLICATION_HOME_DIR$\tools\hvigor\bin\hvigorw.js" />
+      <option name="workingDir" value="$PROJECT_DIR$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="idutcommunity [assembleHap]" type="HvigorRunConfiguration" factoryName="HvigorRunConfiguration" temporary="true">
+      <option name="applicationParameters" value="--mode module -p product=default assembleHap --analyze=normal --parallel --incremental" />
+      <option name="nodeInterpreter" value="C:/Program Files/Huawei/DevEco Studio\tools\node" />
+      <option name="scriptFile" value="C:/Program Files/Huawei/DevEco Studio\tools\hvigor\bin\hvigorw.js" />
+      <option name="workingDir" value="$PROJECT_DIR$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="entry" type="OhosDebugTask" factoryName="OpenHarmony App">
+      <MODULE_NAME>entry</MODULE_NAME>
+      <REINSTALL_APPLICATION>true</REINSTALL_APPLICATION>
+      <ENVIRONMENT_VARIABLES>[]</ENVIRONMENT_VARIABLES>
+      <DEBUG_LINE_ENABLE_DATA>false</DEBUG_LINE_ENABLE_DATA>
+      <AUTO_DEPENDENCIES_DATA>true</AUTO_DEPENDENCIES_DATA>
+      <INSTALL_FLAGS_CONFIG_KEY />
+      <LAUNCH_FLAGS_CONFIG_KEY />
+      <LAUNCH_ABILITY_CONFIG_TYPE>Default Ability</LAUNCH_ABILITY_CONFIG_TYPE>
+      <LAUNCH_ABILITY_CONFIG_VALUE />
+      <SYMBOL_DIRS>[]</SYMBOL_DIRS>
+      <DEBUGGER_TYPE>Detect Automatically</DEBUGGER_TYPE>
+      <MULTI_HAP_MODULE_DATA>[]</MULTI_HAP_MODULE_DATA>
+      <SHOW_STATIC_VARIABLES>true</SHOW_STATIC_VARIABLES>
+      <LOGGING_TARGET_CHANNELS>lldb process:gdb-remote packets</LOGGING_TARGET_CHANNELS>
+      <USER_POST_ATTACH_COMMANDS>[]</USER_POST_ATTACH_COMMANDS>
+      <USER_STARTUP_COMMANDS>[]</USER_STARTUP_COMMANDS>
+      <ETS_SOURCE_PARIS>[]</ETS_SOURCE_PARIS>
+      <DEPLOY_MULTI_HAP>false</DEPLOY_MULTI_HAP>
+      <ASAN_ENABLE_DATA>false</ASAN_ENABLE_DATA>
+      <TSAN_ENABLE_DATA>false</TSAN_ENABLE_DATA>
+      <ERROR_INFO_ENHANCE_ENABLE_DATA>false</ERROR_INFO_ENHANCE_ENABLE_DATA>
+      <MULTI_THREAD_CHECK_SELECTED_DATA>false</MULTI_THREAD_CHECK_SELECTED_DATA>
+      <UBSAN_ENABLE_DATA>false</UBSAN_ENABLE_DATA>
+      <HWASAN_ENABLE_DATA>false</HWASAN_ENABLE_DATA>
+      <method v="2">
+        <option name="Build.Hvigor.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Hvigor.idutcommunity [assembleApp]" />
+        <item itemvalue="Hvigor.idutcommunity [assembleHap]" />
+        <item itemvalue="Hvigor.idutcommunity [assembleApp]" />
+        <item itemvalue="Hvigor.idutcommunity [assembleApp]" />
+        <item itemvalue="Hvigor.idutcommunity [assembleApp]" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+</project>
