@@ -33,9 +33,9 @@
 
 
 ## **使用方法：**
-1.下载DevEco Studio和文档
+1.下载DevEco Studio
 
-2.project structure进行自签名
+2.在project structure进行自签名
 
 3.有线调试，无线调试或hap包自签名
 
