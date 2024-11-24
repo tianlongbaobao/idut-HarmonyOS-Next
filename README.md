@@ -31,6 +31,9 @@
 
 再次感谢@Shirai_Kuroko:https://github.com/IShiraiKurokoI    大佬贡献的源码！！！
 
+另，部分加密算法和服务器端口信息已经隐去，编译时会缺失文件而无法自行编译。希望自行编译和进行二次开发的请用邮箱联系我（luzhiyi@mail.dlut.edu.cn），并提供dut在读证明（
+android的java源码请联系@Shirai_Kuroko，鸿蒙的arkts源码可以联系我！）
+
 
 ## **使用方法：**
 1.下载DevEco Studio
