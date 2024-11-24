@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="ff0c7b05-60f0-4835-a337-6b049a7b76a0" name="Changes" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="ArkTS File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HiLogStateProjectLevelPreference">
+    <panelStates>
+      <hilogPanelState>
+        <option name="filterName" value="User logs of selected app" />
+        <option name="logPanelType" value="ONLINE" />
+        <option name="processName" value="com.tianlongbaobao.idut" />
+      </hilogPanelState>
+    </panelStates>
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 2
+}</component>
+  <component name="ProjectId" id="2p4feuFF4ONxHmC4v98t3WFEEhC" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "33Z0224528032492": "5373133431732453709120",
+    "Application.entry.executor": "Run",
+    "MODULE_HAP_TIME": "{\"33Z0224528032492entry\":\"2024-11-24T13:08:21.324247900Z\"}",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "ace.nodejs.version": "18.20.1",
+    "auto_debug_bundleName": "00000027E9C9EAFF94CA2C2AF9E2FC9B43D9099E52F55F634C2334B487D9CD2199820CA334384AB9EA30F1557E93FAB0FA3C9F8773C0D4",
+    "auto_debug_cert_list": "00000023B1E627B4732809E0F5829761E2D02CF953E772B8F1B1FD69EFC8D7BA3CF6900AED1F4B45D68FF9F3D0905EB7763E32",
+    "auto_debug_device_list": "00000023C40D7F17EDFC25F58445A558D1EE2720F8C90B8DE78081F5C5AFB08B3D08E5EBDB061C901E365858521EA223133FEC",
+    "auto_debug_package_name": "00000027C991424E058D6342DE7DB248872060AD61756528484ACA599453CA8171CFFA4B78A9B0C0858224A743973909A263F74EEFEE56",
+    "auto_debug_team_id": "00000021E89816374EEFF569C8779E18015B9106910E17B2BEF5A2C1A962A2410EF06E2D26F3D63BC448620779517FF5B7",
+    "last_csr_path": "C:\\Users\\luzhiyi\\Desktop\\.csr",
+    "last_keystore_path": "L:\\Harmony\\idut_debug.p12",
+    "last_opened_file_path": "C:/Users/luzhiyi/Desktop/labels.png",
+    "settings.editor.selected.configurable": "preferences.lookFeel"
+  },
+  "keyToStringList": {
+    "reqPermissions": [
+    ]
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="L:\Harmony\idutcommunity\entry\src\main\resources\rawfile" />
+      <recent name="L:\Harmony\idutcommunity\entry\src\main\ets\pages" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="L:\Harmony\idutcommunity\entry\src\main\ets\pages" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.entry">
+    <configuration name="entry" type="HotReLoadTask" factoryName="Hot Reload">
+      <MODULE_NAME />
+      <REINSTALL_APPLICATION>true</REINSTALL_APPLICATION>
+      <ENVIRONMENT_VARIABLES>[]</ENVIRONMENT_VARIABLES>
+      <DEBUG_LINE_ENABLE_DATA>false</DEBUG_LINE_ENABLE_DATA>
+      <AUTO_DEPENDENCIES_DATA>true</AUTO_DEPENDENCIES_DATA>
+      <INSTALL_FLAGS_CONFIG_KEY />
+      <LAUNCH_FLAGS_CONFIG_KEY />
+      <LAUNCH_ABILITY_CONFIG_TYPE>Default Ability</LAUNCH_ABILITY_CONFIG_TYPE>
+      <LAUNCH_ABILITY_CONFIG_VALUE />
+      <SYMBOL_DIRS>[]</SYMBOL_DIRS>
+      <DEBUGGER_TYPE>Detect Automatically</DEBUGGER_TYPE>
+      <MULTI_HAP_MODULE_DATA>[]</MULTI_HAP_MODULE_DATA>
+      <SHOW_STATIC_VARIABLES>true</SHOW_STATIC_VARIABLES>
+      <LOGGING_TARGET_CHANNELS>lldb process:gdb-remote packets</LOGGING_TARGET_CHANNELS>
+      <USER_POST_ATTACH_COMMANDS>[]</USER_POST_ATTACH_COMMANDS>
+      <USER_STARTUP_COMMANDS>[]</USER_STARTUP_COMMANDS>
+      <ETS_SOURCE_PARIS>[]</ETS_SOURCE_PARIS>
+      <DEPLOY_MULTI_HAP>false</DEPLOY_MULTI_HAP>
+      <ASAN_ENABLE_DATA>false</ASAN_ENABLE_DATA>
+      <TSAN_ENABLE_DATA>false</TSAN_ENABLE_DATA>
+      <ERROR_INFO_ENHANCE_ENABLE_DATA>false</ERROR_INFO_ENHANCE_ENABLE_DATA>
+      <MULTI_THREAD_CHECK_SELECTED_DATA>false</MULTI_THREAD_CHECK_SELECTED_DATA>
+      <UBSAN_ENABLE_DATA>false</UBSAN_ENABLE_DATA>
+      <HWASAN_ENABLE_DATA>false</HWASAN_ENABLE_DATA>
+      <HOT_RELOAD_MODULE_NAME>entry</HOT_RELOAD_MODULE_NAME>
+      <method v="2">
+        <option name="Build.Hvigor.HotReloadBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="idutcommunity [assembleApp]" type="HvigorRunConfiguration" factoryName="HvigorRunConfiguration" temporary="true">
+      <option name="applicationParameters" value="--mode project -p product=default assembleApp --analyze=normal --parallel --incremental" />
+      <option name="nodeInterpreter" value="C:/Program Files/Huawei/DevEco Studio\tools\node" />
+      <option name="scriptFile" value="C:/Program Files/Huawei/DevEco Studio\tools\hvigor\bin\hvigorw.js" />
+      <option name="workingDir" value="$PROJECT_DIR$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="idutcommunity [assembleDevHqf]" type="HvigorRunConfiguration" factoryName="HvigorRunConfiguration" temporary="true">
+      <option name="applicationParameters" value="--mode module -p module=entry@default -p product=default -p requiredDeviceType=phone assembleDevHqf --analyze=normal --parallel --incremental" />
+      <option name="nodeInterpreter" value="$APPLICATION_HOME_DIR$\tools\node" />
+      <option name="scriptFile" value="$APPLICATION_HOME_DIR$\tools\hvigor\bin\hvigorw.js" />
+      <option name="workingDir" value="$PROJECT_DIR$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="idutcommunity [assembleHap]" type="HvigorRunConfiguration" factoryName="HvigorRunConfiguration" temporary="true">
+      <option name="applicationParameters" value="--mode module -p product=default assembleHap --analyze=normal --parallel --incremental" />
+      <option name="nodeInterpreter" value="$APPLICATION_HOME_DIR$\tools\node" />
+      <option name="scriptFile" value="$APPLICATION_HOME_DIR$\tools\hvigor\bin\hvigorw.js" />
+      <option name="workingDir" value="$PROJECT_DIR$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="entry" type="OhosDebugTask" factoryName="OpenHarmony App">
+      <MODULE_NAME>entry</MODULE_NAME>
+      <REINSTALL_APPLICATION>true</REINSTALL_APPLICATION>
+      <ENVIRONMENT_VARIABLES>[]</ENVIRONMENT_VARIABLES>
+      <DEBUG_LINE_ENABLE_DATA>false</DEBUG_LINE_ENABLE_DATA>
+      <AUTO_DEPENDENCIES_DATA>true</AUTO_DEPENDENCIES_DATA>
+      <INSTALL_FLAGS_CONFIG_KEY />
+      <LAUNCH_FLAGS_CONFIG_KEY />
+      <LAUNCH_ABILITY_CONFIG_TYPE>Default Ability</LAUNCH_ABILITY_CONFIG_TYPE>
+      <LAUNCH_ABILITY_CONFIG_VALUE />
+      <SYMBOL_DIRS>[]</SYMBOL_DIRS>
+      <DEBUGGER_TYPE>Detect Automatically</DEBUGGER_TYPE>
+      <MULTI_HAP_MODULE_DATA>[]</MULTI_HAP_MODULE_DATA>
+      <SHOW_STATIC_VARIABLES>true</SHOW_STATIC_VARIABLES>
+      <LOGGING_TARGET_CHANNELS>lldb process:gdb-remote packets</LOGGING_TARGET_CHANNELS>
+      <USER_POST_ATTACH_COMMANDS>[]</USER_POST_ATTACH_COMMANDS>
+      <USER_STARTUP_COMMANDS>[]</USER_STARTUP_COMMANDS>
+      <ETS_SOURCE_PARIS>[]</ETS_SOURCE_PARIS>
+      <DEPLOY_MULTI_HAP>false</DEPLOY_MULTI_HAP>
+      <ASAN_ENABLE_DATA>false</ASAN_ENABLE_DATA>
+      <TSAN_ENABLE_DATA>false</TSAN_ENABLE_DATA>
+      <ERROR_INFO_ENHANCE_ENABLE_DATA>false</ERROR_INFO_ENHANCE_ENABLE_DATA>
+      <MULTI_THREAD_CHECK_SELECTED_DATA>false</MULTI_THREAD_CHECK_SELECTED_DATA>
+      <UBSAN_ENABLE_DATA>false</UBSAN_ENABLE_DATA>
+      <HWASAN_ENABLE_DATA>false</HWASAN_ENABLE_DATA>
+      <method v="2">
+        <option name="Build.Hvigor.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Hvigor.idutcommunity [assembleHap]" />
+        <item itemvalue="Hvigor.idutcommunity [assembleDevHqf]" />
+        <item itemvalue="Hvigor.idutcommunity [assembleDevHqf]" />
+        <item itemvalue="Hvigor.idutcommunity [assembleHap]" />
+        <item itemvalue="Hvigor.idutcommunity [assembleHap]" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+</project>
