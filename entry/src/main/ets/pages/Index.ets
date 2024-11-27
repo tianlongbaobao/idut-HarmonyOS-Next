@@ -1,5 +1,5 @@
-import { router } from '@kit.ArkUI';
 import {LoginRequest} from "./backrequest/Login"
+import preferences from '@ohos.data.preferences'
 @Entry
 @Component
 struct Index {
