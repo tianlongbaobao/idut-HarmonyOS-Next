@@ -8,7 +8,7 @@ const  password:string = (router.getParams() as Record<string, string>)['id1'];
 const  api: Array<ScriptItem> = [{ script: "username.value='" + account + "';password.value='" + password + "';submit.disabled='';submit.click()", scriptRules: ["*"] }]
 const  sso: Array<ScriptItem> = [{ script: "$(\"#un\").val('" + account + "');$(\"#pd\").val('" + password + "');login()", scriptRules: ["*"] }]
 const  vpn: Array<ScriptItem> = [{ script: "document.getElementById('cas-login').click()", scriptRules: ["*"] }]
-
+const  card: Array<ScriptItem> = [{ script: "document.getElementsByClassName('top gradient2')[0].outerHTML=''", scriptRules: ["*"] }]
 @Entry
 @Component
 struct  Navigators {
@@ -67,7 +67,7 @@ struct  Navigators {
             .fontWeight(FontWeight.Bold)
         }
         ListItem() {
-          Button("玉兰卡(无效)").onClick(() => {
+          Button("玉兰卡").onClick(() => {
             this.pathStack.pushPath({ name: "玉兰卡"})
           })
             .width('100%')
@@ -295,8 +295,19 @@ export struct pagecard {
       Column() {
         Web({ src: "https://api.m.dlut.edu.cn/oauth/authorize?client_id=19b32196decf419a&redirect_uri=https%3A%2F%2Fcard.m.dlut.edu.cn%2Fhomerj%2FopenRjOAuthPage&response_type=code&scope=base_api&state=weishao", controller: this.controller })
           .javaScriptAccess(true)
+          .fileAccess(true)
+          .imageAccess(true)
+          .onlineImageAccess(true)
           .domStorageAccess(true)
           .javaScriptOnDocumentEnd(api)
+          .onControllerAttached(() => {
+            console.log("onControllerAttached");
+            try {
+              let userAgent = "Mozilla/ 5.0 (Linux; Android 10; EBG Build/ HUAWEIEBG; wv) AppleWebKit/ 537.36 (KHTML, like Gecko) Version/ 4.0 Chrome/ 88.0.4324.93 Mobile Safari/ 537.36 weishao(3.3.0.74633)";
+              this.controller.setCustomUserAgent(userAgent);
+            } catch (error) {
+            }
+          })
       }
     }.title("玉兰卡")
     .onBackPressed(() => {
