@@ -1,1 +1,3 @@
 *.so linguist-language=typescript
+*.json5 linguist-language=typescript
+*.ets linguist-language=typescript
