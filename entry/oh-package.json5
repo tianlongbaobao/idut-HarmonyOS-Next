@@ -1,10 +1,12 @@
 {
   "name": "entry",
-  "version": "1.6.2",
+  "version": "1.8.0",
   "description": "Please describe the basic information.",
   "main": "",
   "author": "",
   "license": "",
-  "dependencies": {}
+  "dependencies": {
+    "@tencent/wechat_open_sdk": "1.0.4"
+  }
 }
 

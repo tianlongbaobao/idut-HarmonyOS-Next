@@ -58,6 +58,9 @@
           "when":"always"
         }
       }
-    ]
+    ],
+    "querySchemes": [
+      "alipays"
+      ],
   }
 }

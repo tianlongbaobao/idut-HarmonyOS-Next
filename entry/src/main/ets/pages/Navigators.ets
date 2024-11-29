@@ -1,14 +1,16 @@
 import { webview } from "@kit.ArkWeb";
 import router from '@ohos.router';
 import window from '@ohos.window';
+import { Pay } from '@cashier_alipay/cashiersdk'
+import { BusinessError } from '@kit.BasicServicesKit';
+import { common } from '@kit.AbilityKit';
 
-
-const  account:string = (router.getParams() as Record<string, string>)['id2']; // 获取id属性的值
+const  account:string = (router.getParams() as Record<string, string>)['id2'];
 const  password:string = (router.getParams() as Record<string, string>)['id1'];
 const  api: Array<ScriptItem> = [{ script: "username.value='" + account + "';password.value='" + password + "';submit.disabled='';submit.click()", scriptRules: ["*"] }]
 const  sso: Array<ScriptItem> = [{ script: "$(\"#un\").val('" + account + "');$(\"#pd\").val('" + password + "');login()", scriptRules: ["*"] }]
 const  vpn: Array<ScriptItem> = [{ script: "document.getElementById('cas-login').click()", scriptRules: ["*"] }]
-const  card: Array<ScriptItem> = [{ script: "document.getElementsByClassName('top gradient2')[0].outerHTML=''", scriptRules: ["*"] }]
+
 @Entry
 @Component
 struct  Navigators {
@@ -54,6 +56,10 @@ struct  Navigators {
       pagebooking()
     } else if (name === "多媒体教室管理") {
       pagemedia()
+    } else if (name === "心理测评") {
+      pagepys()
+    } else if (name === "图书馆系统") {
+      pagelibma()
     }
   }
 
@@ -104,12 +110,23 @@ struct  Navigators {
             .width('100%')
         }
         ListItem() {
+          Button("图书馆预约").onClick(() => {
+            this.pathStack.pushPath({ name: "图书馆预约"})
+          })
+            .width('100%')
+        }
+        ListItem() {
           Button("体育场馆预定").onClick(() => {
             this.pathStack.pushPath({ name: "体育场馆预定"})
           })
             .width('100%')
         }
-
+        ListItem() {
+          Button("心理测评").onClick(() => {
+            this.pathStack.pushPath({ name: "心理测评"})
+          })
+            .width('100%')
+        }
         ListItem() {
           Button("校外人员预约").onClick(() => {
             this.pathStack.pushPath({ name: "校外人员预约"})
@@ -208,6 +225,33 @@ export struct pageemail {
     })
   }
 }
+// 体质测评
+@Component
+export struct pagelibma {
+  pathStack: NavPathStack = new NavPathStack();
+  scroller: Scroller = new Scroller()
+  contentScroller: Scroller = new Scroller()
+  controller: webview.WebviewController = new webview.WebviewController()
+  build() {
+    NavDestination() {
+      Column() {
+        Web({ src: "https://webvpn.dlut.edu.cn/https/57787a7876706e323032336b657940247708031bb20f9a4ce448f62d85f580230796e3c6/meta-local/opac/cas/rosetta?filter=app&from=rj", controller: this.controller })
+          .javaScriptAccess(true)
+          .fileAccess(true)
+          .imageAccess(true)
+          .onlineImageAccess(true)
+          .domStorageAccess(true)
+      }
+    }.title("图书馆系统")
+    .onBackPressed(() => {
+      const popDestinationInfo = this.pathStack.pop()
+      return true
+    })
+    .onReady((context: NavDestinationContext) => {
+      this.pathStack = context.pathStack
+    })
+  }
+}
 
 // 我的课表
 @Component
@@ -289,7 +333,8 @@ export struct pagetest {
 @Component
 export struct pagecard {
   pathStack: NavPathStack = new NavPathStack();
-  controller: webview.WebviewController = new webview.WebviewController()
+  controller: webview.WebviewController = new webview.WebviewController();
+  responseResource: WebResourceResponse = new WebResourceResponse();
   build() {
     NavDestination() {
       Column() {
@@ -307,6 +352,36 @@ export struct pagecard {
               this.controller.setCustomUserAgent(userAgent);
             } catch (error) {
             }
+          })
+          .onLoadIntercept((event) => {
+            let data = event.data;
+            let url = data.getRequestUrl();
+            if (!(url.startsWith("http") || url.startsWith("https"))) {
+              return false;
+            }
+            console.log(`alipay: url: ${url}`);
+            let result = new Pay().payInterceptorWithUrl(url, true, (result) => {
+              let resultCode = result.get("resultCode");
+              let returnUrl = result.get("returnUrl");
+              console.log(`resultCode: ${resultCode}, returnUrl: ${returnUrl}`);
+              this.controller.loadUrl(returnUrl);
+            });
+            return result;
+          })
+          .onLoadIntercept((event) => {
+            let data = event.data;
+            let url = data.getRequestUrl();
+            if (url.startsWith("weixin://")) {
+              (getContext() as common.UIAbilityContext).openLink(url)
+                .then(() => {
+                  console.log('openLink success');
+                }).catch((err: BusinessError) => {
+                console.error('openLink failed, err:' + JSON.stringify(err));
+              });
+              return true;
+            }
+            // 返回true表示阻止此次加载，否则允许此次加载
+            return false;
           })
       }
     }.title("玉兰卡")
@@ -418,6 +493,12 @@ export struct pageout {
     NavDestination() {
       Column() {
         Web({ src: "https://ehall.dlut.edu.cn/fp/view?m=fp#act=fp/serveapply&from=hall&serveID=7573037038055424", controller: this.controller })
+          .javaScriptAccess(true)
+          .fileAccess(true)
+          .imageAccess(true)
+          .onlineImageAccess(true)
+          .domStorageAccess(true)
+          .javaScriptOnDocumentEnd(sso)
       }
     }.title("校外人员预约")
     .onBackPressed(() => {
@@ -434,8 +515,6 @@ export struct pageout {
 // 空闲教室
 @Component
 export struct pageclassroom {
-
-  @State  api: Array<ScriptItem> = [{ script: "username.value='" + account + "';password.value='" + password + "';submit.disabled='';submit.click()", scriptRules: ["*"] }]
   pathStack: NavPathStack = new NavPathStack();
   controller: webview.WebviewController = new webview.WebviewController()
 
@@ -448,6 +527,32 @@ export struct pageclassroom {
           .javaScriptOnDocumentEnd(api)
       }
     }.title("空闲教室")
+    .onBackPressed(() => {
+      const popDestinationInfo = this.pathStack.pop()
+      console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
+      return true
+    })
+    .onReady((context: NavDestinationContext) => {
+      this.pathStack = context.pathStack
+    })
+  }
+}
+
+// 空闲教室
+@Component
+export struct pagepys {
+  pathStack: NavPathStack = new NavPathStack();
+  controller: webview.WebviewController = new webview.WebviewController()
+
+  build() {
+    NavDestination() {
+      Column() {
+        Web({ src: "https://webvpn.dlut.edu.cn/http/57787a7876706e323032336b65794024680b1b56f80f865ae449fe2ddfb88b/psym/Default/Index?from=rj&filter=app", controller: this.controller })
+          .javaScriptAccess(true)
+          .domStorageAccess(true)
+          .javaScriptOnDocumentEnd(api)
+      }
+    }.title("心理测评")
     .onBackPressed(() => {
       const popDestinationInfo = this.pathStack.pop()
       console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
