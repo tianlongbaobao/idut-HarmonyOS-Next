@@ -356,6 +356,15 @@ export struct pagecard {
           .onLoadIntercept((event) => {
             let data = event.data;
             let url = data.getRequestUrl();
+            if (url.startsWith("weixin://")) {
+              (getContext() as common.UIAbilityContext).openLink(url)
+                .then(() => {
+                  console.log('openLink success');
+                }).catch((err: BusinessError) => {
+                console.error('openLink failed, err:' + JSON.stringify(err));
+              });
+              return true;
+            }
             if (!(url.startsWith("http") || url.startsWith("https"))) {
               return false;
             }
@@ -367,21 +376,6 @@ export struct pagecard {
               this.controller.loadUrl(returnUrl);
             });
             return result;
-          })
-          .onLoadIntercept((event) => {
-            let data = event.data;
-            let url = data.getRequestUrl();
-            if (url.startsWith("weixin://")) {
-              (getContext() as common.UIAbilityContext).openLink(url)
-                .then(() => {
-                  console.log('openLink success');
-                }).catch((err: BusinessError) => {
-                console.error('openLink failed, err:' + JSON.stringify(err));
-              });
-              return true;
-            }
-            // 返回true表示阻止此次加载，否则允许此次加载
-            return false;
           })
       }
     }.title("玉兰卡")
