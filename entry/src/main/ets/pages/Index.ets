@@ -1,5 +1,4 @@
 import {LoginRequest} from "./backrequest/Login"
-import preferences from '@ohos.data.preferences'
 @Entry
 @Component
 struct Index {
@@ -21,6 +20,8 @@ struct Index {
         })
       Button('登录').width(150).margin({ top: 20 })
         .onClick(() =>{
+          console.log(this.password.trim())
+          console.log(this.account.trim())
           LoginRequest(this.password.trim(),this.account.trim())
         })
     }.padding(20)

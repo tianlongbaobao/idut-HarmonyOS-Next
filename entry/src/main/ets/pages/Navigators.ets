@@ -4,6 +4,8 @@ import window from '@ohos.window';
 import { Pay } from '@cashier_alipay/cashiersdk'
 import { BusinessError } from '@kit.BasicServicesKit';
 import { common } from '@kit.AbilityKit';
+import { promptAction } from '@kit.ArkUI';
+import { PermissionsUtil } from './utils/permission';
 
 const  account:string = (router.getParams() as Record<string, string>)['id2'];
 const  password:string = (router.getParams() as Record<string, string>)['id1'];
@@ -110,12 +112,6 @@ struct  Navigators {
             .width('100%')
         }
         ListItem() {
-          Button("图书馆预约").onClick(() => {
-            this.pathStack.pushPath({ name: "图书馆预约"})
-          })
-            .width('100%')
-        }
-        ListItem() {
           Button("体育场馆预定").onClick(() => {
             this.pathStack.pushPath({ name: "体育场馆预定"})
           })
@@ -202,8 +198,6 @@ struct  Navigators {
 @Component
 export struct pageemail {
   pathStack: NavPathStack = new NavPathStack();
-  scroller: Scroller = new Scroller()
-  contentScroller: Scroller = new Scroller()
   controller: webview.WebviewController = new webview.WebviewController()
   build() {
     NavDestination() {
@@ -332,6 +326,30 @@ export struct pagetest {
 // 玉兰卡
 @Component
 export struct pagecard {
+  private TAG: string = "permissionPage";
+
+  private showToast(content: string){
+    try {
+      promptAction.showToast({
+        message: content,
+        duration: 2000
+      });
+    } catch (error) {
+      let message = (error as BusinessError).message
+      let code = (error as BusinessError).code
+      console.error(this.TAG, `showToast args error code is ${code}, message is ${message}`);
+    };
+  }
+
+  onClickCamera = async ()=>{
+    console.log(this.TAG, " onClickCamera");
+    let isUserGrant: boolean = await PermissionsUtil.requestCameraPermission();
+    if(isUserGrant){
+      this.showToast("用户同意授权");
+    }else{
+      this.showToast("用户拒绝授权");
+    }
+  }
   pathStack: NavPathStack = new NavPathStack();
   controller: webview.WebviewController = new webview.WebviewController();
   responseResource: WebResourceResponse = new WebResourceResponse();
@@ -345,6 +363,18 @@ export struct pagecard {
           .onlineImageAccess(true)
           .domStorageAccess(true)
           .javaScriptOnDocumentEnd(api)
+          .onPageBegin((event) => {
+            if (event) {
+              console.log(this.TAG, " onClickCamera");
+              PermissionsUtil.requestCameraPermission()
+                .then((isUserGrant)=> {
+                  if (isUserGrant) {
+                  } else {
+                    this.showToast("用户拒绝授权");
+                  }
+                })
+            }
+          })
           .onControllerAttached(() => {
             console.log("onControllerAttached");
             try {
