@@ -1,0 +1,40 @@
+{
+	"app": {
+		"bundleName": "com.alipay.sdk.pay.demo",
+		"versionCode": 1000000,
+		"versionName": "1.0.0",
+		"minAPIVersion": 50000012,
+		"targetAPIVersion": 50000012,
+		"apiReleaseType": "Release",
+		"compileSdkVersion": "5.0.0.71",
+		"compileSdkType": "HarmonyOS",
+		"appEnvironments": [],
+		"bundleType": "app"
+	},
+	"module": {
+		"name": "cashiersdk",
+		"type": "har",
+		"routerMap": "$profile:route_map",
+		"deviceTypes": [
+			"default",
+			"tablet",
+			"2in1"
+		],
+		"requestPermissions": [
+			{
+				"name": "ohos.permission.INTERNET"
+			},
+			{
+				"name": "ohos.permission.GET_NETWORK_INFO"
+			},
+			{
+				"name": "ohos.permission.PRIVACY_WINDOW"
+			}
+		],
+		"packageName": "@cashier_alipay/cashiersdk",
+		"installationFree": false,
+		"virtualMachine": "ark12.0.2.0",
+		"compileMode": "esmodule",
+		"dependencies": []
+	}
+}

@@ -1,0 +1,1 @@
+{"name":"@tencent/wechat_open_sdk","version":"1.0.4","description":"Tencent WeChat OpenSDK","main":"Index.ets","author":"wechatohos","license":"MPL-2.0","dependencies":{},"metadata":{"sourceRoots":["./src/main"],"debug":true},"compatibleSdkVersion":12,"compatibleSdkType":"HarmonyOS","obfuscated":false}
