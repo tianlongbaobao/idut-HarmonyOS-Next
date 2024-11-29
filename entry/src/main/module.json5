@@ -57,6 +57,16 @@
           ],
           "when":"always"
         }
+      },
+      {
+        "name" : "ohos.permission.CAMERA",
+        "reason": "$string:reason",
+        "usedScene": {
+          "abilities": [
+            "FormAbility"
+          ],
+          "when":"always"
+        }
       }
     ],
     "querySchemes": [
