@@ -2,9 +2,7 @@
 
 ### **目前版本2.0.0:**
 
-<img src="https://github.com/tianlongbaobao/idut-HarmonyOS-Next/blob/2.0.0/demo/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20241130182420.jpg" width="210px">
-<img src="https://github.com/tianlongbaobao/idut-HarmonyOS-Next/blob/2.0.0/demo/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20241130182436.jpg" width="210px">
-<img src="https://github.com/tianlongbaobao/idut-HarmonyOS-Next/blob/2.0.0/demo/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20241130182452.jpg" width="210px">
+<img src="https://github.com/tianlongbaobao/idut-HarmonyOS-Next/blob/2.0.0/demo/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20241130182420.jpg" width="210px"><img src="https://github.com/tianlongbaobao/idut-HarmonyOS-Next/blob/2.0.0/demo/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20241130182436.jpg" width="210px"><img src="https://github.com/tianlongbaobao/idut-HarmonyOS-Next/blob/2.0.0/demo/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20241130182452.jpg" width="210px">
 ### **1.0.0版：**
 
 **鸿蒙原生i大工社区版1.0.0来了！**
