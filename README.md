@@ -5,6 +5,10 @@
 **效果图展示**
 
 <img src="https://github.com/tianlongbaobao/idut-HarmonyOS-Next/blob/2.0.0/demo/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20241130182420.jpg" width="210px"><img src="https://github.com/tianlongbaobao/idut-HarmonyOS-Next/blob/2.0.0/demo/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20241130182436.jpg" width="210px"><img src="https://github.com/tianlongbaobao/idut-HarmonyOS-Next/blob/2.0.0/demo/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20241130182452.jpg" width="210px">
+
+## **致谢&后续版本维护**
+<img src="https://github.com/tianlongbaobao/idut-HarmonyOS-Next/blob/2.0.0/demo/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20241130183925.jpg" width="210px">
+
 ### **1.0.0版：**
 
 **鸿蒙原生i大工社区版1.0.0来了！**
@@ -88,6 +92,8 @@ bug：app功能不适配
 ### **2.0.0版**
 
 UI界面大改动，增加退出账号功能
+
+
 
 ### **社区版相对于正式版的区别：**
 
