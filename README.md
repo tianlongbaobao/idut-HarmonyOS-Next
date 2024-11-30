@@ -1,4 +1,4 @@
-## **原生鸿蒙i大工社区版**
+# **原生鸿蒙i大工社区版**
 
 ### **目前版本2.0.0:**
 
@@ -9,6 +9,7 @@
 ## **致谢&后续版本维护**
 <img src="https://github.com/tianlongbaobao/idut-HarmonyOS-Next/blob/2.0.0/demo/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20241130183925.jpg" width="210px">
 
+## **版本历史**
 ### **1.0.0版：**
 
 **鸿蒙原生i大工社区版1.0.0来了！**
