@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ff0c7b05-60f0-4835-a337-6b049a7b76a0" name="Changes" comment="" />
+    <list default="true" id="24302744-8b7a-4278-b29a-cc8e45377e54" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -27,30 +27,27 @@
     </panelStates>
   </component>
   <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 2
+  &quot;associatedIndex&quot;: 3
 }</component>
-  <component name="ProjectId" id="2p4feuFF4ONxHmC4v98t3WFEEhC" />
+  <component name="ProjectId" id="2pWYKbnknxaamCLVxKrOZNKELeT" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "33Z0224528032492": "5373133431732453709120",
+    "33Z0224528032492": "5371582861732959797382",
     "Application.entry.executor": "Run",
-    "MODULE_HAP_TIME": "{\"33Z0224528032492entry\":\"2024-11-24T13:08:21.324247900Z\"}",
+    "MODULE_HAP_TIME": "{\"33Z0224528032492entry\":\"2024-11-30T09:41:44.460425500Z\"}",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "ace.nodejs.version": "18.20.1",
-    "auto_debug_bundleName": "00000027E9C9EAFF94CA2C2AF9E2FC9B43D9099E52F55F634C2334B487D9CD2199820CA334384AB9EA30F1557E93FAB0FA3C9F8773C0D4",
-    "auto_debug_cert_list": "00000023B1E627B4732809E0F5829761E2D02CF953E772B8F1B1FD69EFC8D7BA3CF6900AED1F4B45D68FF9F3D0905EB7763E32",
-    "auto_debug_device_list": "00000023C40D7F17EDFC25F58445A558D1EE2720F8C90B8DE78081F5C5AFB08B3D08E5EBDB061C901E365858521EA223133FEC",
-    "auto_debug_package_name": "00000027C991424E058D6342DE7DB248872060AD61756528484ACA599453CA8171CFFA4B78A9B0C0858224A743973909A263F74EEFEE56",
-    "auto_debug_team_id": "00000021E89816374EEFF569C8779E18015B9106910E17B2BEF5A2C1A962A2410EF06E2D26F3D63BC448620779517FF5B7",
-    "last_csr_path": "C:\\Users\\luzhiyi\\Desktop\\.csr",
-    "last_keystore_path": "L:\\Harmony\\idut_debug.p12",
-    "last_opened_file_path": "C:/Users/luzhiyi/Desktop/labels.png",
-    "settings.editor.selected.configurable": "preferences.lookFeel"
+    "auto_debug_bundleName": "00000027403C7FA9B18A5A2B62F3B4F0787B44437F6850D48D1A301C4C956A1FF836A11888ACFC77F8C7F59539247575BE77A9434A0EE1",
+    "auto_debug_cert_list": "000000237BA86356BC47B74141F62ADB3614757A0A543741BB6FFB22ED147960C367E754B5F86D295692FCFAE741B62BDD8111",
+    "auto_debug_device_list": "000000372DEC9146C1C6A37C62E45B61E0A7CD276A2F53F3A7DEA1067E823EDB2ED974B29F5B46C7C579A5155EC397ABAEB5EF511EEFE9BF63004A12BB9C6DA31DC5510A4F45BD",
+    "auto_debug_package_name": "0000002702BA2160E05BA3021DDE736CB96E9C1F6B4169BADBBA61B2CD7B73C2931014F01C4CBB165A56197E2970C0A257E336BC8B44FE",
+    "auto_debug_team_id": "00000021C6971D94127677EBAD98E8E74B06D8A923708DF67C116387E182B97AAD98D71D9634F0874E8A292A10D8F74CAD",
+    "last_opened_file_path": "I:/Harmony/iduter/entry/src/main/ets/entryability"
   },
   "keyToStringList": {
     "reqPermissions": [
@@ -59,11 +56,14 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="L:\Harmony\idutcommunity\entry\src\main\resources\rawfile" />
-      <recent name="L:\Harmony\idutcommunity\entry\src\main\ets\pages" />
+      <recent name="I:\Harmony\iduter\entry\src\main\ets\entryability" />
+      <recent name="I:\Harmony\iduter\entry\src\main\ets\entrybackupability" />
+      <recent name="I:\Harmony\iduter\entry\src\main" />
+      <recent name="I:\Harmony\iduter\entry\src\main\ets" />
+      <recent name="I:\Harmony\iduter\entry\src\main\ets\pages" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="L:\Harmony\idutcommunity\entry\src\main\ets\pages" />
+      <recent name="I:\Harmony\iduter\entry\src\main\resources\rawfile" />
     </key>
   </component>
   <component name="RunManager" selected="Application.entry">
@@ -97,21 +97,21 @@
         <option name="Build.Hvigor.HotReloadBeforeRunTask" enabled="true" />
       </method>
     </configuration>
-    <configuration name="idutcommunity [assembleApp]" type="HvigorRunConfiguration" factoryName="HvigorRunConfiguration" temporary="true">
+    <configuration name="iduter [assembleApp]" type="HvigorRunConfiguration" factoryName="HvigorRunConfiguration" temporary="true">
       <option name="applicationParameters" value="--mode project -p product=default assembleApp --analyze=normal --parallel --incremental" />
-      <option name="nodeInterpreter" value="C:/Program Files/Huawei/DevEco Studio\tools\node" />
-      <option name="scriptFile" value="C:/Program Files/Huawei/DevEco Studio\tools\hvigor\bin\hvigorw.js" />
+      <option name="nodeInterpreter" value="$APPLICATION_HOME_DIR$\tools\node" />
+      <option name="scriptFile" value="$APPLICATION_HOME_DIR$\tools\hvigor\bin\hvigorw.js" />
       <option name="workingDir" value="$PROJECT_DIR$" />
       <method v="2" />
     </configuration>
-    <configuration name="idutcommunity [assembleDevHqf]" type="HvigorRunConfiguration" factoryName="HvigorRunConfiguration" temporary="true">
+    <configuration name="iduter [assembleDevHqf]" type="HvigorRunConfiguration" factoryName="HvigorRunConfiguration" temporary="true">
       <option name="applicationParameters" value="--mode module -p module=entry@default -p product=default -p requiredDeviceType=phone assembleDevHqf --analyze=normal --parallel --incremental" />
       <option name="nodeInterpreter" value="$APPLICATION_HOME_DIR$\tools\node" />
       <option name="scriptFile" value="$APPLICATION_HOME_DIR$\tools\hvigor\bin\hvigorw.js" />
       <option name="workingDir" value="$PROJECT_DIR$" />
       <method v="2" />
     </configuration>
-    <configuration name="idutcommunity [assembleHap]" type="HvigorRunConfiguration" factoryName="HvigorRunConfiguration" temporary="true">
+    <configuration name="iduter [assembleHap]" type="HvigorRunConfiguration" factoryName="HvigorRunConfiguration" temporary="true">
       <option name="applicationParameters" value="--mode module -p product=default assembleHap --analyze=normal --parallel --incremental" />
       <option name="nodeInterpreter" value="$APPLICATION_HOME_DIR$\tools\node" />
       <option name="scriptFile" value="$APPLICATION_HOME_DIR$\tools\hvigor\bin\hvigorw.js" />
@@ -149,11 +149,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Hvigor.idutcommunity [assembleHap]" />
-        <item itemvalue="Hvigor.idutcommunity [assembleDevHqf]" />
-        <item itemvalue="Hvigor.idutcommunity [assembleDevHqf]" />
-        <item itemvalue="Hvigor.idutcommunity [assembleHap]" />
-        <item itemvalue="Hvigor.idutcommunity [assembleHap]" />
+        <item itemvalue="Hvigor.iduter [assembleHap]" />
+        <item itemvalue="Hvigor.iduter [assembleHap]" />
+        <item itemvalue="Hvigor.iduter [assembleApp]" />
+        <item itemvalue="Hvigor.iduter [assembleHap]" />
+        <item itemvalue="Hvigor.iduter [assembleApp]" />
       </list>
     </recent_temporary>
   </component>
