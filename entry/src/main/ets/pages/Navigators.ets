@@ -27,7 +27,7 @@ struct  Navigators {
       let height = area.topRect.height;
       let vpheight = px2vp(height);
       AppStorage.setOrCreate('topHeight', vpheight);
-      win.setWindowSystemBarProperties({ statusBarContentColor: '#ffffff' }); // 设置状态栏字体颜色
+      win.setWindowSystemBarProperties({ statusBarContentColor: "#000000" }); // 设置状态栏字体颜色
     });
   }
   @Builder
