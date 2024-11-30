@@ -11,6 +11,10 @@
     {
       "name": "EntryAbility_label",
       "value": "i大工"
+    },
+    {
+      "name": "reason",
+      "value": "调用相机完成扫码"
     }
   ]
 }

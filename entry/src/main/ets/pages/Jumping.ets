@@ -6,7 +6,7 @@ let context = getContext(this)
 @Entry
 struct Splash {
   timeId?: number; // 定时器
-  @State num: number = 5; // 倒计时
+  @State num: number = 3; // 倒计时
 
   build() {
     Stack() {
