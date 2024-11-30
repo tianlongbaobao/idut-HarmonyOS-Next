@@ -5,13 +5,13 @@
         "name": "default",
         "type": "HarmonyOS",
         "material": {
-          "certpath": "C:\\Users\\luzhiyi\\.ohos\\config\\default_idutcommunity_39XyBhLC3XWMWUzH1yFhGb4Qke-3ERmIYHHYG7ZUE0s=.cer",
-          "storePassword": "0000001BA234DEBB080C5F1444D06878ECC920E81FDEAA807221E06011909584B67041160B214100DA4DD9",
+          "certpath": "C:\\Users\\luzhiyi\\.ohos\\config\\default_iduter_RUA_DQEqC7iwiLCVqwi5q1g6ft74q723H8BDtHFbZUY=.cer",
+          "storePassword": "0000001B5449207865D94BAA06AA3E37C2A7A910699AAA25CA89D7780B17052CB55181B1282EFEC6D14936",
           "keyAlias": "debugKey",
-          "keyPassword": "0000001B18C4CEB09EC272E82DA71E1EF2F1EAFE6CF3667197C21793B4826FB5B8339AAF0086A9F9FD1036",
-          "profile": "C:\\Users\\luzhiyi\\.ohos\\config\\default_idutcommunity_39XyBhLC3XWMWUzH1yFhGb4Qke-3ERmIYHHYG7ZUE0s=.p7b",
+          "keyPassword": "0000001BC84F34926E4A5A49309B50480CE64D9D2541F8345C1891C4577274EDD54B2992800D9E65FF394C",
+          "profile": "C:\\Users\\luzhiyi\\.ohos\\config\\default_iduter_RUA_DQEqC7iwiLCVqwi5q1g6ft74q723H8BDtHFbZUY=.p7b",
           "signAlg": "SHA256withECDSA",
-          "storeFile": "C:\\Users\\luzhiyi\\.ohos\\config\\default_idutcommunity_39XyBhLC3XWMWUzH1yFhGb4Qke-3ERmIYHHYG7ZUE0s=.p12"
+          "storeFile": "C:\\Users\\luzhiyi\\.ohos\\config\\default_iduter_RUA_DQEqC7iwiLCVqwi5q1g6ft74q723H8BDtHFbZUY=.p12"
         }
       }
     ],
