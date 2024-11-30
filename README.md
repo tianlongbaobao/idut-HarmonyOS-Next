@@ -2,7 +2,7 @@
 
 ### **目前版本2.0.0:**
 
-![](https://raw.github.com/tianlongbaobao/repositpry/master/idut-HarmonyOS-Next/demo/微信图片_20241130182420.jpg.jpg)
+![](https://raw.github.com/tianlongbaobao/repositpry/master/idut-HarmonyOS-Next/demo/微信图片_20241130182420.jpg)
 ### **1.0.0版：**
 
 **鸿蒙原生i大工社区版1.0.0来了！**
