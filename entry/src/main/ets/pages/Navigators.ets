@@ -44,7 +44,7 @@ struct  Navigators {
       pagecard()
     } else if (name === "校车定位") {
       pagecar()
-    }  else if (name === "校园网自助服务") {
+    }  else if (name === "网络自助") {
       pageweb()
     } else if (name === "体育场馆预定") {
       pagesports()
@@ -78,7 +78,6 @@ struct  Navigators {
       pagesettings()
     }
   }
-
   build() {
 
     Navigation(this.pathStack) {
@@ -1067,7 +1066,7 @@ export struct pagesettings {
         Text("i大工社区版").margin({top:18})
           .fontSize(18)
           .fontWeight(FontWeight.Bold)
-        Text("版本号:2.0.0").margin({top:15})
+        Text("版本号:2.1.0").margin({top:15})
           .fontSize(15)
         Hyperlink('https://github.com/tianlongbaobao/idut-HarmonyOS-Next', 'Github源码') {
         }

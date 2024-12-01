@@ -4,6 +4,7 @@ import {LoginRequest} from "./backrequest/Login"
 struct Index {
   @State account: string = "";
   @State password: string = ""
+
   build() {
     Column() {
       Image($rawfile('login.jpg'))
