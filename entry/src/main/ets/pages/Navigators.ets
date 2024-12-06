@@ -399,6 +399,7 @@ export struct pageemail {
           .imageAccess(true)
           .onlineImageAccess(true)
           .domStorageAccess(true)
+          .javaScriptOnDocumentEnd(api)
       }
     }.title("体质测评")
     .onBackPressed(() => {
@@ -426,6 +427,7 @@ export struct pagelibma {
           .imageAccess(true)
           .onlineImageAccess(true)
           .domStorageAccess(true)
+          .javaScriptOnDocumentEnd(api)
       }
     }.title("图书馆系统")
     .onBackPressed(() => {
@@ -476,7 +478,7 @@ export struct pagelib {
         Web({ src: "https://sso.dlut.edu.cn/cas/login?from=rj&service=https%3A%2F%2Fsso.dlut.edu.cn%2Fcas%2Flogin%3Fservice%3Dhttp%253A%252F%252Fseat.lib.dlut.edu.cn%252Fyanxiujian%252Fclient%252Flogin.php%253Fredirect%253Dindex.php", controller: this.controller })
           .javaScriptAccess(true)
           .domStorageAccess(true)
-          .javaScriptOnDocumentEnd(sso)
+          .javaScriptOnDocumentEnd(api)
       }
     }.title("图书馆预约")
     .onBackPressed(() => {
@@ -686,6 +688,7 @@ export struct pagesports {
           .imageAccess(true)
           .onlineImageAccess(true)
           .domStorageAccess(true)
+          .javaScriptOnDocumentEnd(api)
       }
     }.title("体育场馆预定")
     .onBackPressed(() => {
@@ -821,6 +824,7 @@ export struct pagemap {
           .imageAccess(true)
           .onlineImageAccess(true)
           .domStorageAccess(true)
+          .javaScriptOnDocumentEnd(api)
       }
     }.title("校园地图")
     .onBackPressed(() => {
