@@ -97,15 +97,15 @@ bug:玉兰卡虚拟卡支付未知错误(一直存在，刚发现)
 
 ### **2.4.0版**
 
-1.支持扫一扫。实现方法：jsbridge，原生鸿蒙javascriptproxy和runjavascriptproxy，借用i大工安卓端的jsbridge，拉起scan kit
+1.支持扫一扫。实现方法：jsbridge，原生鸿蒙javascriptproxy和runjavascript，借用i大工安卓端的jsbridge，拉起原生鸿蒙系统级scan kit
 
 2.修复虚拟卡无法支付的bug
 
-3.照片采集的拍摄提示版本过低为i大工服务器后端的未适配鸿蒙next，目前鸿蒙next不允许app接管相机权限。
+3.照片采集的拍摄提示版本过低为i大工服务器后端的未适配鸿蒙next，目前鸿蒙next不允许app接管相机权限，i大工后端仍选择向系统接管相机权限
 
 #### **2.4.0版后记**
 
-此版所有服务均可正常使用，如果有其它app服务需求请提Issue,i大工社区版正式进入运维阶段。
+此版所有服务均可正常使用，如果有其它app服务需求请提Issue，i大工社区版正式进入运维阶段。
 
 ## **运维阶段**
 
