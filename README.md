@@ -1,10 +1,11 @@
 # **原生鸿蒙i大工社区版**
 
-## **目前版本2.1.2**
+## **目前版本2.4.0**
 
 **效果图展示**
 
-<img src="https://github.com/tianlongbaobao/idut-HarmonyOS-Next/blob/2.0.0/demo/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20241130182420.jpg" width="210px"><img src="https://github.com/tianlongbaobao/idut-HarmonyOS-Next/blob/2.0.0/demo/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20241130182436.jpg" width="210px"><img src="https://github.com/tianlongbaobao/idut-HarmonyOS-Next/blob/2.0.0/demo/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20241130182452.jpg" width="210px"><img src="https://github.com/tianlongbaobao/idut-HarmonyOS-Next/blob/2.1.0/demo/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20241201154854.jpg" width="210px"><img src="https://github.com/tianlongbaobao/idut-HarmonyOS-Next/blob/2.1.0/demo/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20241201155120.jpg" width="210px">
+<img src="https://github.com/tianlongbaobao/idut-HarmonyOS-Next/blob/2.0.0/demo/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20241130182420.jpg" width="210px"><img src="https://github.com/tianlongbaobao/idut-HarmonyOS-Next/blob/2.0.0/demo/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20241130182436.jpg" width="210px"><img src="https://github.com/tianlongbaobao/idut-HarmonyOS-Next/blob/2.0.0/demo/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20241130182452.jpg" width="210px"><img src="https://github.com/tianlongbaobao/idut-HarmonyOS-Next/blob/2.1.0/demo/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20241201154854.jpg" width="210px"><img src="https://github.com/tianlongbaobao/idut-HarmonyOS-Next/blob/2.1.0/demo/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20241201155120.jpg" width="210px"><img src="https://github.com/tianlongbaobao/idut-HarmonyOS-Next/blob/2.4.0/demo/screenshot_20241213_091940.jpg" width="210px"><img src="https://github.com/tianlongbaobao/idut-HarmonyOS-Next/blob/2.4.0/demo/screenshot_20241213_090733.jpg" width="210px">
+
 
 ## **致谢&后续版本维护**
 <img src="https://github.com/tianlongbaobao/idut-HarmonyOS-Next/blob/2.0.0/demo/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20241130183925.jpg" width="210px">
