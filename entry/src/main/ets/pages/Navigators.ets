@@ -7,6 +7,7 @@ import { common } from '@kit.AbilityKit';
 import { promptAction } from '@kit.ArkUI';
 import { PermissionsUtil } from './utils/permission';
 import dataPreferences from '@ohos.data.preferences';
+import {browserProxy} from "./utils/Browserproxy"
 
 let context = getContext(this)
 const  account:string = (router.getParams() as Record<string, string>)['id2'];
@@ -14,11 +15,10 @@ const  password:string = (router.getParams() as Record<string, string>)['id1'];
 const  api: Array<ScriptItem> = [{ script: "username.value='" + account + "';password.value='" + password + "';submit.disabled='';submit.click()", scriptRules: ["*"] }]
 const  sso: Array<ScriptItem> = [{ script: "$(\"#un\").val('" + account + "');$(\"#pd\").val('" + password + "');login()", scriptRules: ["*"] }]
 const  vpn: Array<ScriptItem> = [{ script: "document.getElementById('cas-login').click()", scriptRules: ["*"] }]
-
+const  card: Array<ScriptItem> = [{ script: "document.getElementsByClassName('top gradient2')[0].outerHTML=''", scriptRules: ["*"] }]
 @Entry
 @Component
 struct  Navigators {
-
   pathStack: NavPathStack = new NavPathStack();
   private setImmersive() {
     window.getLastWindow(getContext()).then(win => {
@@ -124,7 +124,6 @@ struct  Navigators {
             }.margin({left:20})
           }
         }
-
 
         ListItem() {
           Text("2.校园生活").margin({left:20,top:15,bottom:10})
@@ -546,6 +545,7 @@ export struct pagecard {
   pathStack: NavPathStack = new NavPathStack();
   controller: webview.WebviewController = new webview.WebviewController();
   responseResource: WebResourceResponse = new WebResourceResponse();
+  @State BrowserProxy:browserProxy = new browserProxy(this.controller)
   build() {
     NavDestination() {
       Column() {
@@ -556,6 +556,13 @@ export struct pagecard {
           .onlineImageAccess(true)
           .domStorageAccess(true)
           .javaScriptOnDocumentEnd(api)
+          .javaScriptProxy({
+            object: this.BrowserProxy,
+            name:  "__nativeWhistleProxy",
+            methodList: ["issueCommand","configApp","debugOut"],
+            controller: this.controller,
+          })
+          .cacheMode(CacheMode.Online)
           .onPageBegin((event) => {
             if (event) {
               console.log(this.TAG, " onClickCamera");
@@ -569,12 +576,8 @@ export struct pagecard {
             }
           })
           .onControllerAttached(() => {
-            console.log("onControllerAttached");
-            try {
-              let userAgent = "Mozilla/ 5.0 (Linux; Android 10; EBG Build/ HUAWEIEBG; wv) AppleWebKit/ 537.36 (KHTML, like Gecko) Version/ 4.0 Chrome/ 88.0.4324.93 Mobile Safari/ 537.36 weishao(3.3.0.74633)";
-              this.controller.setCustomUserAgent(userAgent);
-            } catch (error) {
-            }
+            let userAgent = "Mozilla/ 5.0 (Linux; Android 10; EBG Build/ HUAWEIEBG; wv) AppleWebKit/ 537.36 (KHTML, like Gecko) Version/ 4.0 Chrome/ 88.0.4324.93 Mobile Safari/ 537.36 weishao(3.3.0.74633)";
+            this.controller.setCustomUserAgent(userAgent);
           })
           .onLoadIntercept((event) => {
             let data = event.data;
@@ -610,6 +613,13 @@ export struct pagecard {
     .onReady((context: NavDestinationContext) => {
       this.pathStack = context.pathStack
     })
+  }
+  private execute() {
+    console.log("123")
+    promptAction.showToast({
+      message: "123",
+      duration: 4000
+    });
   }
 }
 
@@ -971,6 +981,33 @@ export struct pageteach {
 }
 
 @Component
+export struct pagescan {
+  pathStack: NavPathStack = new NavPathStack();
+  controller: webview.WebviewController = new webview.WebviewController()
+  build() {
+    NavDestination() {
+      Column() {
+        Web({ src: "https://webvpn.dlut.edu.cn/http/57787a7876706e323032336b6579402472000514b2079f5bbe02ff3c84f58629/student/ucas-sso/login?filter=app&from=rj", controller: this.controller })
+          .javaScriptAccess(true)
+          .fileAccess(true)
+          .imageAccess(true)
+          .onlineImageAccess(true)
+          .domStorageAccess(true)
+          .javaScriptOnDocumentEnd(sso)
+      }
+    }.title("教务主页")
+    .onBackPressed(() => {
+      const popDestinationInfo = this.pathStack.pop()
+      console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
+      return true
+    })
+    .onReady((context: NavDestinationContext) => {
+      this.pathStack = context.pathStack
+    })
+  }
+}
+
+@Component
 export struct pageinformation {
   pathStack: NavPathStack = new NavPathStack();
   build() {
@@ -1070,7 +1107,7 @@ export struct pagesettings {
         Text("i大工社区版").margin({top:18})
           .fontSize(18)
           .fontWeight(FontWeight.Bold)
-        Text("版本号:2.1.0").margin({top:15})
+        Text("版本号:2.4.0").margin({top:15})
           .fontSize(15)
         Hyperlink('https://github.com/tianlongbaobao/idut-HarmonyOS-Next', 'Github源码') {
         }
