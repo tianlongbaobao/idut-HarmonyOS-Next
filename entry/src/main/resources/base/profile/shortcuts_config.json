@@ -1,0 +1,19 @@
+{
+  "shortcuts": [
+    {
+      "shortcutId": "vcard",
+      "label": "$string:card",
+      "icon": "$media:vicard",
+      "wants": [
+        {
+          "bundleName": "com.tianlongbaobao.idut",
+          "moduleName": "entry",
+          "abilityName": "EntryAbility",
+          "parameters": {
+            "shortCutKey": "CompanyPage"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -14,7 +14,47 @@
     },
     {
       "name": "reason",
-      "value": "调用相机完成扫码"
+      "value": "调用相机完成扫码功能"
+    },
+    {
+      "name": "scan",
+      "value": "扫一扫"
+    },
+    {
+      "name": "card",
+      "value": "虚拟卡"
+    },
+    {
+      "name": "EntryFormAbility_desc",
+      "value": "form_description"
+    },
+    {
+      "name": "EntryFormAbility_label",
+      "value": "form_label"
+    },
+    {
+      "name": "servicecard_desc",
+      "value": "看看今天有什么课吧"
+    },
+    {
+      "name": "servicecard_display_name",
+      "value": "今日课表"
+    },
+    {
+      "name": "card_list_title",
+      "value": "Title"
+    },
+    {
+      "name": "card_list_content",
+      "value": "Introduction"
+    },
+    {
+      "name": "dianwang_desc",
+      "value": "This is a service widget."
+    },
+    {
+      "name": "dianwang_display_name",
+      "value": "widget"
     }
   ]
 }
