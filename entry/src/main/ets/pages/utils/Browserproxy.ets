@@ -27,7 +27,65 @@ export class browserProxy{
       const responseBean:ResponseBean = JSON.parse(JSON.stringify(result))
       let value:string = responseBean.originalValue
       if (value.includes("whistle_info")) {
-        //未完工
+        let url: string = "";
+        try {
+          const parts = value.split("whistle_info=");
+          if (parts.length > 1) {
+            url = parts[1];
+          } else {
+            AlertDialog.show(
+              {
+                message: '无效的二维码',
+                autoCancel: false,
+                alignment: DialogAlignment.Bottom,
+                gridCount: 5,
+                offset: { dx: 0, dy: -20 },
+                primaryButton: {
+                  value: '确认',
+                  fontColor:"red",
+                  action: () => {
+                  }
+                },
+              }
+            )
+          }
+        } catch (e) {
+          AlertDialog.show(
+            {
+              message: '无效的二维码',
+              autoCancel: false,
+              alignment: DialogAlignment.Bottom,
+              gridCount: 5,
+              offset: { dx: 0, dy: -20 },
+              primaryButton: {
+                value: '确认',
+                fontColor:"red",
+                action: () => {
+                }
+              },
+            }
+          )
+        }
+
+        if (url.length < 5) {
+          AlertDialog.show(
+            {
+              message: '无效的二维码',
+              autoCancel: false,
+              alignment: DialogAlignment.Bottom,
+              gridCount: 5,
+              offset: { dx: 0, dy: -20 },
+              primaryButton: {
+                value: '确认',
+                fontColor:"red",
+                action: () => {
+                }
+              },
+            }
+          )
+        } else {
+          console.log("有效的 URL:", url);
+        }
       } else if (value.includes("qrLogin")){
         //未完工
 

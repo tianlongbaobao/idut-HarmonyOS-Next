@@ -8,6 +8,8 @@ import { promptAction } from '@kit.ArkUI';
 import { PermissionsUtil } from './utils/permission';
 import dataPreferences from '@ohos.data.preferences';
 import {browserProxy} from "./utils/Browserproxy"
+import {responsebean} from "./utils/ResponseBean"
+import {PhotoBean} from "./utils/photobean"
 
 let context = getContext(this)
 const  account:string = (router.getParams() as Record<string, string>)['id2'];
@@ -15,7 +17,7 @@ const  password:string = (router.getParams() as Record<string, string>)['id1'];
 const  api: Array<ScriptItem> = [{ script: "username.value='" + account + "';password.value='" + password + "';submit.disabled='';submit.click()", scriptRules: ["*"] }]
 const  sso: Array<ScriptItem> = [{ script: "$(\"#un\").val('" + account + "');$(\"#pd\").val('" + password + "');login()", scriptRules: ["*"] }]
 const  vpn: Array<ScriptItem> = [{ script: "document.getElementById('cas-login').click()", scriptRules: ["*"] }]
-const  card: Array<ScriptItem> = [{ script: "document.getElementsByClassName('top gradient2')[0].outerHTML=''", scriptRules: ["*"] }]
+
 @Entry
 @Component
 struct  Navigators {
@@ -76,6 +78,8 @@ struct  Navigators {
       pageteach()
     }else if (name === "设置") {
       pagesettings()
+    }else if (name === "个人证件") {
+      pageself()
     }
   }
   build() {
@@ -83,7 +87,7 @@ struct  Navigators {
     Navigation(this.pathStack) {
       List({ space: 7 }) {
         ListItem() {
-          Text("1.生活服务").margin({left:20,top:15,bottom:10})
+          Text("1.生活服务").margin({left:"4%",top:"7.5%",bottom:"5%"})
             .fontSize(20)
             .fontWeight(FontWeight.Bold)
         }
@@ -98,8 +102,8 @@ struct  Navigators {
                 this.pathStack.pushPath({ name: "玉兰卡" })
               })
               .width(80).height(80).backgroundColor("white")
-              Text("玉兰卡").margin({ top: 5 })
-            }.margin({left:20})
+              Text("玉兰卡").margin({ top: "2.5%" })
+            }.margin({left:"5%"})
             Column() {
               Button({ type: ButtonType.Circle, stateEffect: true }) {
                 Image("https://store.m.dlut.edu.cn/group1/M00/02/31/ynZM2V9Mt0SAE0SFAABPvJJ1-9A273.png")
@@ -109,8 +113,8 @@ struct  Navigators {
                 this.pathStack.pushPath({ name: "校车定位" })
               })
               .width(80).height(80).backgroundColor("white")
-              Text("校车定位").margin({ top: 5 })
-            }.margin({left:20})
+              Text("校车定位").margin({ top: "2.5%" })
+            }.margin({left:"8%"})
             Column() {
               Button({ type: ButtonType.Circle, stateEffect: true }) {
                 Image("https://store.m.dlut.edu.cn/group1/M00/00/01/ynZM2VkVANOAaHFwAAAhBvGkHdU6252034")
@@ -120,13 +124,13 @@ struct  Navigators {
                 this.pathStack.pushPath({ name: "校园地图" })
               })
               .width(80).height(80).backgroundColor("white")
-              Text("校园地图").margin({ top: 5 })
-            }.margin({left:20})
+              Text("校园地图").margin({ top: "2.5%" })
+            }.margin({left:"8%"})
           }
         }
 
         ListItem() {
-          Text("2.校园生活").margin({left:20,top:15,bottom:10})
+          Text("2.校园生活").margin({left:"4%",top:"7.5%",bottom:"5%"})
             .fontSize(20)
             .fontWeight(FontWeight.Bold)
         }
@@ -141,8 +145,8 @@ struct  Navigators {
                 this.pathStack.pushPath({ name: "体质测评" })
               })
               .width(80).height(80).backgroundColor("white")
-              Text("体质测评").margin({ top: 5 })
-            }.margin({left:20})
+              Text("体质测评").margin({ top: "2.5%" })
+            }.margin({left:"5%"})
             Column() {
               Button({ type: ButtonType.Circle, stateEffect: true }) {
                 Image("https://store.m.dlut.edu.cn/group1/M00/02/03/ynZM2V8hIHuAakGbAABHogF7lj8252.png")
@@ -152,8 +156,8 @@ struct  Navigators {
                 this.pathStack.pushPath({ name: "图书馆预约" })
               })
               .width(80).height(80).backgroundColor("white")
-              Text("图书馆预约").margin({ top: 5 })
-            }.margin({left:20})
+              Text("图书馆预约").margin({ top: "2.5%" })
+            }.margin({left:"8%"})
             Column() {
               Button({ type: ButtonType.Circle, stateEffect: true }) {
                 Image("https://store.m.dlut.edu.cn/group1/M00/02/30/ynZM2V9Mj2GAXxRpAAAZEquDC1U035.png")
@@ -163,8 +167,8 @@ struct  Navigators {
                 this.pathStack.pushPath({ name: "体育场馆预定" })
               })
               .width(80).height(80).backgroundColor("white")
-              Text("体育场馆预定").margin({ top: 5 })
-            }.margin({left:15})
+              Text("体育场馆预定").margin({ top: "2.5%" })
+            }.margin({left:"7%"})
           }
         }
 
@@ -180,8 +184,8 @@ struct  Navigators {
               })
               .width(80).height(80).backgroundColor("white")
 
-              Text("心理测评").margin({ top: 5 })
-            }.margin({ left: 20 })
+              Text("心理测评").margin({ top: "2.5%" })
+            }.margin({left:"5%"})
             Column() {
               Button({ type: ButtonType.Circle, stateEffect: true }) {
                 Image("https://ehall.dlut.edu.cn/fp/uploadfiles/uw_service/2019/06/20/1561004260430.png")
@@ -192,8 +196,8 @@ struct  Navigators {
               })
               .width(80).height(80).backgroundColor("white")
 
-              Text("读者入馆培训").margin({ top: 5 })
-            }.margin({ left: 10 })
+              Text("读者入馆培训").margin({ top: "2.5%" })
+            }.margin({left:"6%"})
             Column() {
               Button({ type: ButtonType.Circle, stateEffect: true }) {
                 Image("https://store.m.dlut.edu.cn/group1/M00/01/0B/ynZM2VuPucOAG2EUAAAijVD0PLU792.png")
@@ -204,12 +208,12 @@ struct  Navigators {
               })
               .width(80).height(80).backgroundColor("white")
 
-              Text("活动报名").margin({ top: 5 })
-            }.margin({ left: 18 })
+              Text("活动报名").margin({ top: "2.5%" })
+            }.margin({left:"7%"})
           }
         }
         ListItem() {
-          Text("3.教学与资源").margin({left:20,top:15,bottom:10})
+          Text("3.教学与资源").margin({left:"4%",top:"7.5%",bottom:"5%"})
             .fontSize(20)
             .fontWeight(FontWeight.Bold)
         }
@@ -224,8 +228,8 @@ struct  Navigators {
                 this.pathStack.pushPath({ name: "我的课表" })
               })
               .width(80).height(80).backgroundColor("white")
-              Text("我的课表").margin({ top: 5 })
-            }.margin({ left: 22 })
+              Text("我的课表").margin({ top: "2.5%" })
+            }.margin({left:"5%"})
             Column() {
               Button({ type: ButtonType.Circle, stateEffect: true }) {
                 Image("https://store.m.dlut.edu.cn/group1/M00/00/7B/ynZM2Vn7QI6AOQVDAAAZa-V0lMA6705172")
@@ -236,8 +240,8 @@ struct  Navigators {
               })
               .width(80).height(80).backgroundColor("white")
 
-              Text("考试安排").margin({ top: 5 })
-            }.margin({ left: 20 })
+              Text("考试安排").margin({ top: "2.5%" })
+            }.margin({left:"8%"})
             Column() {
               Button({ type: ButtonType.Circle, stateEffect: true }) {
                 Image("https://store.m.dlut.edu.cn/group1/M00/00/08/ynZM2VkeVL2AGt4BAAAYlzvpSVo6550599")
@@ -248,8 +252,8 @@ struct  Navigators {
               })
               .width(80).height(80).backgroundColor("white")
 
-              Text("空闲教室").margin({ top: 5 })
-            }.margin({ left: 20 })
+              Text("空闲教室").margin({ top: "2.5%" })
+            }.margin({left:"8%"})
           }
         }
         ListItem() {
@@ -263,8 +267,8 @@ struct  Navigators {
                 this.pathStack.pushPath({ name: "资源预约" })
               })
               .width(80).height(80).backgroundColor("white")
-              Text("资源预约").margin({ top: 5 })
-            }.margin({ left: 22 })
+              Text("资源预约").margin({ top: "2.5%" })
+            }.margin({left:"5%"})
             Column() {
               Button({ type: ButtonType.Circle, stateEffect: true }) {
                 Image("https://store.m.dlut.edu.cn/group1/M00/03/4A/ynZM2WGOE1KAbZSmAAAKzt9dyGg960.png")
@@ -275,8 +279,8 @@ struct  Navigators {
               })
               .width(80).height(80).backgroundColor("white")
 
-              Text("多媒体教室管理").margin({ top: 5 })
-            }.margin({ left: 8 })
+              Text("多媒体教室管理").margin({ top: "2.5%" })
+            }.margin({ left: "4%" })
             Column() {
               Button({ type: ButtonType.Circle, stateEffect: true }) {
                 Image("https://store.m.dlut.edu.cn/group1/M00/00/01/ynZM2VkU_9iAdpatAAAcFW_puS88241415")
@@ -287,28 +291,28 @@ struct  Navigators {
               })
               .width(80).height(80).backgroundColor("white")
 
-              Text("教师主页").margin({ top: 5 })
-            }.margin({ left: 0 })
+              Text("教师主页").margin({ top: "2.5%" })
+            }.margin({ left: "3%" })
           }
         }
         ListItem() {
           Row() {
             Column() {
               Button({ type: ButtonType.Circle, stateEffect: true }) {
-                Image("https://store.m.dlut.edu.cn/group1/M00/00/08/ynZM2VkeVL2AGt4BAAAYlzvpSVo6550599")
+                Image("https://store.m.dlut.edu.cn/group1/M00/05/7C/ynZM2WNgsKCAZc5sAAARL-e-cEo984.png")
                   .borderRadius(35)
               }
               .onClick(() => {
                 this.pathStack.pushPath({ name: "教务主页" })
               })
               .width(80).height(80).backgroundColor("white")
-              Text("教务主页").margin({ top: 5 })
-            }.margin({ left: 20 })
+              Text("大工教务").margin({ top: "2.5%" })
+            }.margin({ left: "5%" })
 
           }
         }
         ListItem() {
-          Text("4.网信服务").margin({left:20,top:15,bottom:10})
+          Text("4.网信服务").margin({left:"4%",top:"7.5%",bottom:"5%"})
             .fontSize(20)
             .fontWeight(FontWeight.Bold)
         }
@@ -324,8 +328,8 @@ struct  Navigators {
                 this.pathStack.pushPath({ name: "网络自助" })
               })
               .width(80).height(80).backgroundColor("white")
-              Text("网络自助").margin({ top: 5 })
-            }.margin({ left: 20 })
+              Text("网络自助").margin({ top: "2.5%" })
+            }.margin({ left: "5%" })
             Column() {
               Button({ type: ButtonType.Circle, stateEffect: true }) {
                 Image("https://store.m.dlut.edu.cn/group1/M00/01/45/ynZM2Vzjo7-AEl7QAAAv69n_AZs158.png")
@@ -335,12 +339,12 @@ struct  Navigators {
                 this.pathStack.pushPath({ name: "校园网测速"})
               })
               .width(80).height(80).backgroundColor("white")
-              Text("校园网测速").margin({ top: 5 })
-            }.margin({ left: 18 })
+              Text("校园网测速").margin({ top: "2.5%" })
+            }.margin({ left: "6%" })
           }
         }
         ListItem() {
-          Text("5.设置").margin({left:20,top:15,bottom:10})
+          Text("5.设置").margin({left:"4%",top:"7.5%",bottom:"5%"})
             .fontSize(20)
             .fontWeight(FontWeight.Bold)
         }
@@ -356,8 +360,20 @@ struct  Navigators {
               })
               .width(80).height(80).backgroundColor("white")
 
-              Text("设置").margin({ top: 5 })
-            }.margin({ left: 18 })
+              Text("设置").margin({ top: "2.5%" })
+            }.margin({ left: "5%" })
+            Column() {
+              Button({ type: ButtonType.Circle, stateEffect: true }) {
+                Image($rawfile("self.png"))
+
+              }
+              .onClick(() => {
+                this.pathStack.pushPath({ name: "个人证件"})
+              })
+              .width(80).height(80).backgroundColor("white")
+
+              Text("个人证件").margin({ top: "2.5%" })
+            }.margin({ left: "8%" })
             Column() {
               Button({ type: ButtonType.Circle, stateEffect: true }) {
                 Image($rawfile("contact.png"))
@@ -368,8 +384,8 @@ struct  Navigators {
               })
               .width(80).height(80).backgroundColor("white")
 
-              Text("联系我们").margin({ top: 5 })
-            }.margin({ left: 20 })
+              Text("联系我们").margin({ top: "2.5%" })
+            }.margin({ left: "8%" })
           }
         }
       }
@@ -519,7 +535,6 @@ export struct pagetest {
 @Component
 export struct pagecard {
   private TAG: string = "permissionPage";
-
   private showToast(content: string){
     try {
       promptAction.showToast({
@@ -570,7 +585,7 @@ export struct pagecard {
                 .then((isUserGrant)=> {
                   if (isUserGrant) {
                   } else {
-                    this.showToast("用户拒绝授权");
+                    this.showToast("请在设置中开启相机权限");
                   }
                 })
             }
@@ -960,15 +975,15 @@ export struct pageteach {
   build() {
     NavDestination() {
       Column() {
-        Web({ src: "https://webvpn.dlut.edu.cn/http/57787a7876706e323032336b6579402472000514b2079f5bbe02ff3c84f58629/student/ucas-sso/login?filter=app&from=rj", controller: this.controller })
+        Web({ src: "http://jxgl.dlut.edu.cn/cas-auth/jasig/cas/login?from=rj", controller: this.controller })
           .javaScriptAccess(true)
           .fileAccess(true)
           .imageAccess(true)
           .onlineImageAccess(true)
           .domStorageAccess(true)
-          .javaScriptOnDocumentEnd(sso)
+          .javaScriptOnDocumentEnd(api)
       }
-    }.title("教务主页")
+    }.title("大工教务")
     .onBackPressed(() => {
       const popDestinationInfo = this.pathStack.pop()
       console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
@@ -984,17 +999,12 @@ export struct pageteach {
 export struct pagescan {
   pathStack: NavPathStack = new NavPathStack();
   controller: webview.WebviewController = new webview.WebviewController()
+  aboutToAppear(): void {
+    console.log("1")
+  }
   build() {
     NavDestination() {
-      Column() {
-        Web({ src: "https://webvpn.dlut.edu.cn/http/57787a7876706e323032336b6579402472000514b2079f5bbe02ff3c84f58629/student/ucas-sso/login?filter=app&from=rj", controller: this.controller })
-          .javaScriptAccess(true)
-          .fileAccess(true)
-          .imageAccess(true)
-          .onlineImageAccess(true)
-          .domStorageAccess(true)
-          .javaScriptOnDocumentEnd(sso)
-      }
+
     }.title("教务主页")
     .onBackPressed(() => {
       const popDestinationInfo = this.pathStack.pop()
@@ -1023,15 +1033,15 @@ export struct pageinformation {
             .syncLoad(true)
             .width(90)
             .borderRadius(35)
-            .margin({ left: 20 })
+            .margin({ left: "10%" })
 
-          Text("天龙宝宝").margin({ top: 10 ,left: "20%"})
+          Text("天龙宝宝").margin({ top: "5%" ,left: "20%"})
             .fontSize(18)
             .fontWeight(FontWeight.Bold)
           Hyperlink('https://github.com/tianlongbaobao', 'Github主页') {
-          }.margin({ top: 10 ,left: "20%"})
-        }.margin({ top: 10 ,right: "40%"})
-        Text("特别鸣谢:").margin({ top: 30, right: "60%" })
+          }.margin({ top: "5%" ,left: "20%"})
+        }.margin({ top: "5%" ,right: "40%"})
+        Text("特别鸣谢:").margin({ top: "10%", right: "60%" })
           .fontSize(20)
           .fontWeight(FontWeight.Bold)
           .textAlign(TextAlign.Start)
@@ -1040,24 +1050,24 @@ export struct pageinformation {
             .syncLoad(true)
             .width(90)
             .borderRadius(35)
-            .margin({ left: 20 })
+            .margin({ left: "10%" })
 
-          Text("Shirai_Kuroko").margin({ top: 10 ,left: "10%"})
+          Text("Shirai_Kuroko").margin({ top: "5%" ,left: "10%"})
             .fontSize(18)
             .fontWeight(FontWeight.Bold)
           Hyperlink('https://github.com/IShiraiKurokoI', 'Github主页') {
-          }.margin({ top: 10 ,left: "10%"})
-        }.margin({ top: 10 ,right: "40%"})
+          }.margin({ top: "5%" ,left: "10%"})
+        }.margin({ top: "5%" ,right: "40%"})
         Row() {
           Image($rawfile('naosi.png'))
             .syncLoad(true)
             .width(120)
             .borderRadius(35)
-            .margin({ left: 20 })
+            .margin({ left: "10%" })
           Hyperlink('https://naosi.org/', "开发区网络与开源软件协会") {
-          }.margin({ top: 10 ,left: "10%"})
-        }.margin({ top: 40 ,right: "40%"})
-        Text("版本运维:").margin({ top: 50, right: "60%" })
+          }.margin({ top: "5%" ,left: "10%"})
+        }.margin({ top: "10%" ,right: "40%"})
+        Text("版本运维:").margin({ top: "10%", right: "60%" })
           .fontSize(20)
           .fontWeight(FontWeight.Bold)
           .textAlign(TextAlign.Start)
@@ -1066,20 +1076,20 @@ export struct pageinformation {
             .syncLoad(true)
             .width(90)
             .borderRadius(35)
-            .margin({ left: 20 })
+            .margin({ left: "10%" })
 
-          Text("luzhiyi@mail.dlut.edu.cnGithub源码提Issue").margin({ top: 10 ,left: "7%"})
+          Text("luzhiyi@mail.dlut.edu.cnGithub源码提Issue").margin({ top: "5%" ,left: "7%"})
             .fontSize(18)
-        }.margin({ top: 15 ,right: "40%"})
+        }.margin({ top: "5%" ,right: "40%"})
         Row() {
           Image($rawfile('naosi.png'))
             .syncLoad(true)
             .width(120)
             .borderRadius(35)
-            .margin({ left: 20 })
-          Text("Q群:724021138").margin({ top: 10 ,left: "10%"})
+            .margin({ left: "10%" })
+          Text("Q群:724021138").margin({ top: "5%" ,left: "10%"})
             .fontSize(18)
-        }.margin({ top: 50 ,right: "40%"})
+        }.margin({ top: "10%" ,right: "40%"})
       }
       }
     }.title("联系我们")
@@ -1103,23 +1113,24 @@ export struct pagesettings {
         Image($r('app.media.start'))
           .syncLoad(true)
           .width(100)
-          .margin({ top: 120 })
-        Text("i大工社区版").margin({top:18})
+          .margin({ top: "30%" })
+        Text("i大工社区版").margin({ top: "5%" })
           .fontSize(18)
           .fontWeight(FontWeight.Bold)
-        Text("版本号:2.4.0").margin({top:15})
+        Text("版本号:3.0.0").margin({ top: "5%" })
           .fontSize(15)
         Hyperlink('https://github.com/tianlongbaobao/idut-HarmonyOS-Next', 'Github源码') {
         }
         .color(Color.Blue)
-        .margin({top:15})
+        .margin({ top: "5%" })
         Button("退出登录")
-          .margin({top:20})
+          .margin({ top: "8%" })
           .backgroundColor("red")
           .onClick(() => {
           dataPreferences.getPreferences(context, "information").then(preferences=>{
             preferences.delete("account")
             preferences.delete("password")
+            preferences.delete("data")
             preferences.flush()
             router.pushUrl({
               url: 'pages/Index',
@@ -1130,11 +1141,90 @@ export struct pagesettings {
 
         })
           .width('80%')
-        Text("此与i大工官方版无关，由校内独立开发者开发，方便在鸿蒙Next上使用相关服务，仅供交流！").margin({top:290,left:45,right:45})
+        Text("此与i大工官方版无关，由校内独立开发者开发，方便在鸿蒙Next上使用相关服务，仅供交流！").margin({top:"80%",left:"10%",right:"10%"})
           .fontSize(13)
 
       }
     }.title("设置")
+    .onBackPressed(() => {
+      const popDestinationInfo = this.pathStack.pop()
+      console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
+      return true
+    })
+    .onReady((context: NavDestinationContext) => {
+      this.pathStack = context.pathStack
+    })
+  }
+}
+
+@Component
+export struct pageself {
+  @State id_photo:string = ""
+  @State backgroundurl:string = ""
+  @State username:string = account
+  @State name:string = ""
+  @State org:string = ""
+  pathStack: NavPathStack = new NavPathStack();
+  aboutToAppear(): void {
+    dataPreferences.getPreferences(context, "information").then(preferences=>{
+      preferences.get("data",'default').then((value)=>{
+        let data_c:responsebean = JSON.parse(String(value))
+        this.name = data_c.data.my_info.name
+        this.org = data_c.data.my_info.org[0].name
+        if (data_c.data.my_info.authority_identity == "teacher"){
+          this.backgroundurl="https://store.m.dlut.edu.cn/group1/M00/00/08/ynZM2VkeWmaAM-KOAADN7zRo2AM2844791"
+        } else if (data_c.data.my_info.authority_identity == "master"){
+          this.backgroundurl= "https://store.m.dlut.edu.cn/group1/M00/00/08/ynZM2VkeWmiASfbLAAKB81vLQoA7280918"
+        }else {
+          this.backgroundurl= "https://store.m.dlut.edu.cn/group1/M00/00/08/ynZM2VkeWmeATT1oAAJ416V6N7k0520839"
+        }
+        preferences.get("photo",'default').then((value)=>{
+          let photo_in:PhotoBean = JSON.parse(String(value))
+          this.id_photo = "data:image/png;base64," + photo_in.data.id_photo.replace(/\\\//g, "/")
+        })
+      })
+    }).catch((err:Error)=>{
+
+    })
+  }
+  @Builder OverlayNode() {
+    Row() {
+      Image(this.id_photo)
+        .width(60).height(80)
+      Column(){
+        Text("姓名:"+ this.name)
+          .fontSize(12)
+          .fontWeight(FontWeight.Bold)
+        Blank()
+          .height("7%")
+        Text("学号:"+ this.username)
+          .fontSize(12)
+          .fontWeight(FontWeight.Bold)
+        Blank()
+          .height("7%")
+        Text("院系:"+ this.org)
+          .fontSize(12)
+          .fontWeight(FontWeight.Bold)
+      }
+      .alignItems(HorizontalAlign.Start)
+
+      .margin({left:"5%"})
+    }.margin({left:"8%",top:"1%"})
+  }
+  build() {
+    NavDestination() {
+      Column() {
+        Row() {
+          Image(this.backgroundurl)
+            .height("25%")
+            .width("80%")
+            .borderRadius(20)
+            .overlay(this.OverlayNode(), { align: Alignment.Center })
+            .objectFit(ImageFit.Contain)
+            .margin({top:"8%"})
+        }
+      }
+    }.title("个人信息")
     .onBackPressed(() => {
       const popDestinationInfo = this.pathStack.pop()
       console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
