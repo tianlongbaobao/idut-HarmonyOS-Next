@@ -1,53 +1,56 @@
 {
   "ohos-module-entry": {
     "SELECT_TARGET": "default",
-    "MODULE_BUILD_DIR": "I:\\Harmony\\iduter\\entry\\build",
+    "MODULE_BUILD_DIR": "L:\\Harmony\\iduter\\entry\\build",
     "DEPENDENCY_INFO": {
-      "@ohos/crypto-js": "I:\\Harmony\\iduter\\oh_modules\\.ohpm\\@ohos+crypto-js@2.0.4\\oh_modules\\@ohos\\crypto-js",
-      "@cashier_alipay/cashiersdk": "I:\\Harmony\\iduter\\oh_modules\\.ohpm\\@cashier_alipay+cashiersdk@15.8.28\\oh_modules\\@cashier_alipay\\cashiersdk",
-      "@taobao-ohos/utdid_sdk": "I:\\Harmony\\iduter\\oh_modules\\.ohpm\\@taobao-ohos+utdid_sdk@sxn5blz8wnmyyhhjqdjifot4kh4asf+8aeifzj4aaey=\\oh_modules\\@taobao-ohos\\utdid_sdk",
-      "@alipay/blueshieldsdk": "I:\\Harmony\\iduter\\oh_modules\\.ohpm\\@alipay+blueshieldsdk@xy3aw+wprnwn5w0hnkn1+l8x1l+cy7hs8xj7upxeyw0=\\oh_modules\\@alipay\\blueshieldsdk"
+      "@ohos/crypto-js": "L:\\Harmony\\iduter\\oh_modules\\.ohpm\\@ohos+crypto-js@2.0.4\\oh_modules\\@ohos\\crypto-js",
+      "@cashier_alipay/cashiersdk": "L:\\Harmony\\iduter\\oh_modules\\.ohpm\\@cashier_alipay+cashiersdk@15.8.28\\oh_modules\\@cashier_alipay\\cashiersdk",
+      "@hzw/ohos-dsbridge": "L:\\Harmony\\iduter\\oh_modules\\.ohpm\\@hzw+ohos-dsbridge@1.7.2\\oh_modules\\@hzw\\ohos-dsbridge",
+      "@yue/webview_javascript_bridge": "L:\\Harmony\\iduter\\oh_modules\\.ohpm\\@yue+webview_javascript_bridge@1.0.1\\oh_modules\\@yue\\webview_javascript_bridge",
+      "@ohos/axios": "L:\\Harmony\\iduter\\oh_modules\\.ohpm\\@ohos+axios@2.2.4\\oh_modules\\@ohos\\axios",
+      "@taobao-ohos/utdid_sdk": "L:\\Harmony\\iduter\\oh_modules\\.ohpm\\@taobao-ohos+utdid_sdk@sxn5blz8wnmyyhhjqdjifot4kh4asf+8aeifzj4aaey=\\oh_modules\\@taobao-ohos\\utdid_sdk",
+      "@alipay/blueshieldsdk": "L:\\Harmony\\iduter\\oh_modules\\.ohpm\\@alipay+blueshieldsdk@xy3aw+wprnwn5w0hnkn1+l8x1l+cy7hs8xj7upxeyw0=\\oh_modules\\@alipay\\blueshieldsdk"
     },
     "TARGETS": {
       "default": {
-        "SOURCE_ROOT": "I:\\Harmony\\iduter\\entry\\src\\main",
+        "SOURCE_ROOT": "L:\\Harmony\\iduter\\entry\\src\\main",
         "RESOURCES_PATH": [
-          "I:\\Harmony\\iduter\\entry\\src\\main\\resources"
+          "L:\\Harmony\\iduter\\entry\\src\\main\\resources"
         ],
         "BUILD_PATH": {
-          "OUTPUT_PATH": "I:\\Harmony\\iduter\\entry\\build\\default\\outputs\\default",
-          "INTERMEDIA_PATH": "I:\\Harmony\\iduter\\entry\\build\\default\\intermediates",
-          "JS_ASSETS_PATH": "I:\\Harmony\\iduter\\entry\\build\\default\\intermediates\\loader_out\\default",
-          "JS_LITE_ASSETS_PATH": "I:\\Harmony\\iduter\\entry\\build\\default\\intermediates\\loader_out_lite\\default",
-          "RES_PATH": "I:\\Harmony\\iduter\\entry\\build\\default\\intermediates\\res\\default",
-          "RES_PROFILE_PATH": "I:\\Harmony\\iduter\\entry\\build\\default\\intermediates\\res\\default\\resources\\base\\profile",
-          "ETS_SUPER_VISUAL_PATH": "I:\\Harmony\\iduter\\entry\\build\\default\\cache\\default\\default@CompileArkTS\\esmodule",
-          "JS_SUPER_VISUAL_PATH": "I:\\Harmony\\iduter\\entry\\build\\default\\cache\\default\\default@CompileJS\\jsbundle",
-          "WORKER_LOADER": "I:\\Harmony\\iduter\\entry\\build\\default\\intermediates\\loader\\default\\loader.json",
-          "MANIFEST_JSON": "I:\\Harmony\\iduter\\entry\\build\\default\\intermediates\\manifest\\default",
-          "OUTPUT_METADATA_JSON": "I:\\Harmony\\iduter\\entry\\build\\default\\intermediates\\hap_metadata\\default\\output_metadata.json"
+          "OUTPUT_PATH": "L:\\Harmony\\iduter\\entry\\build\\default\\outputs\\default",
+          "INTERMEDIA_PATH": "L:\\Harmony\\iduter\\entry\\build\\default\\intermediates",
+          "JS_ASSETS_PATH": "L:\\Harmony\\iduter\\entry\\build\\default\\intermediates\\loader_out\\default",
+          "JS_LITE_ASSETS_PATH": "L:\\Harmony\\iduter\\entry\\build\\default\\intermediates\\loader_out_lite\\default",
+          "RES_PATH": "L:\\Harmony\\iduter\\entry\\build\\default\\intermediates\\res\\default",
+          "RES_PROFILE_PATH": "L:\\Harmony\\iduter\\entry\\build\\default\\intermediates\\res\\default\\resources\\base\\profile",
+          "ETS_SUPER_VISUAL_PATH": "L:\\Harmony\\iduter\\entry\\build\\default\\cache\\default\\default@CompileArkTS\\esmodule",
+          "JS_SUPER_VISUAL_PATH": "L:\\Harmony\\iduter\\entry\\build\\default\\cache\\default\\default@CompileJS\\jsbundle",
+          "WORKER_LOADER": "L:\\Harmony\\iduter\\entry\\build\\default\\intermediates\\loader\\default\\loader.json",
+          "MANIFEST_JSON": "L:\\Harmony\\iduter\\entry\\build\\default\\intermediates\\manifest\\default",
+          "OUTPUT_METADATA_JSON": "L:\\Harmony\\iduter\\entry\\build\\default\\intermediates\\hap_metadata\\default\\output_metadata.json"
         },
         "BUILD_OPTION": {
           "debuggable": true
         }
       },
       "ohosTest": {
-        "SOURCE_ROOT": "I:\\Harmony\\iduter\\entry\\src\\ohosTest",
+        "SOURCE_ROOT": "L:\\Harmony\\iduter\\entry\\src\\ohosTest",
         "RESOURCES_PATH": [
-          "I:\\Harmony\\iduter\\entry\\src\\ohosTest\\resources"
+          "L:\\Harmony\\iduter\\entry\\src\\ohosTest\\resources"
         ],
         "BUILD_PATH": {
-          "OUTPUT_PATH": "I:\\Harmony\\iduter\\entry\\build\\default\\outputs\\ohosTest",
-          "INTERMEDIA_PATH": "I:\\Harmony\\iduter\\entry\\build\\default\\intermediates",
-          "JS_ASSETS_PATH": "I:\\Harmony\\iduter\\entry\\build\\default\\intermediates\\loader_out\\ohosTest",
-          "JS_LITE_ASSETS_PATH": "I:\\Harmony\\iduter\\entry\\build\\default\\intermediates\\loader_out_lite\\ohosTest",
-          "RES_PATH": "I:\\Harmony\\iduter\\entry\\build\\default\\intermediates\\res\\ohosTest",
-          "RES_PROFILE_PATH": "I:\\Harmony\\iduter\\entry\\build\\default\\intermediates\\res\\ohosTest\\resources\\base\\profile",
-          "ETS_SUPER_VISUAL_PATH": "I:\\Harmony\\iduter\\entry\\build\\default\\cache\\ohosTest\\ohosTest@OhosTestCompileArkTS\\esmodule",
-          "JS_SUPER_VISUAL_PATH": "I:\\Harmony\\iduter\\entry\\build\\default\\cache\\ohosTest\\ohosTest@OhosTestCompileJS\\jsbundle",
-          "WORKER_LOADER": "I:\\Harmony\\iduter\\entry\\build\\default\\intermediates\\loader\\ohosTest\\loader.json",
-          "MANIFEST_JSON": "I:\\Harmony\\iduter\\entry\\build\\default\\intermediates\\manifest\\ohosTest",
-          "OUTPUT_METADATA_JSON": "I:\\Harmony\\iduter\\entry\\build\\default\\intermediates\\hap_metadata\\ohosTest\\output_metadata.json"
+          "OUTPUT_PATH": "L:\\Harmony\\iduter\\entry\\build\\default\\outputs\\ohosTest",
+          "INTERMEDIA_PATH": "L:\\Harmony\\iduter\\entry\\build\\default\\intermediates",
+          "JS_ASSETS_PATH": "L:\\Harmony\\iduter\\entry\\build\\default\\intermediates\\loader_out\\ohosTest",
+          "JS_LITE_ASSETS_PATH": "L:\\Harmony\\iduter\\entry\\build\\default\\intermediates\\loader_out_lite\\ohosTest",
+          "RES_PATH": "L:\\Harmony\\iduter\\entry\\build\\default\\intermediates\\res\\ohosTest",
+          "RES_PROFILE_PATH": "L:\\Harmony\\iduter\\entry\\build\\default\\intermediates\\res\\ohosTest\\resources\\base\\profile",
+          "ETS_SUPER_VISUAL_PATH": "L:\\Harmony\\iduter\\entry\\build\\default\\cache\\ohosTest\\ohosTest@OhosTestCompileArkTS\\esmodule",
+          "JS_SUPER_VISUAL_PATH": "L:\\Harmony\\iduter\\entry\\build\\default\\cache\\ohosTest\\ohosTest@OhosTestCompileJS\\jsbundle",
+          "WORKER_LOADER": "L:\\Harmony\\iduter\\entry\\build\\default\\intermediates\\loader\\ohosTest\\loader.json",
+          "MANIFEST_JSON": "L:\\Harmony\\iduter\\entry\\build\\default\\intermediates\\manifest\\ohosTest",
+          "OUTPUT_METADATA_JSON": "L:\\Harmony\\iduter\\entry\\build\\default\\intermediates\\hap_metadata\\ohosTest\\output_metadata.json"
         },
         "BUILD_OPTION": {
           "debuggable": true
@@ -101,15 +104,15 @@
   },
   "ohos-project": {
     "SELECT_PRODUCT_NAME": "default",
-    "MODULE_BUILD_DIR": "I:\\Harmony\\iduter\\build",
+    "MODULE_BUILD_DIR": "L:\\Harmony\\iduter\\build",
     "BUNDLE_NAME": "com.tianlongbaobao.idut",
     "BUILD_PATH": {
-      "OUTPUT_PATH": "I:\\Harmony\\iduter\\build\\outputs\\default"
+      "OUTPUT_PATH": "L:\\Harmony\\iduter\\build\\outputs\\default"
     },
     "MODULES": [
       {
         "name": "entry",
-        "srcPath": "I:\\Harmony\\iduter\\entry",
+        "srcPath": "L:\\Harmony\\iduter\\entry",
         "targets": [
           {
             "name": "default",
@@ -118,7 +121,7 @@
             ]
           }
         ],
-        "belongProjectPath": "I:\\Harmony\\iduter"
+        "belongProjectPath": "L:\\Harmony\\iduter"
       }
     ],
     "PROFILE_OPT": {
@@ -182,7 +185,7 @@
       "hvigor.keepDependency": true
     },
     "OVERALL_PROJECT_PATHS": [
-      "I:\\Harmony\\iduter"
+      "L:\\Harmony\\iduter"
     ]
   },
   "version": 1
