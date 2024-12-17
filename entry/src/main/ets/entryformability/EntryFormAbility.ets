@@ -3,8 +3,29 @@ import { Want } from '@kit.AbilityKit';
 import axios, { AxiosResponse } from '@ohos/axios';
 import dataPreferences from '@ohos.data.preferences';
 import {GetwhistleVersion,GetHeaderValueFora,GetHeaderForVersion,GetHeaderForNonce,GetHeaderForSign,GetHeaderForTimeStamp} from "../pages/backrequest/c"
-import {courseres} from "../pages/utils/coursebean"
+import {courseres,course} from "../pages/utils/coursebean"
+import {responsebean} from "../pages/utils/ResponseBean"
+import {card,elec} from "../pages/utils/cardbean"
 
+function removestr(str: string): string {
+  let result: string = "";
+
+  for (let i = 0; i < str.length; i++) {
+    const c: string = str.charAt(i);
+
+    // 检查字符首次和末次出现的位置
+    if (str.indexOf(c) === str.lastIndexOf(c)) {
+      result += c;
+    } else {
+      // 如果是字符的第一次出现，添加到结果中
+      if (str.indexOf(c) === i) {
+        result += c;
+      }
+    }
+  }
+
+  return result;
+}
 
 export default class EntryFormAbility extends FormExtensionAbility {
   onCreate(want: Want): formBindingData.FormBindingData {
@@ -27,6 +48,7 @@ export default class EntryFormAbility extends FormExtensionAbility {
       refresh_token:string
       token_type:string
     }
+
     axios.post('https://api.m.dlut.edu.cn/oauth/token', requestbodystring, {
       headers: {
         'a': a,
@@ -52,45 +74,49 @@ export default class EntryFormAbility extends FormExtensionAbility {
             url: url
           }).then((res: AxiosResponse) => {
             let bb :courseres = JSON.parse(JSON.stringify(res.data))
-            let classes1name:string =  '1'
-            let classes_number = "4"
-            try {
-              classes_number = String(bb.data.length)
-            } catch (e) {
-              classes_number = "1234"
+            const now: Date = new Date();
+            const hours: number = now.getHours();
+            let cc:course[] =[];
+            let  i = 0;
+            for (let index = 0; index < bb.data.length; index++) {
+              if (Number(bb.data[index].event_begintime.split(":")[0])>=hours) {
+                cc[i] = bb.data[index]
+                i++
+              }
             }
+            let classes1name:string =  '1'
             try {
-              classes1name =  JSON.stringify(bb.data[0].course_name)
+              classes1name =  JSON.stringify(cc[0].course_name)
             } catch (e){
               classes1name =  "暂无课程"
             }
             let classes1time:string =  '1'
             try {
-              classes1time =  JSON.stringify(bb.data[0].event_begintime+"--"+bb.data[0].event_endtime)
+              classes1time =  JSON.stringify(cc[0].event_begintime+"--"+cc[0].event_endtime)
             } catch (e){
               classes1time =  "-"
             }
             let classes1add:string =  '1'
             try {
-              classes1add =  JSON.stringify(bb.data[0].course_address)
+              classes1add =  removestr(JSON.stringify(cc[0].course_address))
             } catch (e){
               classes1add =  "-"
             }
             let classes2name:string =  '1'
             try {
-              classes2name =  JSON.stringify(bb.data[1].course_name)
+              classes2name =  JSON.stringify(cc[1].course_name)
             } catch (e){
               classes2name =  "暂无课程"
             }
             let classes2time:string =  '1'
             try {
-              classes2time =  JSON.stringify(bb.data[1].event_begintime+"--"+bb.data[1].event_endtime)
+              classes2time =  JSON.stringify(cc[1].event_begintime+"--"+cc[1].event_endtime)
             } catch (e){
               classes2time =  "-"
             }
             let classes2add:string =  '1'
             try {
-              classes2add =  JSON.stringify(bb.data[1].course_address)
+              classes2add =  removestr(JSON.stringify(cc[1].course_address))
             } catch (e){
               classes2add =  "-"
             }
@@ -101,8 +127,8 @@ export default class EntryFormAbility extends FormExtensionAbility {
               'classes2name': classes2name,
               'classes2time': classes2time,
               "classes2add": classes2add,
-              "classesnumber": classes_number,
             };
+
             let formInfo: formBindingData.FormBindingData = formBindingData.createFormBindingData(param);
             formProvider.updateForm(formId, formInfo);
           })
@@ -157,45 +183,49 @@ export default class EntryFormAbility extends FormExtensionAbility {
               url: url
             }).then((res: AxiosResponse) => {
               let bb :courseres = JSON.parse(JSON.stringify(res.data))
-              let classes1name:string =  '1'
-              let classes_number = "4"
-              try {
-                classes_number = String(bb.data.length)
-              } catch (e) {
-                classes_number = "1234"
+              const now: Date = new Date();
+              const hours: number = now.getHours();
+              let cc:course[] =[];
+              let  i = 0;
+              for (let index = 0; index < bb.data.length; index++) {
+                if (Number(bb.data[index].event_begintime.split(":")[0])>=hours) {
+                  cc[i] = bb.data[index]
+                  i++
+                }
               }
+              let classes1name:string =  '1'
               try {
-                classes1name =  JSON.stringify(bb.data[0].course_name)
+                classes1name =  JSON.stringify(cc[0].course_name)
               } catch (e){
                 classes1name =  "暂无课程"
               }
               let classes1time:string =  '1'
               try {
-                classes1time =  JSON.stringify(bb.data[0].event_begintime+"--"+bb.data[0].event_endtime)
+                classes1time =  JSON.stringify(cc[0].event_begintime+"--"+cc[0].event_endtime)
               } catch (e){
                 classes1time =  "-"
               }
               let classes1add:string =  '1'
               try {
-                classes1add =  JSON.stringify(bb.data[0].course_address)
+                classes1add =  JSON.stringify(cc[0].course_address)
               } catch (e){
                 classes1add =  "-"
               }
               let classes2name:string =  '1'
               try {
-                classes2name =  JSON.stringify(bb.data[1].course_name)
+                classes2name =  JSON.stringify(cc[1].course_name)
               } catch (e){
                 classes2name =  "暂无课程"
               }
               let classes2time:string =  '1'
               try {
-                classes2time =  JSON.stringify(bb.data[1].event_begintime+"--"+bb.data[1].event_endtime)
+                classes2time =  JSON.stringify(cc[1].event_begintime+"--"+cc[1].event_endtime)
               } catch (e){
                 classes2time =  "-"
               }
               let classes2add:string =  '1'
               try {
-                classes2add =  JSON.stringify(bb.data[1].course_address)
+                classes2add =  JSON.stringify(cc[1].course_address)
               } catch (e){
                 classes2add =  "-"
               }
@@ -206,7 +236,7 @@ export default class EntryFormAbility extends FormExtensionAbility {
                 'classes2name': classes2name,
                 'classes2time': classes2time,
                 "classes2add": classes2add,
-                "classesnumber": classes_number
+
               };
               let formInfo: formBindingData.FormBindingData = formBindingData.createFormBindingData(param);
               formProvider.updateForm(formId, formInfo);
@@ -215,7 +245,30 @@ export default class EntryFormAbility extends FormExtensionAbility {
 
         })
       })
-
+    dataPreferences.getPreferences(this.context, "information").then(preferences=> {
+      preferences.get("data", 'default').then((value) => {
+        let op:responsebean = JSON.parse(value.toString())
+        axios<string, AxiosResponse<string>, null>({
+          method: "get",
+          url: "https://lightapp.m.dlut.edu.cn/api/library/library/ecard?verify="+op.data.verify
+        }).then((res: AxiosResponse) => {
+          axios<string, AxiosResponse<string>, null>({
+            method: "get",
+            url: "https://lightapp.m.dlut.edu.cn/api/courseschedule/dorm/get_dorm_info?verify="+op.data.verify
+          }).then((rca: AxiosResponse) => {
+            let mm: card = JSON.parse(JSON.stringify(res.data))
+            let kk:elec = JSON.parse(JSON.stringify(rca.data))
+            let pacv: Record<string, string> = {
+              "cardmoney": mm.data[0].value,
+              "room":kk.data[0].data[0].text.split("：")[1],
+              "elec":kk.data[1].data[0].text.split("：")[1]
+            }
+            let formmn: formBindingData.FormBindingData = formBindingData.createFormBindingData(pacv);
+            formProvider.updateForm(formId, formmn);
+          })
+        })
+      })
+    })
     // 当异步更新时，onAddForm方法最后可以返回 null
     return formBindingData.createFormBindingData(formData);
   }

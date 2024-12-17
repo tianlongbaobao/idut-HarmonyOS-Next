@@ -44,6 +44,21 @@ export default class EntryAbility extends UIAbility {
         })
       })
 
+    }else  if (this.selectPage =="check"){
+      this.selectPage=""
+      dataPreferences.getPreferences(this.context, "information").then(preferences=> {
+        preferences.get("account", 'default').then((value) => {
+          preferences.get("password","default").then((ljc) => {
+            router.pushUrl({
+              url: 'pages/Card',
+              params:{
+                id1:ljc,
+                id2:value}
+            })
+          })
+        })
+      })
+
     }
   }
   onNewWant(want: Want, launchParam: AbilityConstant.LaunchParam): void {
@@ -95,6 +110,10 @@ export default class EntryAbility extends UIAbility {
               break;
             case 'vcard':
               path = 'pages/Vcard';
+              this.selectPage = ""
+              break;
+            case 'check':
+              path = 'pages/Card';
               this.selectPage = ""
               break;
             default:
