@@ -16,7 +16,7 @@
 
 2.请前往[作者主页](https://luzhiyidut.cn)下载(不要使用校园网，作者服务器ip被校园网墙了)
 
-## **二次开发和编译
+## **二次开发和编译**
 
 部分加密算法和服务器端口信息已经隐去，编译时会缺失文件而无法自行编译。希望自行编译和进行二次开发的请用邮箱联系我(luzhiyi@mail.dlut.edu.cn)，并提供dut在读证明(android的java源码请联系[@Shirai_Kuroko](https://github.com/IShiraiKurokoI)，鸿蒙的arkts源码可以联系我！)
 
