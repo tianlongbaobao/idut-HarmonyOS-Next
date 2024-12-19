@@ -10,6 +10,9 @@ import dataPreferences from '@ohos.data.preferences';
 import {browserProxy} from "./utils/Browserproxy"
 import {responsebean} from "./utils/ResponseBean"
 import {PhotoBean} from "./utils/photobean"
+import {ec} from "./backrequest/elec"
+import {updatedata} from "./backrequest/Update"
+import {Lingshui} from "./backrequest/network"
 
 let context = getContext(this)
 const  account:string = (router.getParams() as Record<string, string>)['id2'];
@@ -1001,9 +1004,21 @@ export struct pagescan {
   controller: webview.WebviewController = new webview.WebviewController()
   aboutToAppear(): void {
     console.log("1")
+    ec()
   }
   build() {
     NavDestination() {
+      Button('loadUrl')
+        .onClick(() => {
+          try {
+                // 点击按钮时，通过loadUrl，跳转到www.example1.com
+            this.controller.loadUrl('www.example1.com');
+          } catch (error) {
+            console.error(`ErrorCode: ${(error as BusinessError).code},  Message: ${(error as BusinessError).message}`);
+          }
+        })
+          // 组件创建时，加载www.example.com
+          Web({ src: 'www.example.com', controller: this.controller })
 
     }.title("教务主页")
     .onBackPressed(() => {
@@ -1016,6 +1031,7 @@ export struct pagescan {
     })
   }
 }
+
 
 @Component
 export struct pageinformation {
@@ -1117,12 +1133,24 @@ export struct pagesettings {
         Text("i大工社区版").margin({ top: "5%" })
           .fontSize(18)
           .fontWeight(FontWeight.Bold)
-        Text("版本号:3.0.0").margin({ top: "5%" })
+        Text("版本号:3.2.0").margin({ top: "5%" })
           .fontSize(15)
         Hyperlink('https://github.com/tianlongbaobao/idut-HarmonyOS-Next', 'Github源码') {
         }
         .color(Color.Blue)
         .margin({ top: "5%" })
+        Hyperlink('https://luzhiyidut.cn/', '作者主页(校园网环境无法访问)') {
+        }
+        .color(Color.Blue)
+        .margin({ top: "5%" })
+        Button("检查更新")
+          .margin({ top: "8%" })
+          .backgroundColor("blue")
+          .onClick(() => {
+            updatedata()
+
+          })
+          .width('80%')
         Button("退出登录")
           .margin({ top: "8%" })
           .backgroundColor("red")
@@ -1131,6 +1159,7 @@ export struct pagesettings {
             preferences.delete("account")
             preferences.delete("password")
             preferences.delete("data")
+            preferences.delete("photo")
             preferences.flush()
             router.pushUrl({
               url: 'pages/Index',
@@ -1179,6 +1208,7 @@ export struct pageself {
           this.backgroundurl= "https://store.m.dlut.edu.cn/group1/M00/00/08/ynZM2VkeWmeATT1oAAJ416V6N7k0520839"
         }
         preferences.get("photo",'default').then((value)=>{
+
           let photo_in:PhotoBean = JSON.parse(String(value))
           this.id_photo = "data:image/png;base64," + photo_in.data.id_photo.replace(/\\\//g, "/")
         })
@@ -1224,7 +1254,7 @@ export struct pageself {
             .margin({top:"8%"})
         }
       }
-    }.title("个人信息")
+    }.title("个人证件")
     .onBackPressed(() => {
       const popDestinationInfo = this.pathStack.pop()
       console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))

@@ -2,6 +2,9 @@ import { scanCore, scanBarcode } from '@kit.ScanKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { BusinessError } from '@kit.BasicServicesKit';
 import { webview } from "@kit.ArkWeb";
+import router from '@ohos.router';
+import {ApiLogin} from "../backrequest/apiqr"
+
 
 export class browserProxy{
   controller: webview.WebviewController;
@@ -26,12 +29,14 @@ export class browserProxy{
     scanBarcode.startScanForResult(getContext(this), options).then((result: scanBarcode.ScanResult) => {
       const responseBean:ResponseBean = JSON.parse(JSON.stringify(result))
       let value:string = responseBean.originalValue
+      console.log(value)
       if (value.includes("whistle_info")) {
         let url: string = "";
         try {
           const parts = value.split("whistle_info=");
           if (parts.length > 1) {
             url = parts[1];
+            ApiLogin(url)
           } else {
             AlertDialog.show(
               {
@@ -87,7 +92,11 @@ export class browserProxy{
           console.log("有效的 URL:", url);
         }
       } else if (value.includes("qrLogin")){
-        //未完工
+        router.pushUrl({
+          url: 'pages/SSO',
+          params:{
+            id1:value}
+        })
 
       } else {
         let encodedResult = encodeURIComponent(value.replace(/\n/g, "%5cn").replace(/\r/g, "%5cr").replace(/\t/g, "%5ct").replace(/\\/g, "%5c"));

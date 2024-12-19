@@ -4,7 +4,7 @@ export interface courseres{
   data:course[]
 }
 
-interface course {
+export interface course {
   typeid:number
   lesson_times:number
   succession:number
