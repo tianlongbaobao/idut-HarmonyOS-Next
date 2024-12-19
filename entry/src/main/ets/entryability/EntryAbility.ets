@@ -4,6 +4,9 @@ import { Router, window } from '@kit.ArkUI';
 import { UIContext } from '@kit.ArkUI'
 import { router } from '@kit.ArkUI';
 import dataPreferences from '@ohos.data.preferences';
+import { scanCore, scanBarcode } from '@kit.ScanKit';
+import { BusinessError } from '@kit.BasicServicesKit';
+import {ApiLogin} from "../pages/backrequest/apiqr"
 
 export default class EntryAbility extends UIAbility {
   funcAbilityWant: Want | undefined = undefined;
@@ -58,6 +61,95 @@ export default class EntryAbility extends UIAbility {
           })
         })
       })
+
+    } else if (this.uiContext && shortCutKey && shortCutKey === 'Scan'){
+      shortCutKey = ""
+      let options: scanBarcode.ScanOptions = {
+        scanTypes: [scanCore.ScanType.ALL],
+        enableMultiMode: true,
+        enableAlbum: true
+      };
+      interface ResponseBean {
+        scanType: number;
+        originalValue:string
+      }
+      scanBarcode.startScanForResult(getContext(this), options).then((result: scanBarcode.ScanResult) => {
+        const responseBean:ResponseBean = JSON.parse(JSON.stringify(result))
+        let value:string = responseBean.originalValue
+        console.log(value)
+        if (value.includes("whistle_info")) {
+          let url: string = "";
+          try {
+            const parts = value.split("whistle_info=");
+            if (parts.length > 1) {
+              url = parts[1];
+              ApiLogin(url)
+            } else {
+              AlertDialog.show(
+                {
+                  message: '无效的二维码',
+                  autoCancel: false,
+                  alignment: DialogAlignment.Bottom,
+                  gridCount: 5,
+                  offset: { dx: 0, dy: -20 },
+                  primaryButton: {
+                    value: '确认',
+                    fontColor:"red",
+                    action: () => {
+                    }
+                  },
+                }
+              )
+            }
+          } catch (e) {
+            AlertDialog.show(
+              {
+                message: '无效的二维码',
+                autoCancel: false,
+                alignment: DialogAlignment.Bottom,
+                gridCount: 5,
+                offset: { dx: 0, dy: -20 },
+                primaryButton: {
+                  value: '确认',
+                  fontColor:"red",
+                  action: () => {
+                  }
+                },
+              }
+            )
+          }
+
+          if (url.length < 5) {
+            AlertDialog.show(
+              {
+                message: '无效的二维码',
+                autoCancel: false,
+                alignment: DialogAlignment.Bottom,
+                gridCount: 5,
+                offset: { dx: 0, dy: -20 },
+                primaryButton: {
+                  value: '确认',
+                  fontColor:"red",
+                  action: () => {
+                  }
+                },
+              }
+            )
+          } else {
+            console.log("有效的 URL:", url);
+          }
+        } else if (value.includes("qrLogin")){
+          router.pushUrl({
+            url: 'pages/SSO',
+            params:{
+              id1:value}
+          })
+
+        }
+      }).catch((error: BusinessError) => {
+        hilog.error(0x0001, '[Scan CPSample]',
+          `Failed to get ScanResult by promise with options. Code:${error.code}, message: ${error.message}`);
+      });
 
     }
   }
@@ -116,8 +208,8 @@ export default class EntryAbility extends UIAbility {
               path = 'pages/Card';
               this.selectPage = ""
               break;
-            default:
-              path = 'pages/Jumping';
+            default :
+              path = 'pages/Jumping'
           }
         }
         console.log(this.selectPage)

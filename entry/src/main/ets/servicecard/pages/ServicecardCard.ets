@@ -12,7 +12,7 @@ struct ServicecardCard {
   @LocalStorageProp('classes2name') classes2name: string = ""
   @LocalStorageProp('classes2time') classes2time: string = ""
   @LocalStorageProp('classes2add') classes2add: string = ""
-  @LocalStorageProp('classesnumber') classes_number: string = "1"
+
   /*
    * The action type.
    */
@@ -38,42 +38,41 @@ struct ServicecardCard {
     content: "今日课表",
     icon: $r('app.media.list_item')
   };
-  cardList: Array<number> = new Array(0, 1);
-  @State cardListParameter: CardListParameter = new CardListParameter($r('sys.color.ohos_id_color_background'),
-    "今日课表", '', ImageSize.Auto, $r('app.media.class'), true,
-    $r('sys.color.ohos_id_color_background'), true, Number(this.classes_number.replace(/^['"]|['"]$/g, '')), $r('sys.color.ohos_id_color_emphasize'),
-    $r('app.color.list_item_count_background'), '', true, $r('app.media.bottom_icon'));
 
+  @State cardList: CardListParameter = new CardListParameter($r('sys.color.ohos_id_color_background'),
+    "今日课表", '', ImageSize.Auto, $r('app.media.class'), true,
+    $r('sys.color.ohos_id_color_background'), true, 0, $r('sys.color.ohos_id_color_emphasize'),
+    $r('app.color.list_item_count_background'), '', true, $r('app.media.bottom_icon'));
   @Builder
   cardListBuilder() {
       ListItem() {
         Row() {
           Column() {
-            Text(this.classes1name.replace(/^['"]|['"]$/g, ''))
-              .maxLines(1)
-              .textOverflow({ overflow: TextOverflow.Ellipsis })
-              .fontSize($r('app.float.item_content_font_size'))
-              .fontWeight(FontWeight.Medium)
-              .fontColor(Color.Black)
-              .height($r('app.float.item_text_height'))
-            Text(this.classes1add.replace(/^['"]|['"]$/g, ''))
-              .maxLines(1)
-              .fontSize($r('app.float.item_content_font_size'))
-              .textOverflow({ overflow: TextOverflow.Ellipsis })
-              .fontWeight(FontWeight.Regular)
-              .height($r('app.float.item_text_height'))
-            Text(this.classes1time.replace(/^['"]|['"]$/g, ''))
-              .maxLines(1)
-              .fontSize($r('app.float.item_content_font_size'))
-              .textOverflow({ overflow: TextOverflow.Ellipsis })
-              .fontWeight(FontWeight.Regular)
-              .height($r('app.float.item_text_height'))
+              Text(this.classes1name.replace(/^['"]|['"]$/g, '').split("\"")[0])
+                .maxLines(1)
+                .textOverflow({ overflow: TextOverflow.Ellipsis })
+                .fontSize($r('app.float.item_content_font_size'))
+                .fontWeight(FontWeight.Bold)
+                .fontColor(Color.Black)
+                .height(14)
+                .margin({ top: "-0.5%" })
+              Text(this.classes1add.replace(/^['"]|['"]$/g, ''))
+                .maxLines(1)
+                .fontSize(10)
+                .textOverflow({ overflow: TextOverflow.Ellipsis })
+                .fontWeight(FontWeight.Regular)
+                .height(14)
+              Text(this.classes1time.replace(/^['"]|['"]$/g, ''))
+                .maxLines(1)
+                .fontSize(12)
+                .textOverflow({ overflow: TextOverflow.Ellipsis })
+                .fontWeight(FontWeight.Regular)
+                .height(14)
 
             Divider()
               .strokeWidth(0.38)
               .lineCap(LineCapStyle.Square)
           }
-          .offset({top:-2})
           .alignItems(HorizontalAlign.Start)
           .layoutWeight(1)
         }
@@ -81,7 +80,7 @@ struct ServicecardCard {
         .width(this.FULL_WIDTH_PERCENT)
       }
       .width(this.FULL_WIDTH_PERCENT)
-      .height($r('app.float.item_height'))
+      .height(40)
       ListItem() {
         Row() {
           Column() {
@@ -89,22 +88,22 @@ struct ServicecardCard {
               .maxLines(1)
               .textOverflow({ overflow: TextOverflow.Ellipsis })
               .fontSize($r('app.float.item_content_font_size'))
-              .fontWeight(FontWeight.Medium)
+              .fontWeight(FontWeight.Bold)
               .fontColor(Color.Black)
               .height($r('app.float.item_text_height'))
-              .margin({top:"2%"})
+              .margin({top:3})
             Text(this.classes2add.replace(/^['"]|['"]$/g, ''))
               .maxLines(1)
-              .fontSize($r('app.float.item_content_font_size'))
+              .fontSize(10)
               .textOverflow({ overflow: TextOverflow.Ellipsis })
               .fontWeight(FontWeight.Regular)
-              .height($r('app.float.item_text_height'))
+              .height(14)
             Text(this.classes2time.replace(/^['"]|['"]$/g, ''))
               .maxLines(1)
               .fontSize($r('app.float.item_content_font_size'))
               .textOverflow({ overflow: TextOverflow.Ellipsis })
               .fontWeight(FontWeight.Regular)
-              .height($r('app.float.item_text_height'))
+              .height(14)
           }
           .alignItems(HorizontalAlign.Start)
           .layoutWeight(1)
@@ -113,12 +112,12 @@ struct ServicecardCard {
         .width(this.FULL_WIDTH_PERCENT)
       }
       .width(this.FULL_WIDTH_PERCENT)
-      .height($r('app.float.item_height'))
+      .height(40)
   }
 
   build() {
     Row() {
-      CardListComponent({ cardListParameter: this.cardListParameter }) {
+      CardListComponent({ cardListParameter: this.cardList }) {
         this.cardListBuilder()
       }
     }
