@@ -31,6 +31,12 @@
               "action.system.home"
             ]
           }
+        ],
+        "metadata": [
+          {
+            "name": "ohos.ability.shortcuts",
+            "resource": "$profile:shortcuts_config"
+          }
         ]
       }
     ],
@@ -46,31 +52,53 @@
             "resource": "$profile:backup_config"
           }
         ],
+      },
+      {
+        "name": "EntryFormAbility",
+        "srcEntry": "./ets/entryformability/EntryFormAbility.ets",
+        "label": "$string:EntryFormAbility_label",
+        "description": "$string:EntryFormAbility_desc",
+        "type": "form",
+        "metadata": [
+          {
+            "name": "ohos.extension.form",
+            "resource": "$profile:form_config"
+          }
+        ]
       }
     ],
-    "requestPermissions":[
+    "requestPermissions": [
       {
-        "name" : "ohos.permission.INTERNET",
+        "name": "ohos.permission.INTERNET",
         "usedScene": {
           "abilities": [
             "FormAbility"
           ],
-          "when":"always"
+          "when": "always"
         }
       },
       {
-        "name" : "ohos.permission.CAMERA",
+        "name": "ohos.permission.KEEP_BACKGROUND_RUNNING",
+        "usedScene": {
+          "abilities": [
+            "FormAbility"
+          ],
+          "when": "always"
+        }
+      },
+      {
+        "name": "ohos.permission.CAMERA",
         "reason": "$string:reason",
         "usedScene": {
           "abilities": [
             "FormAbility"
           ],
-          "when":"always"
+          "when": "always"
         }
       }
     ],
     "querySchemes": [
       "alipays"
-      ],
+    ],
   }
 }
