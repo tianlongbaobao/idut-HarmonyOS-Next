@@ -11,6 +11,9 @@
 <img src="https://github.com/tianlongbaobao/idut-HarmonyOS-Next/blob/2.0.0/demo/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20241130183925.jpg" width="210px"><img src="https://github.com/tianlongbaobao/idut-HarmonyOS-Next/blob/3.1.0/demo/qq.jpg" width="210px">
 
 ## **代码统计**
+
+截至到12.19日闭包的代码统计
+
 <img width="1249" alt="联想截图_20241219234851" src="https://github.com/user-attachments/assets/d195da4b-bce6-49bb-a0da-02abd09b00e2" />
 
 
@@ -33,7 +36,7 @@
 
 3.app服务的增加，后期将添加更多app服务
 
-4.因为作者在主校区，开发区的部分服务未上线，请开区的同学见谅，后期抽个时间去开发区实地debug一下相关服务
+**4.因为作者在主校区，开发区的部分服务未上线，请开区的同学见谅，后期抽个时间去开发区实地debug一下相关服务**
 
 **作者的能力和知识水平有限，欢迎各位大佬进行二次开发！**
 
