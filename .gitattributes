@@ -1,4 +1,4 @@
-*.ets linguist-language=arkts
+*.ets linguist-language=typescript
 *.1 linguist-language=typescript
 *.2 linguist-language=typescript
 *.3 linguist-language=typescript
