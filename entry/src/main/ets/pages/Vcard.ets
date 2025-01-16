@@ -1,6 +1,6 @@
 import { webview } from "@kit.ArkWeb";
 import router from '@ohos.router';
-import dataPreferences from '@ohos.data.preferences';
+import preferences from '@ohos.data.preferences';
 
 let account:string
 let password:string
@@ -16,19 +16,14 @@ let context = getContext(this)
 let  api: Array<ScriptItem> = [{ script: "username.value='" + account + "';password.value='" + password + "';submit.disabled='';submit.click()", scriptRules: ["*"] }]
 @Entry
 @Component
-struct Vcard {
+export struct Vcard {
   controller: webview.WebviewController = new webview.WebviewController()
   aboutToAppear(): void {
-    dataPreferences.getPreferences(context, "information").then(preferences=> {
-      preferences.get("account", 'default').then((value) => {
-        preferences.get("password", "default").then((ljc) => {
-          account = String(value)
-          password = String(ljc)
-          api =  [{ script: "username.value='" + account + "';password.value='" + password + "';submit.disabled='';submit.click()", scriptRules: ["*"] }]
-        })
-      })
-    })
-
+    let options: preferences.Options = { name: 'information' };
+    let dataPreferences: preferences.Preferences = preferences.getPreferencesSync(context, options)
+      account = dataPreferences.getSync("account", 'default')+""
+      password = dataPreferences.getSync("password", "default")+""
+      api =  [{ script: "username.value='" + account + "';password.value='" + password + "';submit.disabled='';submit.click()", scriptRules: ["*"] }]
   }
   build() {
     Column() {

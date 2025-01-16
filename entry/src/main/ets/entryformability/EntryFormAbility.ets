@@ -304,7 +304,132 @@ export default class EntryFormAbility extends FormExtensionAbility {
   }
 
   onUpdate(formId: string): void {
-    // Called to notify the form provider to update a specified form.
+    const  a = GetHeaderValueFora();
+    const  timestamps = GetHeaderForTimeStamp()
+    const  Timestamp = timestamps[0];
+    const  LocalTimestamp = timestamps[1];
+    const  Nonce = GetHeaderForNonce();
+    const requestbodystring = "app_key=20460cbb2ccf1c97&app_secret=1dcc14a227a6f8d9b37792b7b053f671&app_version=" + GetwhistleVersion() + "&grant_type=client_credentials&platform=android&scope=all";
+    const  Sign = GetHeaderForSign(requestbodystring, Timestamp, Nonce, a)
+    interface resp {
+      access_token:string
+      expires_in:string
+      scope:string
+      refresh_token:string
+      token_type:string
+    }
+    axios.post('https://api.m.dlut.edu.cn/oauth/token', requestbodystring, {
+      headers: {
+        'a': a,
+        'sign': Sign,
+        'local_timestamp': LocalTimestamp,
+        'nonce': Nonce,
+        'version': GetHeaderForVersion(),
+        'timestamp': Timestamp,
+        'Host': 'service.m.dlut.edu.cn',
+        'Connection': 'Keep-Alive',
+        'Cookie2': '$Version=1',
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+    })
+      .then((response: AxiosResponse<string>) => {
+        dataPreferences.getPreferences(this.context, "information").then(preferences => {
+          preferences.get("account", 'default').then((value) => {
+            let jsc: resp = JSON.parse(JSON.stringify(response.data))
+            let url = "https://api.m.dlut.edu.cn/lightappapi/course/get_today_course?access_token=" + jsc.access_token +
+              "&app_version=" + GetwhistleVersion() + "&domain=dlut&identity=" + "student" +
+              "&platform=android&student_number=" + value;
+            axios<string, AxiosResponse<string>, null>({
+              method: "get",
+              url: url
+            }).then((res: AxiosResponse) => {
+              let bb :courseres = JSON.parse(JSON.stringify(res.data))
+              const now: Date = new Date();
+              const hours: number = now.getHours();
+              let cc:course[] =[];
+              let  i = 0;
+              for (let index = 0; index < bb.data.length; index++) {
+                if (Number(bb.data[index].event_begintime.split(":")[0])>=hours) {
+                  cc[i] = bb.data[index]
+                  i++
+                }
+              }
+              let classes1name:string =  '1'
+              try {
+                classes1name =  JSON.stringify(cc[0].course_name)
+              } catch (e){
+                classes1name =  "暂无课程"
+              }
+              let classes1time:string =  '1'
+              try {
+                classes1time =  JSON.stringify(cc[0].event_begintime+"--"+cc[0].event_endtime)
+              } catch (e){
+                classes1time =  "-"
+              }
+              let classes1add:string =  '1'
+              try {
+                classes1add =  JSON.stringify(cc[0].course_address)
+              } catch (e){
+                classes1add =  "-"
+              }
+              let classes2name:string =  '1'
+              try {
+                classes2name =  JSON.stringify(cc[1].course_name)
+              } catch (e){
+                classes2name =  "暂无课程"
+              }
+              let classes2time:string =  '1'
+              try {
+                classes2time =  JSON.stringify(cc[1].event_begintime+"--"+cc[1].event_endtime)
+              } catch (e){
+                classes2time =  "-"
+              }
+              let classes2add:string =  '1'
+              try {
+                classes2add =  JSON.stringify(cc[1].course_address)
+              } catch (e){
+                classes2add =  "-"
+              }
+              let param: Record<string, string> = {
+                'classes1name': classes1name,
+                'classes1time': classes1time,
+                "classes1add": classes1add,
+                'classes2name': classes2name,
+                'classes2time': classes2time,
+                "classes2add": classes2add,
+
+              };
+              let formInfo: formBindingData.FormBindingData = formBindingData.createFormBindingData(param);
+              formProvider.updateForm(formId, formInfo);
+            })
+          })
+
+        })
+      })
+    dataPreferences.getPreferences(this.context, "information").then(preferences=> {
+      preferences.get("data", 'default').then((value) => {
+        let op:responsebean = JSON.parse(value.toString())
+        axios<string, AxiosResponse<string>, null>({
+          method: "get",
+          url: "https://lightapp.m.dlut.edu.cn/api/library/library/ecard?verify="+op.data.verify
+        }).then((res: AxiosResponse) => {
+          axios<string, AxiosResponse<string>, null>({
+            method: "get",
+            url: "https://lightapp.m.dlut.edu.cn/api/courseschedule/dorm/get_dorm_info?verify="+op.data.verify
+          }).then((rca: AxiosResponse) => {
+            let mm: card = JSON.parse(JSON.stringify(res.data))
+            let kk:elec = JSON.parse(JSON.stringify(rca.data))
+            let pacv: Record<string, string> = {
+              "cardmoney": mm.data[0].value,
+              "room":kk.data[0].data[0].text.split("：")[1],
+              "elec":kk.data[1].data[0].text.split("：")[1]
+            }
+            let formmn: formBindingData.FormBindingData = formBindingData.createFormBindingData(pacv);
+            formProvider.updateForm(formId, formmn);
+          })
+        })
+      })
+    })
   }
 
   onVisibilityChange(newStatus: string): void {
