@@ -4,8 +4,6 @@
   "dependencies": {
     "@ohos/crypto-js": "^2.0.4",
     "@cashier_alipay/cashiersdk": "^15.8.28",
-    "@hzw/ohos-dsbridge": "^1.7.2",
-    "@yue/webview_javascript_bridge": "^1.0.1",
     "@ohos/axios": "^2.2.4"
   },
   "devDependencies": {

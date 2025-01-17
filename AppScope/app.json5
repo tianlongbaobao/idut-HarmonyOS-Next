@@ -3,7 +3,7 @@
     "bundleName": "com.tianlongbaobao.idut",
     "vendor": "tianlongbaobao",
     "versionCode": 3200000,
-    "versionName": "3.2.0",
+    "versionName": "4.0.0",
     "icon": "$media:app_icon",
     "label": "$string:app_name"
   }

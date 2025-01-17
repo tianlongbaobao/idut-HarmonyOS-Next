@@ -5,13 +5,13 @@
         "name": "default",
         "type": "HarmonyOS",
         "material": {
-          "certpath": "C:\\Users\\luzhiyi\\.ohos\\config\\default_iduter_RUA_DQEqC7iwiLCVqwi5q1g6ft74q723H8BDtHFbZUY=.cer",
-          "storePassword": "0000001B5449207865D94BAA06AA3E37C2A7A910699AAA25CA89D7780B17052CB55181B1282EFEC6D14936",
-          "keyAlias": "debugKey",
-          "keyPassword": "0000001BC84F34926E4A5A49309B50480CE64D9D2541F8345C1891C4577274EDD54B2992800D9E65FF394C",
-          "profile": "C:\\Users\\luzhiyi\\.ohos\\config\\default_iduter_RUA_DQEqC7iwiLCVqwi5q1g6ft74q723H8BDtHFbZUY=.p7b",
+          "storePassword": "0000001B5E3D5A7B1F1EF56C4D18544A4EF8B19B93D6AFF29B42BBCD25F8AEBCB19CAEB2A86E3D3BFC5134",
+          "certpath": "L:/Harmony/iduter/idut.cer",
+          "keyAlias": "idut",
+          "keyPassword": "0000001B375ACAA33772FF092CDEC90C630CF776A31EACB860ACE9109D263F9BBB25A81B1859BB74B938D2",
+          "profile": "L:/Harmony/iduter/idutDebug.p7b",
           "signAlg": "SHA256withECDSA",
-          "storeFile": "C:\\Users\\luzhiyi\\.ohos\\config\\default_iduter_RUA_DQEqC7iwiLCVqwi5q1g6ft74q723H8BDtHFbZUY=.p12"
+          "storeFile": "L:/Harmony/iduter/idut.p12"
         }
       }
     ],
@@ -31,7 +31,7 @@
     ],
     "buildModeSet": [
       {
-        "name": "debug",
+        "name": "debug"
       },
       {
         "name": "release"
@@ -50,6 +50,6 @@
           ]
         }
       ]
-    }
+    },
   ]
 }
