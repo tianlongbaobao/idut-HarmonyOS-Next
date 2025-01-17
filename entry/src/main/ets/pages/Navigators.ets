@@ -1,51 +1,146 @@
 import { webview } from "@kit.ArkWeb";
+import dataPreferences from '@ohos.data.preferences';
+import {responsebean} from "./utils/ResponseBean"
 import router from '@ohos.router';
 import window from '@ohos.window';
-import { Pay } from '@cashier_alipay/cashiersdk'
+import { scanCore, scanBarcode } from '@kit.ScanKit';
 import { BusinessError } from '@kit.BasicServicesKit';
-import { common } from '@kit.AbilityKit';
-import { promptAction } from '@kit.ArkUI';
-import { PermissionsUtil } from './utils/permission';
-import dataPreferences from '@ohos.data.preferences';
-import {browserProxy} from "./utils/Browserproxy"
-import {responsebean} from "./utils/ResponseBean"
-import {PhotoBean} from "./utils/photobean"
-import {ec} from "./backrequest/elec"
-import {updatedata} from "./backrequest/Update"
-import {Lingshui} from "./backrequest/network"
+import {pageself} from "./app/self"
+import {pagepe} from "./app/sports"
+import {pageclass} from "./app/classes"
+import {pagecard} from "./app/vcard"
+import {pagelib} from "./app/lib"
+import {pagetest} from "./app/test"
+import {pagecar} from "./app/car"
+import {pageweb} from "./app/web"
+import {pagesports} from "./app/sportsm"
+import {pageout} from "./app/out"
+import {pageticket} from "./app/tickets"
+import {pagepys} from "./app/pys"
+import {pageclassroom} from "./app/classroom"
+import {pagemap} from "./app/map"
+import {pageteacher} from "./app/teacher"
+import {pagebooking} from "./app/booking"
+import {pagemedia} from "./app/media"
+import {pagespeed} from "./app/speed"
+import {pageteach} from "./app/teach"
+import {pageinformation} from "./app/information"
+import {pagesettings} from "./app/settiing"
+import {pagewebeda} from "./app/webeda"
+import {pagesportseda} from "./app/sportseda"
+import {pagevcard} from "./app/card"
+import {appList} from "./app/applist"
+import {pushclass} from "./utils/pushservice"
+import {PermissionsUtil} from "./utils/permission"
 
-let context = getContext(this)
 const  account:string = (router.getParams() as Record<string, string>)['id2'];
 const  password:string = (router.getParams() as Record<string, string>)['id1'];
-const  api: Array<ScriptItem> = [{ script: "username.value='" + account + "';password.value='" + password + "';submit.disabled='';submit.click()", scriptRules: ["*"] }]
-const  sso: Array<ScriptItem> = [{ script: "$(\"#un\").val('" + account + "');$(\"#pd\").val('" + password + "');login()", scriptRules: ["*"] }]
-const  vpn: Array<ScriptItem> = [{ script: "document.getElementById('cas-login').click()", scriptRules: ["*"] }]
+const  pasz:string = (router.getParams() as Record<string, string>)['id4'];
 
+interface mnv {
+  accounts:string
+  passwords:string
+}
+
+let ncs:mnv ={
+  accounts:account,
+  passwords:password
+}
+let context = getContext(this)
 @Entry
 @Component
 struct  Navigators {
-  pathStack: NavPathStack = new NavPathStack();
+  @State appll:number[] = []
+  @State selectIndex:number = 0
+  @State nickname:string = ""
+  @State head:string = ""
+  @State index:number = -1
+  @Provide('pathInfos') pathStack: NavPathStack = new NavPathStack();
+
   private setImmersive() {
     window.getLastWindow(getContext()).then(win => {
       win.setWindowLayoutFullScreen(false);
-      let area = win.getWindowAvoidArea(window.AvoidAreaType.TYPE_SYSTEM);
-      let height = area.topRect.height;
-      let vpheight = px2vp(height);
-      AppStorage.setOrCreate('topHeight', vpheight);
-      win.setWindowSystemBarProperties({ statusBarContentColor: "#000000" }); // 设置状态栏字体颜色
+      win.setWindowSystemBarProperties({ statusBarContentColor: "#000000" });
     });
+  }
+  aboutToAppear(): void {
+    let paszl = pasz.split(",")
+    let mn = 0
+    for (let index = 0; index < paszl.length; index++) {
+      if (paszl[index]!=",") {
+        this.appll[mn] = Number(paszl[index])
+        mn=mn+1
+      }
+    }
+    dataPreferences.getPreferences(context, "information").then(preferences=>{
+      preferences.get("data",'default').then((value)=>{
+        let data_c:responsebean = JSON.parse(String(value))
+        this.nickname = data_c.data.my_info.nick_name
+        this.head = data_c.data.my_info.head
+      })
+    }).catch((err:Error)=>{
+
+    })
+  }
+  @Builder
+  tabBuilder(){
+    Flex({direction:FlexDirection.Row,justifyContent:FlexAlign.Center}) {
+
+
+        Column() {
+          Image($rawfile("icon_service_all.png"))
+            .width("10%")
+            .height("53%")
+            .margin("2.5%")
+          Text("我的服务")
+            .fontSize(12)
+            .fontWeight(FontWeight.Bold)
+        }
+        .onClick(() => {
+          this.selectIndex = 0;
+        })
+        .margin({right:"20%"})
+      Column() {
+        Image($rawfile("icon_service_study.png"))
+          .width("8%")
+          .height("53%")
+          .margin("2.5%")
+        Text("工具箱")
+          .fontSize(12)
+          .fontWeight(FontWeight.Bold)
+      }
+      .margin({right:"20%"})
+      .onClick(() => {
+        this.selectIndex = 2;
+      })
+      Column() {
+        Image($rawfile("icon_service_social.png"))
+          .width("8%")
+          .height("53%")
+          .margin("2.5%")
+        Text("个人中心")
+          .fontSize(12)
+          .fontWeight(FontWeight.Bold)
+      }
+
+      .onClick(() => {
+        this.selectIndex = 1;
+      })
+
+    }
+    .height("100%")
   }
   @Builder
   PageMap(name: string) {
-    if (name === "体质测评") {
-      pageemail()
+    if (name == "体质测评") {
+      pagepe()
     } else if (name === "我的课表") {
       pageclass()
     } else if (name === "图书馆预约") {
       pagelib()
     } else if (name === "考试安排") {
       pagetest()
-    } else if (name === "玉兰卡") {
+    } else if (name == "玉兰卡") {
       pagecard()
     } else if (name === "校车定位") {
       pagecar()
@@ -67,8 +162,6 @@ struct  Navigators {
       pagemedia()
     } else if (name === "心理测评") {
       pagepys()
-    } else if (name === "图书馆系统") {
-      pagelibma()
     } else if (name === "活动报名") {
       pageticket()
     }else if (name === "校园网测速") {
@@ -77,926 +170,262 @@ struct  Navigators {
       pageteach()
     }else if (name === "作者信息") {
       pageinformation()
-    }else if (name === "教务主页") {
+    }else if (name === "大工教务") {
       pageteach()
     }else if (name === "设置") {
       pagesettings()
     }else if (name === "个人证件") {
       pageself()
+    }else if (name === "校园网（开发区校区）") {
+      pagewebeda()
+    }else if (name === "开发区体育场馆预约") {
+      pagesportseda()
+    }else if (name === "虚拟卡") {
+      pagevcard()
     }
   }
+
   build() {
-
     Navigation(this.pathStack) {
-      List({ space: 7 }) {
-        ListItem() {
-          Text("1.生活服务").margin({left:"4%",top:"7.5%",bottom:"5%"})
-            .fontSize(20)
-            .fontWeight(FontWeight.Bold)
-        }
-        ListItem() {
-          Row() {
-            Column() {
-              Button({ type: ButtonType.Circle, stateEffect: true }) {
-                Image("https://store.m.dlut.edu.cn/group1/M00/00/08/ynZM2VlLGmmAb9t7AAAj67t6MTY8968130")
+      if (this.selectIndex === 1) {
+        List({ space: 7 }) {
+          ListItem(){
+            Flex({direction:FlexDirection.Row,justifyContent:FlexAlign.Center,alignItems:ItemAlign.End}) {
+              Text("个人中心")
+                .fontWeight(FontWeight.Bold)
+                .fontSize(20)
+            }
+          }
+          ListItem(){
+            Flex({direction:FlexDirection.Row,justifyContent:FlexAlign.Center,alignItems:ItemAlign.End}) {
+              Column() {
+                Image(this.head)
+                  .height("12%")
                   .borderRadius(35)
+                Text(this.nickname)
+                  .margin({top:"3.5%"})
+                  .fontWeight(FontWeight.Bold)
+                  .fontSize(17)
               }
-              .onClick(() => {
-                this.pathStack.pushPath({ name: "玉兰卡" })
-              })
-              .width(80).height(80).backgroundColor("white")
-              Text("玉兰卡").margin({ top: "2.5%" })
-            }.margin({left:"5%"})
-            Column() {
-              Button({ type: ButtonType.Circle, stateEffect: true }) {
-                Image("https://store.m.dlut.edu.cn/group1/M00/02/31/ynZM2V9Mt0SAE0SFAABPvJJ1-9A273.png")
-                  .borderRadius(35)
+              .margin({top:"5%"})
+            }
+          }
+          ListItem(){
+            Flex({direction:FlexDirection.Row,justifyContent:FlexAlign.Center,alignItems:ItemAlign.End}){
+              Column(){
+                Button({ type: ButtonType.Circle, stateEffect: true }) {
+                  Image($rawfile("settings.png"))
+                    .borderRadius(35)
+                    .height("50%")
+                    .width("50%")
+                }
+                .onClick(() => {
+                  this.pathStack.pushPath({ name: "设置"})
+                })
+                .width(80).height(80).backgroundColor("white")
+                Text("设置").margin({ top: "1%" })
+                  .fontSize(15)
               }
-              .onClick(() => {
-                this.pathStack.pushPath({ name: "校车定位" })
-              })
-              .width(80).height(80).backgroundColor("white")
-              Text("校车定位").margin({ top: "2.5%" })
-            }.margin({left:"8%"})
-            Column() {
-              Button({ type: ButtonType.Circle, stateEffect: true }) {
-                Image("https://store.m.dlut.edu.cn/group1/M00/00/01/ynZM2VkVANOAaHFwAAAhBvGkHdU6252034")
-                  .borderRadius(35)
-              }
-              .onClick(() => {
-                this.pathStack.pushPath({ name: "校园地图" })
-              })
-              .width(80).height(80).backgroundColor("white")
-              Text("校园地图").margin({ top: "2.5%" })
-            }.margin({left:"8%"})
+              Column() {
+                Button({ type: ButtonType.Circle, stateEffect: true }) {
+                  Image($rawfile("self.png"))
+                    .height("50%")
+                }
+                .onClick(() => {
+                  this.pathStack.pushPath({ name: "个人证件"})
+                })
+                .width(80).height(80).backgroundColor("white")
+                Text("个人证件").margin({ top: "1%" })
+                  .fontSize(15)
+              }.margin({ left: "8%" })
+              Column() {
+                Button({ type: ButtonType.Circle, stateEffect: true }) {
+                  Image($rawfile("contact.png"))
+                    .borderRadius(35)
+                    .height("50%")
+                }
+                .onClick(() => {
+                  this.pathStack.pushPath({ name: "作者信息"})
+                })
+                .width(80).height(80).backgroundColor("white")
+
+                Text("联系我们").margin({ top: "1%" })
+                  .fontSize(15)
+              }.margin({ left: "8%" })
+            }.margin({bottom:"3%"})
           }
         }
-
-        ListItem() {
-          Text("2.校园生活").margin({left:"4%",top:"7.5%",bottom:"5%"})
-            .fontSize(20)
-            .fontWeight(FontWeight.Bold)
-        }
-        ListItem() {
-          Row()
-          {
-            Column() {
-              Button({ type: ButtonType.Circle, stateEffect: true }) {
-                Image("https://store.m.dlut.edu.cn/group1/M00/01/25/ynZM2VwAqXuAfK3HAAAQNK-baPo920.png")
-              }
-              .onClick(() => {
-                this.pathStack.pushPath({ name: "体质测评" })
-              })
-              .width(80).height(80).backgroundColor("white")
-              Text("体质测评").margin({ top: "2.5%" })
-            }.margin({left:"5%"})
-            Column() {
-              Button({ type: ButtonType.Circle, stateEffect: true }) {
-                Image("https://store.m.dlut.edu.cn/group1/M00/02/03/ynZM2V8hIHuAakGbAABHogF7lj8252.png")
-                  .borderRadius(35)
-              }
-              .onClick(() => {
-                this.pathStack.pushPath({ name: "图书馆预约" })
-              })
-              .width(80).height(80).backgroundColor("white")
-              Text("图书馆预约").margin({ top: "2.5%" })
-            }.margin({left:"8%"})
-            Column() {
-              Button({ type: ButtonType.Circle, stateEffect: true }) {
-                Image("https://store.m.dlut.edu.cn/group1/M00/02/30/ynZM2V9Mj2GAXxRpAAAZEquDC1U035.png")
-                  .borderRadius(35)
-              }
-              .onClick(() => {
-                this.pathStack.pushPath({ name: "体育场馆预定" })
-              })
-              .width(80).height(80).backgroundColor("white")
-              Text("体育场馆预定").margin({ top: "2.5%" })
-            }.margin({left:"7%"})
+        .listDirection(Axis.Vertical)
+        .backgroundColor("white").padding(20)
+      } else if (this.selectIndex == 2){
+        List({space:7}) {
+          ListItem(){
+            Flex({direction:FlexDirection.Row,justifyContent:FlexAlign.Center,alignItems:ItemAlign.End}) {
+              Text("工具箱")
+                .fontWeight(FontWeight.Bold)
+                .fontSize(20)
+            }
           }
-        }
-
-        ListItem() {
-          Row() {
+          ListItem(){
             Column() {
-              Button({ type: ButtonType.Circle, stateEffect: true }) {
-                Image("https://store.m.dlut.edu.cn/group1/M00/02/A1/ynZM2WBYEe-ALSxiAAA-gtcEwFw355.png")
-                  .borderRadius(35)
+              Row() {
+                Text("课表事项提醒")
+                  .height(50)
+                  .fontSize(16)
               }
-              .onClick(() => {
-                this.pathStack.pushPath({ name: "心理测评" })
-              })
-              .width(80).height(80).backgroundColor("white")
-
-              Text("心理测评").margin({ top: "2.5%" })
-            }.margin({left:"5%"})
-            Column() {
-              Button({ type: ButtonType.Circle, stateEffect: true }) {
-                Image("https://ehall.dlut.edu.cn/fp/uploadfiles/uw_service/2019/06/20/1561004260430.png")
-                  .borderRadius(35)
+              Row() {
+                Text("PushKit提醒")
+                  .height(50)
+                  .padding({left: 10})
+                  .fontSize(16)
+                  .textAlign(TextAlign.Start)
+                  .backgroundColor(0xFFFFFF)
+                Toggle({ type: ToggleType.Switch })
+                  .margin({left: 200, right: 10})
+                  .onChange((isOn: boolean) => {
+                    pushclass(isOn)
+                    PermissionsUtil.requestCameraPermission()
+                  })
               }
-              .onClick(() => {
-                this.pathStack.pushPath({ name: "读者入馆培训"})
-              })
-              .width(80).height(80).backgroundColor("white")
-
-              Text("读者入馆培训").margin({ top: "2.5%" })
-            }.margin({left:"6%"})
-            Column() {
-              Button({ type: ButtonType.Circle, stateEffect: true }) {
-                Image("https://store.m.dlut.edu.cn/group1/M00/01/0B/ynZM2VuPucOAG2EUAAAijVD0PLU792.png")
-                  .borderRadius(35)
-              }
-              .onClick(() => {
-                this.pathStack.pushPath({ name: "活动报名" })
-              })
-              .width(80).height(80).backgroundColor("white")
-
-              Text("活动报名").margin({ top: "2.5%" })
-            }.margin({left:"7%"})
+            }
+            .width('100%')
+            .height('100%')
           }
-        }
-        ListItem() {
-          Text("3.教学与资源").margin({left:"4%",top:"7.5%",bottom:"5%"})
-            .fontSize(20)
-            .fontWeight(FontWeight.Bold)
-        }
-        ListItem() {
-          Row() {
-            Column() {
-              Button({ type: ButtonType.Circle, stateEffect: true }) {
-                Image("https://store.m.dlut.edu.cn/group1/M00/00/01/ynZM2VkU-IiAPBCnAAAamt9Ip481490708")
-                  .borderRadius(35)
-              }
-              .onClick(() => {
-                this.pathStack.pushPath({ name: "我的课表" })
-              })
-              .width(80).height(80).backgroundColor("white")
-              Text("我的课表").margin({ top: "2.5%" })
-            }.margin({left:"5%"})
-            Column() {
-              Button({ type: ButtonType.Circle, stateEffect: true }) {
-                Image("https://store.m.dlut.edu.cn/group1/M00/00/7B/ynZM2Vn7QI6AOQVDAAAZa-V0lMA6705172")
-                  .borderRadius(35)
-              }
-              .onClick(() => {
-                this.pathStack.pushPath({ name: "考试安排"})
-              })
-              .width(80).height(80).backgroundColor("white")
-
-              Text("考试安排").margin({ top: "2.5%" })
-            }.margin({left:"8%"})
-            Column() {
-              Button({ type: ButtonType.Circle, stateEffect: true }) {
-                Image("https://store.m.dlut.edu.cn/group1/M00/00/08/ynZM2VkeVL2AGt4BAAAYlzvpSVo6550599")
-                  .borderRadius(35)
-              }
-              .onClick(() => {
-                this.pathStack.pushPath({ name: "空闲教室" })
-              })
-              .width(80).height(80).backgroundColor("white")
-
-              Text("空闲教室").margin({ top: "2.5%" })
-            }.margin({left:"8%"})
           }
-        }
-        ListItem() {
-          Row() {
-            Column() {
-              Button({ type: ButtonType.Circle, stateEffect: true }) {
-                Image("https://store.m.dlut.edu.cn/group1/M00/02/83/ynZM2V_N3euAAn5PAAAZ46zJWmQ263.png")
-                  .borderRadius(35)
-              }
-              .onClick(() => {
-                this.pathStack.pushPath({ name: "资源预约" })
-              })
-              .width(80).height(80).backgroundColor("white")
-              Text("资源预约").margin({ top: "2.5%" })
-            }.margin({left:"5%"})
-            Column() {
-              Button({ type: ButtonType.Circle, stateEffect: true }) {
-                Image("https://store.m.dlut.edu.cn/group1/M00/03/4A/ynZM2WGOE1KAbZSmAAAKzt9dyGg960.png")
-                  .borderRadius(35)
-              }
-              .onClick(() => {
-                this.pathStack.pushPath({ name: "多媒体教室管理"})
-              })
-              .width(80).height(80).backgroundColor("white")
+        .listDirection(Axis.Vertical)
+        .backgroundColor("white").padding(20)
 
-              Text("多媒体教室管理").margin({ top: "2.5%" })
-            }.margin({ left: "4%" })
-            Column() {
-              Button({ type: ButtonType.Circle, stateEffect: true }) {
-                Image("https://store.m.dlut.edu.cn/group1/M00/00/01/ynZM2VkU_9iAdpatAAAcFW_puS88241415")
-                  .borderRadius(35)
-              }
-              .onClick(() => {
-                this.pathStack.pushPath({ name: "教师主页"})
-              })
-              .width(80).height(80).backgroundColor("white")
-
-              Text("教师主页").margin({ top: "2.5%" })
-            }.margin({ left: "3%" })
-          }
-        }
-        ListItem() {
-          Row() {
-            Column() {
-              Button({ type: ButtonType.Circle, stateEffect: true }) {
-                Image("https://store.m.dlut.edu.cn/group1/M00/05/7C/ynZM2WNgsKCAZc5sAAARL-e-cEo984.png")
-                  .borderRadius(35)
-              }
-              .onClick(() => {
-                this.pathStack.pushPath({ name: "教务主页" })
-              })
-              .width(80).height(80).backgroundColor("white")
-              Text("大工教务").margin({ top: "2.5%" })
-            }.margin({ left: "5%" })
-
-          }
-        }
-        ListItem() {
-          Text("4.网信服务").margin({left:"4%",top:"7.5%",bottom:"5%"})
-            .fontSize(20)
-            .fontWeight(FontWeight.Bold)
-        }
-
-        ListItem() {
-          Row() {
-            Column() {
-              Button({ type: ButtonType.Circle, stateEffect: true }) {
-                Image("https://store.m.dlut.edu.cn/group1/M00/00/5B/ynZM2VmyW9mAGzv_AAAXfJXYcgw8899921")
-                  .borderRadius(35)
-              }
-              .onClick(() => {
-                this.pathStack.pushPath({ name: "网络自助" })
-              })
-              .width(80).height(80).backgroundColor("white")
-              Text("网络自助").margin({ top: "2.5%" })
-            }.margin({ left: "5%" })
-            Column() {
-              Button({ type: ButtonType.Circle, stateEffect: true }) {
-                Image("https://store.m.dlut.edu.cn/group1/M00/01/45/ynZM2Vzjo7-AEl7QAAAv69n_AZs158.png")
-                  .borderRadius(35)
-              }
-              .onClick(() => {
-                this.pathStack.pushPath({ name: "校园网测速"})
-              })
-              .width(80).height(80).backgroundColor("white")
-              Text("校园网测速").margin({ top: "2.5%" })
-            }.margin({ left: "6%" })
-          }
-        }
-        ListItem() {
-          Text("5.设置").margin({left:"4%",top:"7.5%",bottom:"5%"})
-            .fontSize(20)
-            .fontWeight(FontWeight.Bold)
-        }
-        ListItem() {
-          Row() {
-            Column() {
-              Button({ type: ButtonType.Circle, stateEffect: true }) {
-                Image($rawfile("settings.png"))
-                  .borderRadius(35)
-              }
-              .onClick(() => {
-                this.pathStack.pushPath({ name: "设置"})
-              })
-              .width(80).height(80).backgroundColor("white")
-
-              Text("设置").margin({ top: "2.5%" })
-            }.margin({ left: "5%" })
-            Column() {
-              Button({ type: ButtonType.Circle, stateEffect: true }) {
-                Image($rawfile("self.png"))
-
-              }
-              .onClick(() => {
-                this.pathStack.pushPath({ name: "个人证件"})
-              })
-              .width(80).height(80).backgroundColor("white")
-
-              Text("个人证件").margin({ top: "2.5%" })
-            }.margin({ left: "8%" })
-            Column() {
-              Button({ type: ButtonType.Circle, stateEffect: true }) {
-                Image($rawfile("contact.png"))
-                  .borderRadius(35)
-              }
-              .onClick(() => {
-                this.pathStack.pushPath({ name: "作者信息"})
-              })
-              .width(80).height(80).backgroundColor("white")
-
-              Text("联系我们").margin({ top: "2.5%" })
-            }.margin({ left: "8%" })
-          }
-        }
       }
-      .listDirection(Axis.Vertical)
-      .backgroundColor("white").padding(20)
+      else {
+        List({ space: 7 }) {
+          ListItem(){
+            Flex({direction:FlexDirection.Row,justifyContent:FlexAlign.End,alignItems:ItemAlign.End}) {
+              Text("我的服务")
+                .fontWeight(FontWeight.Bold)
+                .fontSize(20)
+                .margin({right:"20%"})
+              Select([{ value: '扫一扫', icon:$rawfile("scancode.png")  },
+                { value: '虚拟卡', icon: $rawfile("vcard.png") }])
+                .selected(this.index)
+                .value("+")
+                .controlSize(ControlSize.SMALL)
+                .onSelect((index:number, text?: string | undefined)=>{
+                  this.index = index;
+                  if (this.index == 1){
+                    this.pathStack.pushPathByName("虚拟卡", ncs);
+                  } else if (this.index == 0){
+                    let options: scanBarcode.ScanOptions = {
+                      scanTypes: [scanCore.ScanType.ALL],
+                      enableMultiMode: true,
+                      enableAlbum: true
+                    };
+                    interface ResponseBean {
+                      scanType: number;
+                      originalValue:string
+                    }
+                    interface SendBean {
+                      resultStr: string;
+                      type:string;
+                      errMsg:string
+                    }
+                    scanBarcode.startScanForResult(getContext(this), options).then((result: scanBarcode.ScanResult) => {
+                      const responseBean: ResponseBean = JSON.parse(JSON.stringify(result))
+                      let value: string = responseBean.originalValue
+                      if (value.includes("qrLogin")){
+                        router.pushUrl({
+                          url: 'pages/SSO',
+                          params:{
+                            id1:value}
+                        })
+
+                      }
+                    })
+
+                  }
+                  this.index = -1
+                })
+
+            }
+          }
+          ListItem() {
+            Flex({ wrap: FlexWrap.Wrap }) {
+              ForEach(this.appll, (item: number) => {
+                ChildItem({ item: item, pathStack: this.pathStack })
+                  .margin({ top: 20 })
+              })
+            }
+          }
+
+          ListItem() {
+            Flex({ direction: FlexDirection.Row, justifyContent: FlexAlign.Center }) {
+              Button() {
+                Text("编辑我的常用服务")
+                  .fontWeight(FontWeight.Bold)
+                  .fontColor("white")
+                  .fontSize(15)
+              }
+              .height("5%")
+              .width("80%")
+              .margin({ top: "5%" })
+              .onClick(() => {
+                router.pushUrl(
+                  {
+                    url: "pages/app/appdia",
+                    params: {
+                      id3: this.appll.toString()
+                    }
+                  }
+                )
+              })
+            }
+          }
+        }
+        .listDirection(Axis.Vertical)
+        .backgroundColor("white").padding(20)
+      }
     }
     .mode(NavigationMode.Stack)
     .navDestination(this.PageMap)
+    .toolbarConfiguration(this.tabBuilder)
+    .hideTitleBar(true)
+    .hideNavBar(false)
+    .navBarWidth('50%')
   }
   onPageShow() {
     this.setImmersive();
   }
 }
 
-// 体质测评
 @Component
-export struct pageemail {
-  pathStack: NavPathStack = new NavPathStack();
-  controller: webview.WebviewController = new webview.WebviewController()
+struct ChildItem {
+  @Prop item: number;
+  @Link pathStack:NavPathStack;
   build() {
-    NavDestination() {
-      Column() {
-        Web({ src: "https://webvpn.dlut.edu.cn/http-8081/57787a7876706e323032336b657940242a485056ad52cb00fc19b469c2e3/cas/mobileCheckJump?from=rj&filter=app", controller: this.controller })
-          .javaScriptAccess(true)
-          .fileAccess(true)
-          .imageAccess(true)
-          .onlineImageAccess(true)
-          .domStorageAccess(true)
-          .javaScriptOnDocumentEnd(api)
+    Column() {
+      Button({ type: ButtonType.Circle, stateEffect: true }) {
+        Image(appList[this.item].url)
+          .borderRadius(25)
+          .height("105%")
+          .width("95%")
       }
-    }.title("体质测评")
-    .onBackPressed(() => {
-      const popDestinationInfo = this.pathStack.pop()
-      return true
-    })
-    .onReady((context: NavDestinationContext) => {
-      this.pathStack = context.pathStack
-    })
-  }
-}
-// 体质测评
-@Component
-export struct pagelibma {
-  pathStack: NavPathStack = new NavPathStack();
-  scroller: Scroller = new Scroller()
-  contentScroller: Scroller = new Scroller()
-  controller: webview.WebviewController = new webview.WebviewController()
-  build() {
-    NavDestination() {
-      Column() {
-        Web({ src: "https://webvpn.dlut.edu.cn/https/57787a7876706e323032336b657940247708031bb20f9a4ce448f62d85f580230796e3c6/meta-local/opac/cas/rosetta?filter=app&from=rj", controller: this.controller })
-          .javaScriptAccess(true)
-          .fileAccess(true)
-          .imageAccess(true)
-          .onlineImageAccess(true)
-          .domStorageAccess(true)
-          .javaScriptOnDocumentEnd(api)
-      }
-    }.title("图书馆系统")
-    .onBackPressed(() => {
-      const popDestinationInfo = this.pathStack.pop()
-      return true
-    })
-    .onReady((context: NavDestinationContext) => {
-      this.pathStack = context.pathStack
-    })
-  }
-}
-
-// 我的课表
-@Component
-export struct pageclass {
-  pathStack: NavPathStack = new NavPathStack();
-  controller: webview.WebviewController = new webview.WebviewController()
-  build() {
-    NavDestination() {
-      Column() {
-        Web({ src: "https://api.m.dlut.edu.cn/oauth/authorize?client_id=9qXqHnRQuhhViycC&redirect_uri=https%3a%2f%2flightapp.m.dlut.edu.cn%2fcheck%2fcourseschedule&response_type=code&scope=base_api&state=dlut", controller: this.controller })
-          .javaScriptAccess(true)
-          .fileAccess(true)
-          .imageAccess(true)
-          .onlineImageAccess(true)
-          .domStorageAccess(true)
-          .javaScriptOnDocumentEnd(api)
-      }
-    }.title("我的课表")
-    .onBackPressed(() => {
-      const popDestinationInfo = this.pathStack.pop()
-      return true
-    })
-    .onReady((context: NavDestinationContext) => {
-      this.pathStack = context.pathStack
-    })
-  }
-}
-
-// 图书馆预约
-@Component
-export struct pagelib {
-  pathStack: NavPathStack = new NavPathStack();
-  controller: webview.WebviewController = new webview.WebviewController()
-  build() {
-    NavDestination() {
-      Column() {
-        Web({ src: "https://sso.dlut.edu.cn/cas/login?from=rj&service=https%3A%2F%2Fsso.dlut.edu.cn%2Fcas%2Flogin%3Fservice%3Dhttp%253A%252F%252Fseat.lib.dlut.edu.cn%252Fyanxiujian%252Fclient%252Flogin.php%253Fredirect%253Dindex.php", controller: this.controller })
-          .javaScriptAccess(true)
-          .domStorageAccess(true)
-          .javaScriptOnDocumentEnd(api)
-      }
-    }.title("图书馆预约")
-    .onBackPressed(() => {
-      const popDestinationInfo = this.pathStack.pop()
-      return true
-    })
-    .onReady((context: NavDestinationContext) => {
-      this.pathStack = context.pathStack
-    })
-  }
-}
-
-// 考试安排
-@Component
-export struct pagetest {
-  pathStack: NavPathStack = new NavPathStack();
-  controller: webview.WebviewController = new webview.WebviewController()
-  build() {
-    NavDestination() {
-      Column() {
-        Web({ src: "https://api.m.dlut.edu.cn/oauth/authorize?client_id=9qXqHnRQuhhViycC&redirect_uri=https%3a%2f%2flightapp.m.dlut.edu.cn%2fcheck%2fexamplan&response_type=code&scope=base_api&state=dlut", controller: this.controller })
-          .javaScriptAccess(true)
-          .domStorageAccess(true)
-          .javaScriptOnDocumentEnd(api)
-      }
-    }.title("考试安排")
-    .onBackPressed(() => {
-      const popDestinationInfo = this.pathStack.pop()
-      console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
-      return true
-    })
-    .onReady((context: NavDestinationContext) => {
-      this.pathStack = context.pathStack
-    })
-  }
-}
-
-// 玉兰卡
-@Component
-export struct pagecard {
-  private TAG: string = "permissionPage";
-  private showToast(content: string){
-    try {
-      promptAction.showToast({
-        message: content,
-        duration: 2000
-      });
-    } catch (error) {
-      let message = (error as BusinessError).message
-      let code = (error as BusinessError).code
-      console.error(this.TAG, `showToast args error code is ${code}, message is ${message}`);
-    };
-  }
-
-  onClickCamera = async ()=>{
-    console.log(this.TAG, " onClickCamera");
-    let isUserGrant: boolean = await PermissionsUtil.requestCameraPermission();
-    if(isUserGrant){
-      this.showToast("用户同意授权");
-    }else{
-      this.showToast("用户拒绝授权");
-    }
-  }
-  pathStack: NavPathStack = new NavPathStack();
-  controller: webview.WebviewController = new webview.WebviewController();
-  responseResource: WebResourceResponse = new WebResourceResponse();
-  @State BrowserProxy:browserProxy = new browserProxy(this.controller)
-  build() {
-    NavDestination() {
-      Column() {
-        Web({ src: "https://api.m.dlut.edu.cn/oauth/authorize?client_id=19b32196decf419a&redirect_uri=https%3A%2F%2Fcard.m.dlut.edu.cn%2Fhomerj%2FopenRjOAuthPage&response_type=code&scope=base_api&state=weishao", controller: this.controller })
-          .javaScriptAccess(true)
-          .fileAccess(true)
-          .imageAccess(true)
-          .onlineImageAccess(true)
-          .domStorageAccess(true)
-          .javaScriptOnDocumentEnd(api)
-          .javaScriptProxy({
-            object: this.BrowserProxy,
-            name:  "__nativeWhistleProxy",
-            methodList: ["issueCommand","configApp","debugOut"],
-            controller: this.controller,
-          })
-          .cacheMode(CacheMode.Online)
-          .onPageBegin((event) => {
-            if (event) {
-              console.log(this.TAG, " onClickCamera");
-              PermissionsUtil.requestCameraPermission()
-                .then((isUserGrant)=> {
-                  if (isUserGrant) {
-                  } else {
-                    this.showToast("请在设置中开启相机权限");
-                  }
-                })
-            }
-          })
-          .onControllerAttached(() => {
-            let userAgent = "Mozilla/ 5.0 (Linux; Android 10; EBG Build/ HUAWEIEBG; wv) AppleWebKit/ 537.36 (KHTML, like Gecko) Version/ 4.0 Chrome/ 88.0.4324.93 Mobile Safari/ 537.36 weishao(3.3.0.74633)";
-            this.controller.setCustomUserAgent(userAgent);
-          })
-          .onLoadIntercept((event) => {
-            let data = event.data;
-            let url = data.getRequestUrl();
-            if (url.startsWith("weixin://")) {
-              (getContext() as common.UIAbilityContext).openLink(url)
-                .then(() => {
-                  console.log('openLink success');
-                }).catch((err: BusinessError) => {
-                console.error('openLink failed, err:' + JSON.stringify(err));
-              });
-              return true;
-            }
-            if (!(url.startsWith("http") || url.startsWith("https"))) {
-              return false;
-            }
-            console.log(`alipay: url: ${url}`);
-            let result = new Pay().payInterceptorWithUrl(url, true, (result) => {
-              let resultCode = result.get("resultCode");
-              let returnUrl = result.get("returnUrl");
-              console.log(`resultCode: ${resultCode}, returnUrl: ${returnUrl}`);
-              this.controller.loadUrl(returnUrl);
-            });
-            return result;
-          })
-      }
-    }.title("玉兰卡")
-    .onBackPressed(() => {
-      const popDestinationInfo = this.pathStack.pop()
-      console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
-      return true
-    })
-    .onReady((context: NavDestinationContext) => {
-      this.pathStack = context.pathStack
-    })
-  }
-  private execute() {
-    console.log("123")
-    promptAction.showToast({
-      message: "123",
-      duration: 4000
-    });
-  }
-}
-
-// 公共资源预约
-@Component
-export struct pagecar {
-  pathStack: NavPathStack = new NavPathStack();
-  controller: webview.WebviewController = new webview.WebviewController()
-  build() {
-    NavDestination() {
-      Column() {
-        Web({ src: "http://webvpn.dlut.edu.cn/http/57787a7876706e323032336b6579402468171111e80a9c40e448f62d85f580232d28ff0e/dlutBus/ssoAuth?from=rj&filter=app", controller: this.controller })
-          .javaScriptAccess(true)
-          .fileAccess(true)
-          .imageAccess(true)
-          .onlineImageAccess(true)
-          .domStorageAccess(true)
-          .javaScriptOnDocumentEnd(api)
-      }
-    }.title("校车定位")
-    .onBackPressed(() => {
-      const popDestinationInfo = this.pathStack.pop()
-      console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
-      return true
-    })
-    .onReady((context: NavDestinationContext) => {
-      this.pathStack = context.pathStack
-    })
-  }
-}
-
-
-
-// 校园网自助服务
-@Component
-export struct pageweb {
-  pathStack: NavPathStack = new NavPathStack();
-  controller: webview.WebviewController = new webview.WebviewController()
-  build() {
-    NavDestination() {
-      Column() {
-        Web({ src: "https://api.m.dlut.edu.cn/oauth/authorize?client_id=9qXqHnRQuhhViycC&redirect_uri=https%3a%2f%2flightapp.m.dlut.edu.cn%2fcheck%2fnethelp&response_type=code&scope=base_api&state=dlut", controller: this.controller })
-          .javaScriptAccess(true)
-          .fileAccess(true)
-          .imageAccess(true)
-          .onlineImageAccess(true)
-          .domStorageAccess(true)
-          .javaScriptOnDocumentEnd(api)
-      }
-    }.title("网络自助")
-    .onBackPressed(() => {
-      const popDestinationInfo = this.pathStack.pop()
-      console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
-      return true
-    })
-    .onReady((context: NavDestinationContext) => {
-      this.pathStack = context.pathStack
-    })
+      .onClick(() => {
+        this.pathStack.pushPathByName(appList[this.item].name, ncs);
+      })
+      .width("80%").height("70%").backgroundColor("white")
+      Text(appList[this.item].name).margin({ top: "10%" })
+        .fontSize(11)
+        .fontWeight(FontWeight.Bold)
+    }.margin({ left: "2.5%" ,right:"2.5%"})
+    .height("10.5%")
+    .width("20%")
   }
 }
 
 
 
 
-// 体育场馆预定
-@Component
-export struct pagesports {
-  pathStack: NavPathStack = new NavPathStack();
-  controller: webview.WebviewController = new webview.WebviewController()
-  build() {
-    NavDestination() {
-      Column() {
-        Web({ src: "http://webvpn.dlut.edu.cn/http/57787a7876706e323032336b65794024791c0f55e81a9049e448f62d85f58023f6c217c3/api/login/login?from=rj&filter=app", controller: this.controller })
-          .javaScriptAccess(true)
-          .fileAccess(true)
-          .imageAccess(true)
-          .onlineImageAccess(true)
-          .domStorageAccess(true)
-          .javaScriptOnDocumentEnd(api)
-      }
-    }.title("体育场馆预定")
-    .onBackPressed(() => {
-      const popDestinationInfo = this.pathStack.pop()
-      console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
-      return true
-    })
-    .onReady((context: NavDestinationContext) => {
-      this.pathStack = context.pathStack
-    })
-  }
-}
-
-// 校外人员预约
-@Component
-export struct pageout {
-  pathStack: NavPathStack = new NavPathStack();
-  controller: webview.WebviewController = new webview.WebviewController()
-  build() {
-    NavDestination() {
-      Column() {
-        Web({ src: "https://webvpn.dlut.edu.cn/https/57787a7876706e323032336b657940246c0a0311f24d9f47a802fe3484afcb22ec20bb291d/?filter=app&from=rj", controller: this.controller })
-          .javaScriptAccess(true)
-          .fileAccess(true)
-          .imageAccess(true)
-          .onlineImageAccess(true)
-          .domStorageAccess(true)
-          .javaScriptOnDocumentEnd(sso)
-      }
-    }.title("读者入馆培训")
-    .onBackPressed(() => {
-      const popDestinationInfo = this.pathStack.pop()
-      console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
-      return true
-    })
-    .onReady((context: NavDestinationContext) => {
-      this.pathStack = context.pathStack
-    })
-  }
-}
-
-// 校外人员预约
-@Component
-export struct pageticket {
-  pathStack: NavPathStack = new NavPathStack();
-  controller: webview.WebviewController = new webview.WebviewController()
-  build() {
-    NavDestination() {
-      Column() {
-        Web({ src: "https://api.m.dlut.edu.cn/oauth/authorize?client_id=9qXqHnRQuhhViycC&redirect_uri=https%3a%2f%2flightapp.m.dlut.edu.cn%2fcheck%2fticketonline&response_type=code&scope=base_api&state=dlut", controller: this.controller })
-          .javaScriptAccess(true)
-          .fileAccess(true)
-          .imageAccess(true)
-          .onlineImageAccess(true)
-          .domStorageAccess(true)
-          .javaScriptOnDocumentEnd(api)
-      }
-    }.title("活动报名")
-    .onBackPressed(() => {
-      const popDestinationInfo = this.pathStack.pop()
-      console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
-      return true
-    })
-    .onReady((context: NavDestinationContext) => {
-      this.pathStack = context.pathStack
-    })
-  }
-}
-
-// 空闲教室
-@Component
-export struct pageclassroom {
-  pathStack: NavPathStack = new NavPathStack();
-  controller: webview.WebviewController = new webview.WebviewController()
-
-  build() {
-    NavDestination() {
-      Column() {
-        Web({ src: "https://api.m.dlut.edu.cn/oauth/authorize?client_id=9qXqHnRQuhhViycC&redirect_uri=https%3a%2f%2flightapp.m.dlut.edu.cn%2fcheck%2femptyclassroom&response_type=code&scope=base_api&state=dlut", controller: this.controller })
-          .javaScriptAccess(true)
-          .domStorageAccess(true)
-          .javaScriptOnDocumentEnd(api)
-      }
-    }.title("空闲教室")
-    .onBackPressed(() => {
-      const popDestinationInfo = this.pathStack.pop()
-      console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
-      return true
-    })
-    .onReady((context: NavDestinationContext) => {
-      this.pathStack = context.pathStack
-    })
-  }
-}
-
-// 空闲教室
-@Component
-export struct pagepys {
-  pathStack: NavPathStack = new NavPathStack();
-  controller: webview.WebviewController = new webview.WebviewController()
-
-  build() {
-    NavDestination() {
-      Column() {
-        Web({ src: "https://webvpn.dlut.edu.cn/http/57787a7876706e323032336b65794024680b1b56f80f865ae449fe2ddfb88b/psym/Default/Index?from=rj&filter=app", controller: this.controller })
-          .javaScriptAccess(true)
-          .domStorageAccess(true)
-          .javaScriptOnDocumentEnd(api)
-      }
-    }.title("心理测评")
-    .onBackPressed(() => {
-      const popDestinationInfo = this.pathStack.pop()
-      console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
-      return true
-    })
-    .onReady((context: NavDestinationContext) => {
-      this.pathStack = context.pathStack
-    })
-  }
-}
-
-// 校园地图
-@Component
-export struct pagemap {
-  pathStack: NavPathStack = new NavPathStack();
-  controller: webview.WebviewController = new webview.WebviewController()
-  build() {
-    NavDestination() {
-      Column() {
-        Web({ src: "http://map.dlut.edu.cn/", controller: this.controller })
-          .javaScriptAccess(true)
-          .fileAccess(true)
-          .imageAccess(true)
-          .onlineImageAccess(true)
-          .domStorageAccess(true)
-          .javaScriptOnDocumentEnd(api)
-      }
-    }.title("校园地图")
-    .onBackPressed(() => {
-      const popDestinationInfo = this.pathStack.pop()
-      console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
-      return true
-    })
-    .onReady((context: NavDestinationContext) => {
-      this.pathStack = context.pathStack
-    })
-  }
-}
 
 
-@Component
-export struct pageteacher {
-  pathStack: NavPathStack = new NavPathStack();
-  controller: webview.WebviewController = new webview.WebviewController()
-  build() {
-    NavDestination() {
-      Column() {
-        Web({ src: "http://faculty.dlut.edu.cn/", controller: this.controller })
-          .javaScriptAccess(true)
-          .fileAccess(true)
-          .imageAccess(true)
-          .onlineImageAccess(true)
-          .domStorageAccess(true)
-      }
-    }.title("教师主页")
-    .onBackPressed(() => {
-      const popDestinationInfo = this.pathStack.pop()
-      console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
-      return true
-    })
-    .onReady((context: NavDestinationContext) => {
-      this.pathStack = context.pathStack
-    })
-  }
-}
-
-@Component
-export struct pagebooking {
-  pathStack: NavPathStack = new NavPathStack();
-  controller: webview.WebviewController = new webview.WebviewController()
-  build() {
-    NavDestination() {
-      Column() {
-        Web({ src: "https://webvpn.dlut.edu.cn/http/57787a7876706e323032336b657940247f1f1801b2079f5bbe02ff3c84f58629/InteAuth/Account/IntegratedAuth", controller: this.controller })
-          .javaScriptAccess(true)
-          .fileAccess(true)
-          .imageAccess(true)
-          .onlineImageAccess(true)
-          .domStorageAccess(true)
-          .javaScriptOnDocumentEnd(sso)
-      }
-    }.title("资源预约")
-    .onBackPressed(() => {
-      const popDestinationInfo = this.pathStack.pop()
-      console.log(password)
-      console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
-      return true
-    })
-    .onReady((context: NavDestinationContext) => {
-      this.pathStack = context.pathStack
-    })
-  }
-}
-@Component
-export struct pagemedia {
-  pathStack: NavPathStack = new NavPathStack();
-  controller: webview.WebviewController = new webview.WebviewController()
-  build() {
-    NavDestination() {
-      Column() {
-        Web({ src: "http://webvpn.dlut.edu.cn/http/57787a7876706e323032336b6579402475154f1bf002805db843f535c0f5812ba27e2bdcf2f7b44596/h5/cas-authorizations?from=rj&filter=app", controller: this.controller })
-          .javaScriptAccess(true)
-          .fileAccess(true)
-          .imageAccess(true)
-          .onlineImageAccess(true)
-          .domStorageAccess(true)
-          .javaScriptOnDocumentEnd(api)
-      }
-    }.title("多媒体教室管理")
-    .onBackPressed(() => {
-      const popDestinationInfo = this.pathStack.pop()
-      console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
-      return true
-    })
-    .onReady((context: NavDestinationContext) => {
-      this.pathStack = context.pathStack
-    })
-  }
-}
-@Component
-export struct pagespeed {
-  pathStack: NavPathStack = new NavPathStack();
-  controller: webview.WebviewController = new webview.WebviewController()
-  build() {
-    NavDestination() {
-      Column() {
-        Web({ src: "http://speedtest.dlut.edu.cn/", controller: this.controller })
-          .javaScriptAccess(true)
-          .fileAccess(true)
-          .imageAccess(true)
-          .onlineImageAccess(true)
-          .domStorageAccess(true)
-      }
-    }.title("校园网测速")
-    .onBackPressed(() => {
-      const popDestinationInfo = this.pathStack.pop()
-      console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
-      return true
-    })
-    .onReady((context: NavDestinationContext) => {
-      this.pathStack = context.pathStack
-    })
-  }
-}
-@Component
-export struct pageteach {
-  pathStack: NavPathStack = new NavPathStack();
-  controller: webview.WebviewController = new webview.WebviewController()
-  build() {
-    NavDestination() {
-      Column() {
-        Web({ src: "http://jxgl.dlut.edu.cn/cas-auth/jasig/cas/login?from=rj", controller: this.controller })
-          .javaScriptAccess(true)
-          .fileAccess(true)
-          .imageAccess(true)
-          .onlineImageAccess(true)
-          .domStorageAccess(true)
-          .javaScriptOnDocumentEnd(api)
-      }
-    }.title("大工教务")
-    .onBackPressed(() => {
-      const popDestinationInfo = this.pathStack.pop()
-      console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
-      return true
-    })
-    .onReady((context: NavDestinationContext) => {
-      this.pathStack = context.pathStack
-    })
-  }
-}
 
 @Component
 export struct pagescan {
@@ -1004,7 +433,6 @@ export struct pagescan {
   controller: webview.WebviewController = new webview.WebviewController()
   aboutToAppear(): void {
     console.log("1")
-    ec()
   }
   build() {
     NavDestination() {
@@ -1033,235 +461,3 @@ export struct pagescan {
 }
 
 
-@Component
-export struct pageinformation {
-  pathStack: NavPathStack = new NavPathStack();
-  build() {
-    NavDestination() {
-      Row(){
-      Column() {
-          Text("作者:").margin({ top: 25, right: "70%" })
-            .fontSize(20)
-            .fontWeight(FontWeight.Bold)
-            .textAlign(TextAlign.Start)
-        Row() {
-          Image($rawfile('self.jpg'))
-            .syncLoad(true)
-            .width(90)
-            .borderRadius(35)
-            .margin({ left: "10%" })
-
-          Text("天龙宝宝").margin({ top: "5%" ,left: "20%"})
-            .fontSize(18)
-            .fontWeight(FontWeight.Bold)
-          Hyperlink('https://github.com/tianlongbaobao', 'Github主页') {
-          }.margin({ top: "5%" ,left: "20%"})
-        }.margin({ top: "5%" ,right: "40%"})
-        Text("特别鸣谢:").margin({ top: "10%", right: "60%" })
-          .fontSize(20)
-          .fontWeight(FontWeight.Bold)
-          .textAlign(TextAlign.Start)
-        Row() {
-          Image($rawfile('thank.png'))
-            .syncLoad(true)
-            .width(90)
-            .borderRadius(35)
-            .margin({ left: "10%" })
-
-          Text("Shirai_Kuroko").margin({ top: "5%" ,left: "10%"})
-            .fontSize(18)
-            .fontWeight(FontWeight.Bold)
-          Hyperlink('https://github.com/IShiraiKurokoI', 'Github主页') {
-          }.margin({ top: "5%" ,left: "10%"})
-        }.margin({ top: "5%" ,right: "40%"})
-        Row() {
-          Image($rawfile('naosi.png'))
-            .syncLoad(true)
-            .width(120)
-            .borderRadius(35)
-            .margin({ left: "10%" })
-          Hyperlink('https://naosi.org/', "开发区网络与开源软件协会") {
-          }.margin({ top: "5%" ,left: "10%"})
-        }.margin({ top: "10%" ,right: "40%"})
-        Text("版本运维:").margin({ top: "10%", right: "60%" })
-          .fontSize(20)
-          .fontWeight(FontWeight.Bold)
-          .textAlign(TextAlign.Start)
-        Row() {
-          Image($rawfile('self.jpg'))
-            .syncLoad(true)
-            .width(90)
-            .borderRadius(35)
-            .margin({ left: "10%" })
-
-          Text("luzhiyi@mail.dlut.edu.cnGithub源码提Issue").margin({ top: "5%" ,left: "7%"})
-            .fontSize(18)
-        }.margin({ top: "5%" ,right: "40%"})
-        Row() {
-          Image($rawfile('naosi.png'))
-            .syncLoad(true)
-            .width(120)
-            .borderRadius(35)
-            .margin({ left: "10%" })
-          Text("Q群:724021138").margin({ top: "5%" ,left: "10%"})
-            .fontSize(18)
-        }.margin({ top: "10%" ,right: "40%"})
-      }
-      }
-    }.title("联系我们")
-    .onBackPressed(() => {
-      const popDestinationInfo = this.pathStack.pop()
-      console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
-      return true
-    })
-    .onReady((context: NavDestinationContext) => {
-      this.pathStack = context.pathStack
-    })
-  }
-}
-
-@Component
-export struct pagesettings {
-  pathStack: NavPathStack = new NavPathStack();
-  build() {
-    NavDestination() {
-      Column() {
-        Image($r('app.media.start'))
-          .syncLoad(true)
-          .width(100)
-          .margin({ top: "30%" })
-        Text("i大工社区版").margin({ top: "5%" })
-          .fontSize(18)
-          .fontWeight(FontWeight.Bold)
-        Text("版本号:3.2.0").margin({ top: "5%" })
-          .fontSize(15)
-        Hyperlink('https://github.com/tianlongbaobao/idut-HarmonyOS-Next', 'Github源码') {
-        }
-        .color(Color.Blue)
-        .margin({ top: "5%" })
-        Hyperlink('https://luzhiyidut.cn/', '作者主页(校园网环境无法访问)') {
-        }
-        .color(Color.Blue)
-        .margin({ top: "5%" })
-        Button("检查更新")
-          .margin({ top: "8%" })
-          .backgroundColor("blue")
-          .onClick(() => {
-            updatedata()
-
-          })
-          .width('80%')
-        Button("退出登录")
-          .margin({ top: "8%" })
-          .backgroundColor("red")
-          .onClick(() => {
-          dataPreferences.getPreferences(context, "information").then(preferences=>{
-            preferences.delete("account")
-            preferences.delete("password")
-            preferences.delete("data")
-            preferences.delete("photo")
-            preferences.flush()
-            router.pushUrl({
-              url: 'pages/Index',
-            })
-          }).catch((err:Error)=>{
-
-          })
-
-        })
-          .width('80%')
-        Text("此与i大工官方版无关，由校内独立开发者开发，方便在鸿蒙Next上使用相关服务，仅供交流！").margin({top:"80%",left:"10%",right:"10%"})
-          .fontSize(13)
-
-      }
-    }.title("设置")
-    .onBackPressed(() => {
-      const popDestinationInfo = this.pathStack.pop()
-      console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
-      return true
-    })
-    .onReady((context: NavDestinationContext) => {
-      this.pathStack = context.pathStack
-    })
-  }
-}
-
-@Component
-export struct pageself {
-  @State id_photo:string = ""
-  @State backgroundurl:string = ""
-  @State username:string = account
-  @State name:string = ""
-  @State org:string = ""
-  pathStack: NavPathStack = new NavPathStack();
-  aboutToAppear(): void {
-    dataPreferences.getPreferences(context, "information").then(preferences=>{
-      preferences.get("data",'default').then((value)=>{
-        let data_c:responsebean = JSON.parse(String(value))
-        this.name = data_c.data.my_info.name
-        this.org = data_c.data.my_info.org[0].name
-        if (data_c.data.my_info.authority_identity == "teacher"){
-          this.backgroundurl="https://store.m.dlut.edu.cn/group1/M00/00/08/ynZM2VkeWmaAM-KOAADN7zRo2AM2844791"
-        } else if (data_c.data.my_info.authority_identity == "master"){
-          this.backgroundurl= "https://store.m.dlut.edu.cn/group1/M00/00/08/ynZM2VkeWmiASfbLAAKB81vLQoA7280918"
-        }else {
-          this.backgroundurl= "https://store.m.dlut.edu.cn/group1/M00/00/08/ynZM2VkeWmeATT1oAAJ416V6N7k0520839"
-        }
-        preferences.get("photo",'default').then((value)=>{
-
-          let photo_in:PhotoBean = JSON.parse(String(value))
-          this.id_photo = "data:image/png;base64," + photo_in.data.id_photo.replace(/\\\//g, "/")
-        })
-      })
-    }).catch((err:Error)=>{
-
-    })
-  }
-  @Builder OverlayNode() {
-    Row() {
-      Image(this.id_photo)
-        .width(60).height(80)
-      Column(){
-        Text("姓名:"+ this.name)
-          .fontSize(12)
-          .fontWeight(FontWeight.Bold)
-        Blank()
-          .height("7%")
-        Text("学号:"+ this.username)
-          .fontSize(12)
-          .fontWeight(FontWeight.Bold)
-        Blank()
-          .height("7%")
-        Text("院系:"+ this.org)
-          .fontSize(12)
-          .fontWeight(FontWeight.Bold)
-      }
-      .alignItems(HorizontalAlign.Start)
-
-      .margin({left:"5%"})
-    }.margin({left:"8%",top:"1%"})
-  }
-  build() {
-    NavDestination() {
-      Column() {
-        Row() {
-          Image(this.backgroundurl)
-            .height("25%")
-            .width("80%")
-            .borderRadius(20)
-            .overlay(this.OverlayNode(), { align: Alignment.Center })
-            .objectFit(ImageFit.Contain)
-            .margin({top:"8%"})
-        }
-      }
-    }.title("个人证件")
-    .onBackPressed(() => {
-      const popDestinationInfo = this.pathStack.pop()
-      console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
-      return true
-    })
-    .onReady((context: NavDestinationContext) => {
-      this.pathStack = context.pathStack
-    })
-  }
-}

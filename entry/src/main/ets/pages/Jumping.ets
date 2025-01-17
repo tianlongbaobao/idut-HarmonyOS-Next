@@ -78,14 +78,19 @@ struct Splash {
       let value: preferences.ValueType = dataPreferences.getSync('password', 'default');
       let password = ""+value
       let values: preferences.ValueType = dataPreferences.getSync('account', 'default');
+      let bvx:preferences.ValueType = dataPreferences.getSync("nowdata","default")
       let account = ""+values
-      const  api: Array<ScriptItem> = [{ script: "username.value='" + account + "';password.value='" + password + "';submit.disabled='';submit.click()", scriptRules: ["*"] }]
-      const  sso: Array<ScriptItem> = [{ script: "$(\"#un\").val('" + account + "');$(\"#pd\").val('" + password + "');login()", scriptRules: ["*"] }]
+      let mnvc = ""+bvx
+      if (mnvc == "default") {
+        mnvc = "0"
+      }
       router.pushUrl({
         url: 'pages/Navigators',
         params:{
           id1:password,
-               id2:account}
+          id2:account,
+          id4:mnvc
+        }
       },router.RouterMode.Standard,
       ).then(() => {
         console.info('成功跳转到第二页。');

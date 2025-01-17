@@ -22,7 +22,6 @@ export class PermissionsUtil{
     let grantStatus = await PermissionsUtil.reqPermissionsFromUser()
     for (let i = 0; i < grantStatus.length; i++) {
       if (grantStatus[i] === 0) {
-        // 用户授权，可以继续访问目标操作
         return true;
       }
     }
