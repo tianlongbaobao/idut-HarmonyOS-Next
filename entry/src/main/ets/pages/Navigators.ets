@@ -1,5 +1,7 @@
 import { webview } from "@kit.ArkWeb";
 import dataPreferences from '@ohos.data.preferences';
+import * as wxopensdk from '@tencent/wechat_open_sdk'
+import { common } from '@kit.AbilityKit';
 import {responsebean} from "./utils/ResponseBean"
 import router from '@ohos.router';
 import window from '@ohos.window';
@@ -32,6 +34,7 @@ import {pagevcard} from "./app/card"
 import {appList} from "./app/applist"
 import {pushclass} from "./utils/pushservice"
 import {PermissionsUtil} from "./utils/permission"
+import axios, { AxiosResponse } from "@ohos/axios";
 
 const  account:string = (router.getParams() as Record<string, string>)['id2'];
 const  password:string = (router.getParams() as Record<string, string>)['id1'];
@@ -55,6 +58,7 @@ struct  Navigators {
   @State nickname:string = ""
   @State head:string = ""
   @State index:number = -1
+  @State doorlink:number = 0
   @Provide('pathInfos') pathStack: NavPathStack = new NavPathStack();
 
   private setImmersive() {
@@ -78,6 +82,13 @@ struct  Navigators {
         this.nickname = data_c.data.my_info.nick_name
         this.head = data_c.data.my_info.head
       })
+      preferences.get("door",'default').then((value)=>{
+        if (value!="default") {
+          this.doorlink = 1
+        } else {
+          this.doorlink = 0
+        }
+      })
     }).catch((err:Error)=>{
 
     })
@@ -85,8 +96,6 @@ struct  Navigators {
   @Builder
   tabBuilder(){
     Flex({direction:FlexDirection.Row,justifyContent:FlexAlign.Center}) {
-
-
         Column() {
           Image($rawfile("icon_service_all.png"))
             .width("10%")
@@ -287,6 +296,125 @@ struct  Navigators {
                     PermissionsUtil.requestCameraPermission()
                   })
               }
+              Row() {
+                Text("开电子房门")
+                  .height(50)
+                  .fontSize(16)
+              }
+              Row(){
+                Text("配置房门信息")
+                  .height(50)
+                  .padding({left: 10})
+                  .fontSize(16)
+                  .textAlign(TextAlign.Start)
+                  .backgroundColor(0xFFFFFF)
+                Button(){
+                  if (this.doorlink == 0) {
+                    Image($rawfile("add.png"))
+                      .height("3.5%")
+                  } else {
+                    Image($rawfile("deleted.png"))
+                      .height("3.5%")
+                  }
+                }
+                .backgroundColor("white")
+                .margin({left: 200, right: 10})
+                .onClick(()=>{
+                    let options: scanBarcode.ScanOptions = {
+                      scanTypes: [scanCore.ScanType.ALL],
+                      enableMultiMode: true,
+                      enableAlbum: true
+                    };
+                    interface ResponseBean {
+                      scanType: number;
+                      originalValue: string
+                    }
+                    scanBarcode.startScanForResult(getContext(this), options)
+                      .then(async (result: scanBarcode.ScanResult) => {
+                        const responseBean: ResponseBean = JSON.parse(JSON.stringify(result))
+                        let value: string = responseBean.originalValue
+                        if (value.includes("https://lock")) {
+                          const response: AxiosResponse = await axios.get(value, {
+                            headers: {
+                              'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.119 Safari/537.36',
+                              'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+                            }
+                          });
+                          let cvbn: string = response.data + ""
+                          const regex = /window\.location\.href\s*=\s*['"]([^'"]+)['"]/;
+                          let match = cvbn.match(regex);
+                          if (match && match[1]) {
+                            const extractedUrl = match[1];
+                            dataPreferences.getPreferences(context, "information").then(preferences => {
+                              preferences.putSync("door", extractedUrl)
+                              preferences.flush()
+                              this.doorlink = 1
+                            })
+                          } else {
+                            AlertDialog.show(
+                              {
+                                message: '未知错误',
+                                autoCancel: false,
+                                alignment: DialogAlignment.Bottom,
+                                gridCount: 5,
+                                offset: { dx: 0, dy: -20 },
+                                primaryButton: {
+                                  value: '确认',
+                                  action: () => {
+                                  },
+                                  fontColor:"red"
+                                },
+                              }
+                            )
+                          }
+                        }
+
+                      })
+                })
+              }
+              Row(){
+                Text("开房门")
+                  .height(50)
+                  .padding({left: 10})
+                  .fontSize(16)
+                  .textAlign(TextAlign.Start)
+                  .backgroundColor(0xFFFFFF)
+                Button('点击开门', { type: ButtonType.Capsule, stateEffect: false })
+                  .fontSize(13)
+                  .margin({left: 180, right: 10})
+                  .height("3.5%")
+                  .onClick(()=>{
+                    dataPreferences.getPreferences(context, "information").then(preferences=>{
+                      preferences.get("door",'default').then((value)=>{
+                        console.log(value+"")
+                        if (value == "default") {
+                          AlertDialog.show(
+                            {
+                              message: '未配置',
+                              autoCancel: false,
+                              alignment: DialogAlignment.Bottom,
+                              gridCount: 5,
+                              offset: { dx: 0, dy: -20 },
+                              primaryButton: {
+                                value: '确认',
+                                action: () => {
+                                },
+                                fontColor:"red"
+                              },
+                            }
+                          )
+                        } else {
+                          (getContext() as common.UIAbilityContext).openLink(value+"")
+                            .then(() => {
+                            }).catch((err: BusinessError) => {
+                          });
+                        }
+                      })
+                    }).catch((err:Error)=>{
+
+                    })
+                  })
+              }
             }
             .width('100%')
             .height('100%')
@@ -323,11 +451,6 @@ struct  Navigators {
                       scanType: number;
                       originalValue:string
                     }
-                    interface SendBean {
-                      resultStr: string;
-                      type:string;
-                      errMsg:string
-                    }
                     scanBarcode.startScanForResult(getContext(this), options).then((result: scanBarcode.ScanResult) => {
                       const responseBean: ResponseBean = JSON.parse(JSON.stringify(result))
                       let value: string = responseBean.originalValue
@@ -337,10 +460,8 @@ struct  Navigators {
                           params:{
                             id1:value}
                         })
-
                       }
                     })
-
                   }
                   this.index = -1
                 })
