@@ -10,7 +10,7 @@
 
 截至到12.19日闭包的代码统计
 
-<img width="1249" alt="联想截图_20241219234851" src="https://github.com/user-attachments/assets/d195da4b-bce6-49bb-a0da-02abd09b00e2" />
+<img width="1249" alt="联想截图_20241219234851" src="https://github.com/tianlongbaobao/idut-HarmonyOS-Next/blob/4.0.0/demo/2.png" />
 
 
 ## **下载**
