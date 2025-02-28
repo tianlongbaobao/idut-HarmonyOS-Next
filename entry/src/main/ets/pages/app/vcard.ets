@@ -37,6 +37,11 @@ export struct pagecard {
         "';submit.disabled='';submit.click()",
       scriptRules: ["*"]
     }]
+    webview.WebCookieManager.clearAllCookies((error) => {
+        if (error) {
+          console.error(`ErrorCode: ${(error as BusinessError).code},  Message: ${(error as BusinessError).message}`);
+        }
+      })
   }
 
   build() {

@@ -26,6 +26,8 @@ struct appdia {
   @State currentIndex: number = 0
   @State selectedIndex: number = 0
   private controller: TabsController = new TabsController()
+  private searchcontroller: SearchController = new SearchController()
+  @State changeValue:string = ""
   @Builder tabBuilder(index: number, name: string) {
     Column() {
       Text(name)
@@ -46,16 +48,69 @@ struct appdia {
         Flex({ justifyContent: FlexAlign.Center, alignItems: ItemAlign.Center }){
           Text("编辑我的常用服务")
             .fontColor("black")
-            .fontSize(20)
+            .fontSize(22)
             .fontWeight(FontWeight.Bold)
+        }
+        .height("8%")
+        .width("100%")
+        Flex({ justifyContent: FlexAlign.Center, alignItems: ItemAlign.Center }){
+          Search({ value: this.changeValue, placeholder: '搜索', controller: this.searchcontroller })
+            .width('95%')
+            .height(40)
+            .backgroundColor('#F5F5F5')
+            .placeholderColor(Color.Grey)
+            .placeholderFont({ size: 14, weight: 400 })
+            .textFont({ size: 14, weight: 400 })
+            .onChange((value: string) => {
+              this.changeValue = value.trim()
+            })
+            .margin(20)
         }
         .height("8%")
         .width("100%")
         Flex({ justifyContent: FlexAlign.Start, alignItems: ItemAlign.Start }) {
           Column() {
             ForEach(this.appll, (item: number) => {
-              ChildItem({ item: item })
-                .margin({ top: 15 })
+              if (this.changeValue == "") {
+                Row() {
+                  if (item == 1) {
+                    Text("校内生活")
+                      .fontWeight(FontWeight.Bold)
+                      .fontSize(18)
+                  }
+                  if (item == 12) {
+                    Text("我的学业")
+                      .fontWeight(FontWeight.Bold)
+                      .fontSize(18)
+                  }
+                  if (item == 20) {
+                    Text("网信服务")
+                      .fontWeight(FontWeight.Bold)
+                      .fontSize(18)
+                  }
+                  if (item == 21) {
+                    Text("开发区校区")
+                      .fontWeight(FontWeight.Bold)
+                      .fontSize(18)
+                  }
+                  if (item == 24) {
+                    Text("其它服务")
+                      .fontWeight(FontWeight.Bold)
+                      .fontSize(18)
+                  }
+                  if (item == 45) {
+                    Text("非i大工服务")
+                      .fontWeight(FontWeight.Bold)
+                      .fontSize(18)
+                  }
+                }.margin({ left: "15%", top: "2%" })
+              }
+
+              if (appList[item].name.includes(this.changeValue)) {
+                ChildItem({ item: item })
+                  .margin({ top: 15 })
+              }
+
             })
           }
         }
@@ -108,7 +163,6 @@ struct ChildItem{
               }
               jksc.pop()
             }
-            console.log(jksc.toString())
           })
           .margin({ right: "5%" })
       } else {
@@ -125,7 +179,6 @@ struct ChildItem{
               }
               jksc.pop()
             }
-            console.log(jksc.toString())
           })
           .margin({ right: "5%" })
       }

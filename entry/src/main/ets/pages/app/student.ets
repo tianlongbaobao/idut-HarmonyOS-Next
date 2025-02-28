@@ -14,7 +14,7 @@ interface mnv {
   passwords:string
 }
 @Component
-export struct pagetest {
+export struct pagestudent {
   @State sso:Array<ScriptItem> = []
   @State api:Array<ScriptItem> = []
   @Consume('pathInfos') pathStack: NavPathStack;
@@ -76,7 +76,7 @@ export struct pagetest {
       value: "share",
       icon: "/resources/rawfile/share.svg",
       action: async () => {
-        componentSnapshot.get("class2", {scale : 2, waitUntilRenderFinished : true})
+        componentSnapshot.get("class1", {scale : 2, waitUntilRenderFinished : true})
           .then((pixmap: image.PixelMap) => {
             let imagePackerApi = image.createImagePacker();
             let packOpts: image.PackingOption = { format: 'image/jpeg', quality: 98 };
@@ -99,8 +99,8 @@ export struct pagetest {
                     let shareData: systemShare.SharedData = new systemShare.SharedData({
                       utd: utdTypeId,
                       uri: fileUri.getUriFromPath(dstUri),
-                      title: '我的课表', // 不传title字段时,显示图片文件名
-                      description: '我的课表', // 不传description字段时,显示图片大小
+                      title: '学工系统', // 不传title字段时,显示图片文件名
+                      description: '学工系统', // 不传description字段时,显示图片大小
                       // thumbnail: new Uint8Array() // 优先使用传递的缩略图预览  不传则默认使用原图做预览图
                     });
                     // 进行分享面板显示
@@ -122,12 +122,12 @@ export struct pagetest {
           console.log("error: " + err)
         })
       }
-    },
+    }
   ]
 
   controller: webview.WebviewController = new webview.WebviewController()
   aboutToAppear(): void {
-    let vsf:mnv =JSON.parse(JSON.stringify(this.pathStack.getParamByName('我的课表')[0]))
+    let vsf:mnv =JSON.parse(JSON.stringify(this.pathStack.getParamByName('学工系统（原）')[0]))
     this.sso = [{ script: "$(\"#un\").val('" + vsf.accounts + "');$(\"#pd\").val('" + vsf.passwords + "');login()", scriptRules: ["*"] }]
     this.api = [{ script: "username.value='" + vsf.accounts + "';password.value='" + vsf.passwords + "';submit.disabled='';submit.click()", scriptRules: ["*"] }]
     if (canIUse('SystemCapability.Collaboration.HarmonyShare')) {
@@ -157,17 +157,17 @@ export struct pagetest {
   build() {
     NavDestination() {
       Column() {
-        Web({ src: "https://api.m.dlut.edu.cn/oauth/authorize?client_id=9qXqHnRQuhhViycC&redirect_uri=https%3a%2f%2flightapp.m.dlut.edu.cn%2fcheck%2fexamplan&response_type=code&scope=base_api&state=dlut", controller: this.controller })
+        Web({ src: "http://webvpn.dlut.edu.cn/http/57787a7876706e323032336b657940247c0d160bfd4d9742bf58b43d95aecb2487/DLUT/Login/Index?from=rj&filter=app", controller: this.controller })
           .javaScriptAccess(true)
           .fileAccess(true)
           .imageAccess(true)
           .onlineImageAccess(true)
           .domStorageAccess(true)
           .javaScriptOnDocumentEnd(this.api)
-          .id("class2")
+          .id("class1")
           .layoutMode(0)
       }
-    }.title("考试安排")
+    }.title("学工系统（原）")
     .menus(this.menuItems)
     .onBackPressed(() => {
       const popDestinationInfo = this.pathStack.pop()

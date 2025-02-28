@@ -37,6 +37,12 @@ export let appList:lidy[] = [
       ty:1
    },
    {
+      name:"图书借阅",
+      url:"https://store.m.dlut.edu.cn/group1/M00/00/09/ynZM2VlVDfOAH_FlAAAQiDCdlzs0313949",
+      describe:"图书借阅、委托、账目清单、遗失赔偿信息查询",
+      ty:1
+   },
+   {
       name:"体育场馆预定",
       url:"https://store.m.dlut.edu.cn/group1/M00/02/30/ynZM2V9Mj2GAXxRpAAAZEquDC1U035.png",
       describe:"提供在线购买体育馆票、卡、场地等功能，在线查看自己已购买的订单等信息。",
@@ -61,6 +67,18 @@ export let appList:lidy[] = [
       ty:0
    },
    {
+      name:"校园缴费",
+      url:"https://store.m.dlut.edu.cn/group1/M00/01/EF/ynZM2V5cX6uADgWxAAAbr4bV4J8446.png",
+      describe:"大连理工大学一卡通电子支付平台",
+      ty:0
+   },
+   {
+      name:"校内通知",
+      url:"https://store.m.dlut.edu.cn/group1/M00/00/34/ynZM2VmRCTmAYyO4AAAZ_eqIXRM2301923",
+      describe:"校内通知、校内文件、干部工作",
+      ty:0
+   },
+   {
       name:"我的课表",
       url:"https://store.m.dlut.edu.cn/group1/M00/00/01/ynZM2VkU-IiAPBCnAAAamt9Ip481490708",
       describe:"学生、任课教师课表信息，数据以教务、研究生系统为准，本应用课表数据仅供参考！",
@@ -76,6 +94,12 @@ export let appList:lidy[] = [
       name:"空闲教室",
       url:"https://store.m.dlut.edu.cn/group1/M00/00/08/ynZM2VkeVL2AGt4BAAAYlzvpSVo6550599",
       describe:"查询空余教室信息",
+      ty:1
+   },
+   {
+      name:"我的成绩",
+      url:"https://store.m.dlut.edu.cn/group1/M00/00/09/ynZM2VlUWLqADKhKAAAUi-vic4E4521607",
+      describe:"查询我的教务成绩信息",
       ty:1
    },
    {
@@ -115,15 +139,169 @@ export let appList:lidy[] = [
       ty:0
    },
    {
+      name:"开发区体育场馆预约",
+      url:"https://store.m.dlut.edu.cn/group1/M00/05/98/ynZM2WQXGdqAbC_DAABeZ4Nr-vE528.png",
+      describe:"提供开发区校区运动场馆场地的线上预约、次卡的购买等功能，方便师生预约开发区校区运动场地。",
+      ty:0
+   },
+   {
       name:"校园网测速",
       url:"https://store.m.dlut.edu.cn/group1/M00/01/45/ynZM2Vzjo7-AEl7QAAAv69n_AZs158.png",
       describe:"学校校园无线网测速工具，如果您想知道所在校园区域的无线网速度，可以使用本工具进行测速。测速的结果不代表访问的实际速度，访问实际速度是由校园网和访问服务的提供商的速度等多种因素决定的。",
       ty:0
    },
    {
-      name:"开发区体育场馆预约",
-      url:"https://store.m.dlut.edu.cn/group1/M00/05/98/ynZM2WQXGdqAbC_DAABeZ4Nr-vE528.png",
-      describe:"提供开发区校区运动场馆场地的线上预约、次卡的购买等功能，方便师生预约开发区校区运动场地。",
-      ty:0
-   }
+      name:"迎新系统",
+      url:"https://store.m.dlut.edu.cn/group1/M00/00/09/ynZM2VlnDrGAZ4zkAAAXPSNRMjc4254667",
+      describe:"负责迎新教师可以查看接站信息、花名册、报到率、绿色通道情况；新入学的同学可以查看自己室友、同班同学、迎新快讯、迎新通知；",
+      ty:2
+   },
+   {
+      name:"办事大厅",
+      url:"https://my.m.dlut.edu.cn/images/appicon/shejiao.png",
+      describe:"学校办事大厅应用，师生可在此应用下办理业务。",
+      ty:2
+   },
+   {
+      name:"学工系统（原）",
+      url:"https://store.m.dlut.edu.cn/group1/M00/01/F6/ynZM2V6qTHOADRmFAAAaO5TnZvA986.png",
+      describe:"为学生提供学工一体化系统中的各类通知查询、个人信息查询与修改；为辅导员和学生工作部门提供学生基本信息查询与筛选、学生工作人员基本信息查询、网络办公系统通知查看等。",
+      ty:2
+   },
+   {
+      name:"调查问卷",
+      url:"https://store.m.dlut.edu.cn/group1/M00/05/6F/ynZM2WMr0eOAFU3IAABeIT1UeNw528.png",
+      describe:"调查问卷填写入口，可获取本人可填写及已历史填写过的问卷。",
+      ty:2
+   },
+   {
+      name:"研究生系统",
+      url:"https://store.m.dlut.edu.cn/group1/M00/01/2B/ynZM2VwcpHeADVLoAAAxsF8nPV0948.png",
+      describe:"研究生管理信息系统移动版本",
+      ty:2
+   },
+   {
+      name:"智能助手",
+      url:"https://store.m.dlut.edu.cn/group1/M00/02/44/ynZM2V9VqPOAZ4ZgAACSZGfegWo269.png",
+      describe:"该系统主要是以一问一答形式，精确的定位网络用户所需要的提问知识，通过与用户进行交互，为用户提供个性化的信息服务。",
+      ty:2
+   },
+   {
+      name:"校历",
+      url:"https://store.m.dlut.edu.cn/group1/M00/00/01/ynZM2VkU_zyAVLJJAAAWwzlljqM2626410",
+      describe:"当前学期校历，可根据身份自动识别大学期、小学期",
+      ty:2
+   },
+   {
+      name:"公共通知",
+      url:"https://store.m.dlut.edu.cn/group1/M00/00/01/ynZM2VkU-9iAJ779AAAqN7kS9pY1398660",
+      describe:"公共通知可以查看各个部门院系通知公告。",
+      ty:2
+   },
+   {
+      name:"离校系统",
+      url:"https://my.m.dlut.edu.cn/images/appicon/xuexi.png",
+      describe:"新离校系统",
+      ty:2
+   },
+   {
+      name:"毕业生档案服务",
+      url: "https://store.m.dlut.edu.cn/group1/M00/05/AC/ynZM2WSMFYqAc3pzAAA8vJJqrM8325.png",
+      describe:"档案馆毕业生档案服务",
+      ty:2
+   },
+   {
+      name:"后勤报修系统",
+      url:"https://store.m.dlut.edu.cn/group1/M00/06/08/ynZM2WU5tWWAEs01AAAunirRhCY524.png",
+      describe:"报修系统是针对校园报修流程建设的一站式服务平台，为师生校内报修提供线上平台，提升校园维修效率。",
+      ty:2
+   },
+   {
+      name:"学校新闻",
+      url:"https://store.m.dlut.edu.cn/group1/M00/00/01/ynZM2VkU-aqAYmGdAAARVIgc0DA1466483",
+      describe:"快速了解学校概要新闻",
+      ty:2
+   },
+   {
+      name:"自助打印",
+      url:"https://store.m.dlut.edu.cn/group1/M00/01/25/ynZM2Vv97QaAZQDFAAAXvITm0Jg604.png",
+      describe:"自助打印服务平台为师生提供线上电子成绩单和电子证明文件申请，线下自助打印情况及自助打印终端位置查看等服务。",
+      ty:2
+   },
+   {
+      name:"照片采集",
+      url:"https://store.m.dlut.edu.cn/group1/M00/01/19/ynZM2VvAP52AemfbAAA0ZwVo190430.png",
+      describe:"自助采集的人像照片将应用于校园进出综合管控、一卡通系统、会议签到、门禁考勤等校园内人脸识别认证和人像照片显示。建议上传本人近期正面免冠彩色头像标准证明照，照片分辨率不低于480*640，大小不超过2M。",
+      ty:2
+   },
+   {
+      name:"校内生活",
+      url:"https://store.m.dlut.edu.cn/group1/M00/00/8D/ynZM2VomenWAeOXkAAANqO47Geg0182891",
+      describe:"各校区图书馆、食堂、场馆等服务场所开放时间及校区班车运行时间",
+      ty:2
+   },
+   {
+      name:"点餐系统",
+      url:"https://store.m.dlut.edu.cn/group1/M00/06/07/ynZM2WUwgcWANYGoAAAfjQxTzx4650.png",
+      describe:"智慧点餐系统针对学校食堂大量人员的就餐情况，缓解人群聚集和排队，实现线上点餐、限流取餐，分时就餐。打造一个安全卫生、科学高效、灵活方便的师生就餐环境，有效减少人员接触，保障校内师生的健康与安全。",
+      ty:2
+   },
+   {
+      name:"移动OA",
+      url: "https://store.m.dlut.edu.cn/group1/M00/03/9F/ynZM2WIgRWeAXK2gAAAuFIR6-Pc622.png",
+      describe:"学校协同办公自动化信息系统（OA系统）开放手机移动端，旨在进一步满足教职员工办公需求。OA系统移动端功能与PC端保持一致，用户可通过该移动端完成公文办理、签报管理、督查督办、信访处理等流程。",
+      ty:2
+   },
+   {
+      name:"组工平台",
+      url: "https://store.m.dlut.edu.cn/group1/M00/03/D8/ynZM2WJC7gCAYYfMAABOdPZK638911.png",
+      describe:"组工平台",
+      ty:2
+   },
+   {
+      name:"DUTer建言",
+      url: "https://store.m.dlut.edu.cn/group1/M00/05/6A/ynZM2WMn4VSAK3DCAAALTLkhkOk599.png",
+      describe:"欢迎使用DUTer建言，该平台主要用于征询在校师生为学校发展的意见建议，受理师生各类投诉反映和政策咨询等。不接受检举控告，不受理涉法涉诉涉纪、内容不合理、语言不健康、反映信息笼统模糊等问题。",
+      ty:2
+   },
+
+   {
+      name:"试剂耗材采购",
+      url: "https://store.m.dlut.edu.cn/group1/M00/05/97/ynZM2WQRl1SATUGsAAC2LMYE5UY141.png",
+      describe:"试剂耗材综合管理系统是集线上采购（化学药品、实验气体、生物制品、实验耗材）、审批、库房管理，信息查询等功能于一体，实现科研物资采购“事前可预警，事后可追溯，管理透明化”，进一步规范学校的试剂耗材全流程的数字化管理的系统。",
+      ty:2
+   },
+   {
+      name:"安全准入考试",
+      url: "https://store.m.dlut.edu.cn/group1/M00/03/59/ynZM2WGgeg-AV37sAABDPXT_nX8596.png",
+      describe:"针对实验室准入考试系统对应的手机端",
+      ty:2
+   },
+   {
+      name:"教务主页",
+      url: "https://store.m.dlut.edu.cn/group1/M00/00/08/ynZM2VkeVL2AGt4BAAAYlzvpSVo6550599",
+      describe:"教务系统主页",
+      ty:2
+   },
+   {
+      name:"选课系统",
+      url: "https://my.m.dlut.edu.cn/images/appicon/xuexi.png",
+      describe:"教务系统的选课界面",
+      ty:2
+   },
+   {
+      name:"评教系统",
+      url: "https://my.m.dlut.edu.cn/images/appicon/shejiao.png",
+      describe:"教务系统的评教系统",
+      ty:2
+   },
+   {
+      name:"大工云盘",
+      url: "https://portal.dlut.edu.cn/tp/resource/image/apps/apps-03.png",
+      describe:"大连理工大学网盘，能用，但不好用",
+      ty:2
+   },
+
+
+
 ]
