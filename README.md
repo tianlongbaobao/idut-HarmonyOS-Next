@@ -8,8 +8,6 @@
 
 ## **代码统计**
 
-截至到12.19日闭包的代码统计
-
 <img width="1249" alt="联想截图_20241219234851" src="https://github.com/tianlongbaobao/idut-HarmonyOS-Next/blob/4.0.0/demo/2.png" />
 
 
