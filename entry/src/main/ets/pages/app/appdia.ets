@@ -78,27 +78,27 @@ struct appdia {
                       .fontWeight(FontWeight.Bold)
                       .fontSize(18)
                   }
-                  if (item == 12) {
+                  if (item == 13) {
                     Text("我的学业")
                       .fontWeight(FontWeight.Bold)
                       .fontSize(18)
                   }
-                  if (item == 20) {
+                  if (item == 21) {
                     Text("网信服务")
                       .fontWeight(FontWeight.Bold)
                       .fontSize(18)
                   }
-                  if (item == 21) {
+                  if (item == 22) {
                     Text("开发区校区")
                       .fontWeight(FontWeight.Bold)
                       .fontSize(18)
                   }
-                  if (item == 24) {
+                  if (item == 25) {
                     Text("其它服务")
                       .fontWeight(FontWeight.Bold)
                       .fontSize(18)
                   }
-                  if (item == 45) {
+                  if (item == 47) {
                     Text("非i大工服务")
                       .fontWeight(FontWeight.Bold)
                       .fontSize(18)
@@ -182,10 +182,22 @@ struct ChildItem{
           })
           .margin({ right: "5%" })
       }
-      Image(appList[this.item].url)
-        .height("100%")
-        .width("13.5%")
-        .borderRadius(25)
+      if (appList[this.item].name == "AI助手"){
+        Image($rawfile("ai.jpg"))
+          .borderRadius(25)
+          .height("100%")
+          .width("13.5%")
+      } else if (appList[this.item].name == "智慧学工"){
+        Image($rawfile("newstudent.jpg"))
+          .borderRadius(25)
+          .height("100%")
+          .width("13.5%")
+      } else {
+        Image(appList[this.item].url)
+          .borderRadius(25)
+          .height("100%")
+          .width("13.5%")
+      }
       Text(appList[this.item].name)
         .margin({left:"8%"})
     }

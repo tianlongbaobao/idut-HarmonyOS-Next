@@ -71,9 +71,19 @@ export struct pagecard {
           })
           .onLoadIntercept((event) => {
             let data = event.data;
-            let url = data.getRequestUrl();
+            let url:string = data.getRequestUrl();
+            console.log(url)
             if (url.startsWith("weixin://")) {
               (getContext() as common.UIAbilityContext).openLink(url)
+                .then(() => {
+                }).catch((err: BusinessError) => {
+              });
+              return true;
+            }
+            if (url.startsWith("upwrp://")) {
+              console.log("uppaywallet://uppay" + url.substring(20))
+              let  newStr = "uppaywallet://uppay" + url.substring(20);
+              (getContext() as common.UIAbilityContext).openLink(newStr)
                 .then(() => {
                 }).catch((err: BusinessError) => {
               });

@@ -1,12 +1,15 @@
 import { webview } from "@kit.ArkWeb";
 import dataPreferences from '@ohos.data.preferences';
-import * as wxopensdk from '@tencent/wechat_open_sdk'
 import { common } from '@kit.AbilityKit';
 import {responsebean} from "./utils/ResponseBean"
 import router from '@ohos.router';
 import window from '@ohos.window';
 import { scanCore, scanBarcode } from '@kit.ScanKit';
 import { BusinessError } from '@kit.BasicServicesKit';
+import {appList} from "./app/applist"
+import {pushclass} from "./utils/pushservice"
+import {PermissionsUtil} from "./utils/permission"
+import axios, { AxiosResponse } from "@ohos/axios";
 import {pageself} from "./app/self"
 import {pagepe} from "./app/sports"
 import {pageclass} from "./app/classes"
@@ -31,23 +34,53 @@ import {pagesettings} from "./app/settiing"
 import {pagewebeda} from "./app/webeda"
 import {pagesportseda} from "./app/sportseda"
 import {pagevcard} from "./app/card"
-import {appList} from "./app/applist"
-import {pushclass} from "./utils/pushservice"
-import {PermissionsUtil} from "./utils/permission"
-import axios, { AxiosResponse } from "@ohos/axios";
+import {pagegrade} from "./app/grade"
+import {pagenew} from "./app/new"
+import {pagehandle} from "./app/handle"
+import {pagestudent} from "./app/student"
+import {pageinvestigate} from "./app/investigate"
+import {pagepostgraduate} from "./app/postgraduate"
+import {pagebooklist} from "./app/booklist"
+import {pagefee} from "./app/fee"
+import {pagenotice} from "./app/notice"
+import {pagecalendar} from "./app/calendar";
+import {pagepublicnotice} from "./app/publicnotice"
+import { pagerunschool } from "./app/runschool";
+import { pagenews } from "./app/news";
+import { pageprint } from "./app/print";
+import { pagephoto } from "./app/photo";
+import { pagelife } from "./app/life";
+import { pagefood } from "./app/food";
+import { pageoa } from "./app/OA";
+import { pagegroup } from "./app/group";
+import { pagespeak } from "./app/speak";
+import { pagechemistry } from "./app/chemistry";
+import { pagegraduate } from "./app/graduate";
+import { pagerepair } from "./app/repair";
+import { pagesafetest } from "./app/safetest";
+import { pageassistant } from "./app/assistant";
+import { pagestudentnew } from "./app/studentnew";
+import { pagechooseclass } from "./app/chooseclass";
+import { pageteachsys } from "./app/teachsys";
+import { pagecomment } from "./app/comment";
+import { pagepan } from "./app/pan";
+import { pageai } from "./app/ai";
 
 const  account:string = (router.getParams() as Record<string, string>)['id2'];
 const  password:string = (router.getParams() as Record<string, string>)['id1'];
 const  pasz:string = (router.getParams() as Record<string, string>)['id4'];
+const  verifys:string = (router.getParams() as Record<string, string>)['id5'];
 
 interface mnv {
   accounts:string
   passwords:string
+  verify:string
 }
 
 let ncs:mnv ={
   accounts:account,
-  passwords:password
+  passwords:password,
+  verify:verifys
 }
 let context = getContext(this)
 @Entry
@@ -175,8 +208,6 @@ struct  Navigators {
       pageticket()
     }else if (name === "校园网测速") {
       pagespeed()
-    }else if (name === "教务主页") {
-      pageteach()
     }else if (name === "作者信息") {
       pageinformation()
     }else if (name === "大工教务") {
@@ -191,6 +222,68 @@ struct  Navigators {
       pagesportseda()
     }else if (name === "虚拟卡") {
       pagevcard()
+    }else if (name === "我的成绩") {
+      pagegrade()
+    }else if (name === "迎新系统") {
+      pagenew()
+    }else if (name === "办事大厅") {
+      pagehandle()
+    }else if (name === "学工系统（原）") {
+      pagestudent()
+    }else if (name === "调查问卷") {
+      pageinvestigate()
+    }else if (name === "研究生系统") {
+      pagepostgraduate()
+    }else if (name === "图书借阅") {
+      pagebooklist()
+    }else if (name === "校园缴费") {
+      pagefee()
+    }else if (name === "校内通知") {
+      pagenotice()
+    }else if (name === "校历") {
+      pagecalendar()
+    }else if (name === "公共通知") {
+      pagepublicnotice()
+    }else if (name === "离校系统") {
+      pagerunschool()
+    }else if (name === "学校新闻") {
+      pagenews()
+    }else if (name === "自助打印") {
+      pageprint()
+    }else if (name === "照片采集") {
+      pagephoto()
+    }else if (name === "校内生活") {
+      pagelife()
+    }else if (name === "点餐系统") {
+      pagefood()
+    }else if (name === "移动OA") {
+      pageoa()
+    }else if (name === "组工平台") {
+      pagegroup()
+    }else if (name === "DUTer建言") {
+      pagespeak()
+    }else if (name === "试剂耗材采购") {
+      pagechemistry()
+    }else if (name === "毕业生档案服务") {
+      pagegraduate()
+    }else if (name === "后勤报修系统") {
+      pagerepair()
+    }else if (name === "安全准入考试") {
+      pagesafetest()
+    }else if (name === "智能助手") {
+      pageassistant()
+    }else if (name === "智慧学工") {
+      pagestudentnew()
+    }else if (name === "教务主页") {
+      pageteachsys()
+    }else if (name === "选课系统") {
+      pagechooseclass()
+    }else if (name === "评教系统") {
+      pagecomment()
+    }else if (name === "大工云盘") {
+      pagepan()
+    }else if (name === "AI助手") {
+      pageai()
     }
   }
 
@@ -524,10 +617,22 @@ struct ChildItem {
   build() {
     Column() {
       Button({ type: ButtonType.Circle, stateEffect: true }) {
-        Image(appList[this.item].url)
-          .borderRadius(25)
-          .height("105%")
-          .width("95%")
+        if (appList[this.item].name == "AI助手"){
+          Image($rawfile("ai.jpg"))
+            .borderRadius(25)
+            .height("105%")
+            .width("95%")
+        } else if (appList[this.item].name == "智慧学工"){
+          Image($rawfile("newstudent.jpg"))
+            .borderRadius(25)
+            .height("105%")
+            .width("95%")
+        } else {
+          Image(appList[this.item].url)
+            .borderRadius(25)
+            .height("105%")
+            .width("95%")
+        }
       }
       .onClick(() => {
         this.pathStack.pushPathByName(appList[this.item].name, ncs);

@@ -60,6 +60,7 @@ export async function pushclass(con:boolean):Promise<void>{
         dataPreferences.getPreferences(context, "information").then(preferences => {
           preferences.get("account", 'default').then((value) => {
             let jsc: resp = JSON.parse(JSON.stringify(response.data))
+            console.log(jsc.access_token)
             let url = "https://api.m.dlut.edu.cn/lightappapi/course/get_today_course?access_token=" + jsc.access_token +
               "&app_version=" + GetwhistleVersion() + "&domain=dlut&identity=" + "student" +
               "&platform=android&student_number=" + value;

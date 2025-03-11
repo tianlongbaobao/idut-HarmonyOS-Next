@@ -1,6 +1,7 @@
 import { router, window } from '@kit.ArkUI';
 import { preferences } from '@kit.ArkData';
 import { BusinessError } from '@kit.BasicServicesKit';
+import {responsebean} from "./utils/ResponseBean"
 let context = getContext(this)
 @Component
 @Entry
@@ -79,6 +80,9 @@ struct Splash {
       let password = ""+value
       let values: preferences.ValueType = dataPreferences.getSync('account', 'default');
       let bvx:preferences.ValueType = dataPreferences.getSync("nowdata","default")
+      let axzc:preferences.ValueType = dataPreferences.getSync("data","default")
+      axzc = axzc+""
+      let dcz:responsebean = JSON.parse(axzc)
       let account = ""+values
       let mnvc = ""+bvx
       if (mnvc == "default") {
@@ -89,11 +93,11 @@ struct Splash {
         params:{
           id1:password,
           id2:account,
-          id4:mnvc
+          id4:mnvc,
+          id5:dcz.data.verify
         }
       },router.RouterMode.Standard,
       ).then(() => {
-        console.info('成功跳转到第二页。');
       }).catch((err: BusinessError) => {
         console.error(`无法跳转到第二页。错误码为${err.code}, 错误消息 ${err.message}`);
       });

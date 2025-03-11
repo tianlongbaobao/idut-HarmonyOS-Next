@@ -13,6 +13,12 @@ export let appList:lidy[] = [
       ty:0
    },
    {
+      name:"AI助手",
+      url:"",
+      describe:"大工ai。",
+      ty:0
+   },
+   {
       name:"校车定位",
       url:"https://store.m.dlut.edu.cn/group1/M00/02/31/ynZM2V9Mt0SAE0SFAABPvJJ1-9A273.png",
       describe:"实现凌水校区校车定位，方便师生查看校车位置。",
@@ -160,6 +166,12 @@ export let appList:lidy[] = [
       name:"办事大厅",
       url:"https://my.m.dlut.edu.cn/images/appicon/shejiao.png",
       describe:"学校办事大厅应用，师生可在此应用下办理业务。",
+      ty:2
+   },
+   {
+      name:"智慧学工",
+      url:"https://my.m.dlut.edu.cn/images/appicon/shejiao.png",
+      describe:"智慧学工。",
       ty:2
    },
    {
