@@ -8,6 +8,7 @@ import { uniformTypeDescriptor as utd } from '@kit.ArkData';
 import fileIo from "@ohos.file.fs";
 import { common } from "@kit.AbilityKit";
 import { fileUri } from "@kit.CoreFileKit";
+import {startBrowser} from "../utils/browser"
 
 interface mnv {
   accounts:string
@@ -17,6 +18,7 @@ interface mnv {
 export struct pageclass {
   @State sso:Array<ScriptItem> = []
   @State api:Array<ScriptItem> = []
+  @State URI:string = ""
   @Consume('pathInfos') pathStack: NavPathStack;
   private immersiveCallback(sharableTarget: harmonyShare.SharableTarget) {
     componentSnapshot.get("class1", {scale : 2, waitUntilRenderFinished : true})
@@ -65,6 +67,14 @@ export struct pageclass {
   }
 
   private menuItems: Array<NavigationMenuItem> = [
+    {
+      value:"browser",
+      icon:"/resources/rawfile/browser.png",
+      action:() =>{
+        const context: common.UIAbilityContext = getContext(this) as common.UIAbilityContext;
+        startBrowser(context,this.URI)
+      }
+    },
     {
       value:"refresh",
       icon:"/resources/rawfile/refresh.svg",
@@ -166,6 +176,11 @@ export struct pageclass {
           .javaScriptOnDocumentEnd(this.api)
           .id("class1")
           .layoutMode(0)
+          .onLoadIntercept((event) => {
+            let data = event.data;
+            this.URI = data.getRequestUrl();
+            return false
+          })
       }
     }.title("我的课表")
     .menus(this.menuItems)

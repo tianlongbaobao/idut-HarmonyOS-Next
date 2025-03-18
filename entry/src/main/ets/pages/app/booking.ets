@@ -1,4 +1,6 @@
 import { webview } from "@kit.ArkWeb";
+import {startBrowser} from "../utils/browser"
+import {common} from "@kit.AbilityKit"
 
 interface mnv {
   accounts:string
@@ -8,16 +10,26 @@ interface mnv {
 @Component
 export struct pagebooking {
   @State sso:Array<ScriptItem> = []
+  @State URI:string = ""
   @Consume('pathInfos') pathStack: NavPathStack;
   controller: webview.WebviewController = new webview.WebviewController()
   private menuItems: Array<NavigationMenuItem> = [
+    {
+      value:"browser",
+      icon:"/resources/rawfile/browser.png",
+      action:() =>{
+        const context: common.UIAbilityContext = getContext(this) as common.UIAbilityContext;
+        startBrowser(context,this.URI)
+      }
+    },
     {
       value:"refresh",
       icon:"/resources/rawfile/refresh.svg",
       action:() =>{
         this.controller.refresh()
       }
-    }]
+    }
+  ]
   aboutToAppear(): void {
     console.log(JSON.stringify(this.pathStack.getParamByName('资源预约')))
     let vsf:mnv =JSON.parse(JSON.stringify(this.pathStack.getParamByName('资源预约')[0]))
@@ -33,6 +45,11 @@ export struct pagebooking {
           .onlineImageAccess(true)
           .domStorageAccess(true)
           .javaScriptOnDocumentEnd(this.sso)
+          .onLoadIntercept((event) => {
+            let data = event.data;
+            this.URI = data.getRequestUrl();
+            return false
+          })
       }
     }.title("资源预约")
     .onBackPressed(() => {
