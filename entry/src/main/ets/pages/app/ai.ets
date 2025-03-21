@@ -12,6 +12,7 @@ export struct pageai {
   @State verify:string = ""
   @State sso:Array<ScriptItem> = []
   @State api:Array<ScriptItem> = []
+  @State vpn:Array<ScriptItem> = [{script:"document.getElementById('cas-login').click()", scriptRules: ["*"] }]
   @State URI:string = ""
   @Consume('pathInfos') pathStack: NavPathStack;
   controller: webview.WebviewController = new webview.WebviewController()
@@ -43,12 +44,13 @@ export struct pageai {
   build() {
     NavDestination() {
       Column() {
-        Web({ src: "http://chat.dlut.edu.cn/page/site/?ip=service.m.dlut.edu.cn&verify="+this.verify, controller: this.controller })
+        Web({ src: "https://webvpn.dlut.edu.cn/http/57787a7876706e323032336b657940247b10030cb2079f5bbe02ff3c84f58629/page/site/newPc?app=1", controller: this.controller })
           .javaScriptAccess(true)
           .fileAccess(true)
           .imageAccess(true)
           .onlineImageAccess(true)
           .domStorageAccess(true)
+          .javaScriptOnDocumentEnd(this.vpn)
           .javaScriptOnDocumentEnd(this.sso)
           .onControllerAttached(() => {
             let userAgent =
@@ -61,7 +63,7 @@ export struct pageai {
             return false
           })
       }
-    }.title("AI助手（校园网）")
+    }.title("AI助手")
     .onBackPressed(() => {
       const popDestinationInfo = this.pathStack.pop()
       return true
@@ -69,6 +71,7 @@ export struct pageai {
     .onReady((context: NavDestinationContext) => {
       this.pathStack = context.pathStack
     })
+
     .menus(this.menuItems)
   }
 }

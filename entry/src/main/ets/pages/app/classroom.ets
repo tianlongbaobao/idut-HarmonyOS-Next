@@ -58,4 +58,5 @@ export struct pageclassroom {
     })
     .menus(this.menuItems)
   }
+
 }

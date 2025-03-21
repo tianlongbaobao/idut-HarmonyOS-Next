@@ -65,4 +65,5 @@ export struct pagestudentnew {
     })
     .menus(this.menuItems)
   }
+
 }

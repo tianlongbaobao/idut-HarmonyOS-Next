@@ -10,6 +10,7 @@ interface mnv {
 @Component
 export struct pagebooking {
   @State sso:Array<ScriptItem> = []
+  @State vpn:Array<ScriptItem> = [{script:"document.getElementById('cas-login').click()", scriptRules: ["*"] }]
   @State URI:string = ""
   @Consume('pathInfos') pathStack: NavPathStack;
   controller: webview.WebviewController = new webview.WebviewController()
@@ -44,6 +45,7 @@ export struct pagebooking {
           .imageAccess(true)
           .onlineImageAccess(true)
           .domStorageAccess(true)
+          .javaScriptOnDocumentEnd(this.vpn)
           .javaScriptOnDocumentEnd(this.sso)
           .onLoadIntercept((event) => {
             let data = event.data;
@@ -61,4 +63,5 @@ export struct pagebooking {
     })
     .menus(this.menuItems)
   }
+
 }

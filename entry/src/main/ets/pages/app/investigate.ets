@@ -60,4 +60,5 @@ export struct pageinvestigate {
     })
     .menus(this.menuItems)
   }
+
 }

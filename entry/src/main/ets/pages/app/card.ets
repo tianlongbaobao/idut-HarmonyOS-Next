@@ -48,4 +48,5 @@ export struct pagevcard {
     })
     .menus(this.menuItems)
   }
+
 }

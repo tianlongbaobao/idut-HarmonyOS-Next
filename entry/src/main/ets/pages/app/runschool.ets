@@ -60,4 +60,5 @@ export struct pagerunschool {
     })
     .menus(this.menuItems)
   }
+
 }

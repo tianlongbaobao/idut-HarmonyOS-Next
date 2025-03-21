@@ -60,4 +60,5 @@ export struct pagepublicnotice {
     })
     .menus(this.menuItems)
   }
+
 }

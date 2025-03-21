@@ -49,4 +49,5 @@ export struct pagespeed {
     })
     .menus(this.menuItems)
   }
+
 }

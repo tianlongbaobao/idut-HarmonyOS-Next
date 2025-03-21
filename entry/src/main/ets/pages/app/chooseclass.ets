@@ -65,4 +65,5 @@ export struct pagechooseclass {
     })
     .menus(this.menuItems)
   }
+
 }

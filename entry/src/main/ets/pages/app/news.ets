@@ -60,4 +60,5 @@ export struct pagenews {
     })
     .menus(this.menuItems)
   }
+
 }

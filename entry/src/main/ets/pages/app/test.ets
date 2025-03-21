@@ -127,7 +127,7 @@ export struct pagetest {
 
   controller: webview.WebviewController = new webview.WebviewController()
   aboutToAppear(): void {
-    let vsf:mnv =JSON.parse(JSON.stringify(this.pathStack.getParamByName('我的课表')[0]))
+    let vsf:mnv =JSON.parse(JSON.stringify(this.pathStack.getParamByName('考试安排')[0]))
     this.sso = [{ script: "$(\"#un\").val('" + vsf.accounts + "');$(\"#pd\").val('" + vsf.passwords + "');login()", scriptRules: ["*"] }]
     this.api = [{ script: "username.value='" + vsf.accounts + "';password.value='" + vsf.passwords + "';submit.disabled='';submit.click()", scriptRules: ["*"] }]
     if (canIUse('SystemCapability.Collaboration.HarmonyShare')) {
@@ -178,4 +178,5 @@ export struct pagetest {
     })
 
   }
+
 }

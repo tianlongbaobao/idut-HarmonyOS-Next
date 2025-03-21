@@ -16,7 +16,7 @@ export struct pagesettings {
         Text("i大工社区版").margin({ top: "5%" })
           .fontSize(18)
           .fontWeight(FontWeight.Bold)
-        Text("版本号:4.5.0").margin({ top: "5%" })
+        Text("版本号:4.5.3").margin({ top: "5%" })
           .fontSize(15)
         Hyperlink('https://github.com/tianlongbaobao/idut-HarmonyOS-Next', 'Github源码') {
         }

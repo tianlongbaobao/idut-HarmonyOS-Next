@@ -605,6 +605,11 @@ struct  Navigators {
     .hideNavBar(false)
     .navBarWidth('50%')
   }
+  onBackPress() {
+    let context   = getContext(this) as common.UIAbilityContext
+    context.terminateSelf()
+    return true
+  }
   onPageShow() {
     this.setImmersive();
   }
@@ -645,45 +650,7 @@ struct ChildItem {
     .height("10.5%")
     .width("20%")
   }
-}
 
-
-
-
-
-
-
-@Component
-export struct pagescan {
-  pathStack: NavPathStack = new NavPathStack();
-  controller: webview.WebviewController = new webview.WebviewController()
-  aboutToAppear(): void {
-    console.log("1")
-  }
-  build() {
-    NavDestination() {
-      Button('loadUrl')
-        .onClick(() => {
-          try {
-                // 点击按钮时，通过loadUrl，跳转到www.example1.com
-            this.controller.loadUrl('www.example1.com');
-          } catch (error) {
-            console.error(`ErrorCode: ${(error as BusinessError).code},  Message: ${(error as BusinessError).message}`);
-          }
-        })
-          // 组件创建时，加载www.example.com
-          Web({ src: 'www.example.com', controller: this.controller })
-
-    }.title("教务主页")
-    .onBackPressed(() => {
-      const popDestinationInfo = this.pathStack.pop()
-      console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
-      return true
-    })
-    .onReady((context: NavDestinationContext) => {
-      this.pathStack = context.pathStack
-    })
-  }
 }
 
 

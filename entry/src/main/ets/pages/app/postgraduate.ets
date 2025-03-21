@@ -65,4 +65,5 @@ export struct pagepostgraduate {
     })
     .menus(this.menuItems)
   }
+
 }

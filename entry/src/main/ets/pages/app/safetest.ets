@@ -65,4 +65,5 @@ export struct pagesafetest {
     })
     .menus(this.menuItems)
   }
+
 }

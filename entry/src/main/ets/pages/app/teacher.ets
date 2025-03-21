@@ -56,4 +56,5 @@ export struct pageteacher {
     })
     .menus(this.menuItems)
   }
+
 }
