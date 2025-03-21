@@ -1,6 +1,7 @@
 import { router, window } from '@kit.ArkUI';
 import { preferences } from '@kit.ArkData';
 import { BusinessError } from '@kit.BasicServicesKit';
+import { common } from '@kit.AbilityKit';
 import {responsebean} from "./utils/ResponseBean"
 let context = getContext(this)
 @Component
@@ -111,5 +112,10 @@ struct Splash {
   onDestroy() {
     this.num = 1;
     clearInterval(this.timeId);
+  }
+  onBackPress() {
+    let context   = getContext(this) as common.UIAbilityContext
+    context.terminateSelf()
+    return true
   }
 }

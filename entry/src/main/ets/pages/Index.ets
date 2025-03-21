@@ -1,4 +1,5 @@
 import { webview } from "@kit.ArkWeb";
+import { common } from '@kit.AbilityKit';
 import {PrivacyDialog} from "./Privacy"
 import {LoginRequest} from "./backrequest/Login"
 const TAG = 'PrivacySubscribe';
@@ -68,6 +69,11 @@ struct Index {
     }
     .mode(NavigationMode.Stack)
     .navDestination(this.PageMap)
+  }
+  onBackPress() {
+    let context   = getContext(this) as common.UIAbilityContext
+    context.terminateSelf()
+    return true
   }
 }
 
