@@ -1,6 +1,7 @@
 import { webview } from "@kit.ArkWeb";
 import {startBrowser} from "../utils/browser"
 import {common} from "@kit.AbilityKit"
+import { cookiesync } from "../backrequest/cookiemanager";
 
 interface mnv {
   accounts:string
@@ -33,6 +34,7 @@ export struct pagepys {
   ]
   aboutToAppear(): void {
     let vsf:mnv =JSON.parse(JSON.stringify(this.pathStack.getParamByName('心理测评')[0]))
+    cookiesync()
     this.sso = [{ script: "$(\"#un\").val('" + vsf.accounts + "');$(\"#pd\").val('" + vsf.passwords + "');login()", scriptRules: ["*"] }]
     this.api = [{ script: "username.value='" + vsf.accounts + "';password.value='" + vsf.passwords + "';submit.disabled='';submit.click()", scriptRules: ["*"] }]
   }

@@ -15,6 +15,7 @@ export interface DataDTO {
   pword: string;
   expires_skey: string;
   img:string
+  image:string
 }
 
 export interface MyInfoDTO {

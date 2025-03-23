@@ -1,4 +1,6 @@
 import { webview } from "@kit.ArkWeb";
+import { cookiesync } from "../backrequest/cookiemanager";
+
 interface mnv {
   accounts:string
   passwords:string
@@ -21,6 +23,7 @@ export struct pagevcard {
     let vsf:mnv =JSON.parse(JSON.stringify(this.pathStack.getParamByName('虚拟卡')[0]))
     this.sso = [{ script: "$(\"#un\").val('" + vsf.accounts + "');$(\"#pd\").val('" + vsf.passwords + "');login()", scriptRules: ["*"] }]
     this.api = [{ script: "username.value='" + vsf.accounts + "';password.value='" + vsf.passwords + "';submit.disabled='';submit.click()", scriptRules: ["*"] }]
+    cookiesync()
   }
   build() {
     NavDestination() {

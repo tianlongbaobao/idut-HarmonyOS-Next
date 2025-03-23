@@ -3,6 +3,7 @@ import { Pay } from '@cashier_alipay/cashiersdk'
 import { BusinessError } from '@kit.BasicServicesKit';
 import { common } from '@kit.AbilityKit';
 import { browserProxy } from "../utils/Browserproxy"
+import {cookiesync} from "../backrequest/cookiemanager"
 
 interface mnv {
   accounts: string
@@ -37,11 +38,7 @@ export struct pagecard {
         "';submit.disabled='';submit.click()",
       scriptRules: ["*"]
     }]
-    webview.WebCookieManager.clearAllCookies((error) => {
-        if (error) {
-          console.error(`ErrorCode: ${(error as BusinessError).code},  Message: ${(error as BusinessError).message}`);
-        }
-      })
+    cookiesync()
   }
 
   build() {

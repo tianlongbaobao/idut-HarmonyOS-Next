@@ -8,6 +8,7 @@ import { uniformTypeDescriptor as utd } from '@kit.ArkData';
 import fileIo from "@ohos.file.fs";
 import { common } from "@kit.AbilityKit";
 import { fileUri } from "@kit.CoreFileKit";
+import { cookiesync } from "../backrequest/cookiemanager";
 
 interface mnv {
   accounts:string
@@ -128,6 +129,7 @@ export struct pagetest {
   controller: webview.WebviewController = new webview.WebviewController()
   aboutToAppear(): void {
     let vsf:mnv =JSON.parse(JSON.stringify(this.pathStack.getParamByName('考试安排')[0]))
+    cookiesync()
     this.sso = [{ script: "$(\"#un\").val('" + vsf.accounts + "');$(\"#pd\").val('" + vsf.passwords + "');login()", scriptRules: ["*"] }]
     this.api = [{ script: "username.value='" + vsf.accounts + "';password.value='" + vsf.passwords + "';submit.disabled='';submit.click()", scriptRules: ["*"] }]
     if (canIUse('SystemCapability.Collaboration.HarmonyShare')) {

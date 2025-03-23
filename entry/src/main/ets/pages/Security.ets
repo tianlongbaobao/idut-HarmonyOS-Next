@@ -10,7 +10,6 @@ const  password:string = (router.getParams() as Record<string, string>)['id1'];
 @Component
 struct Security {
   aboutToAppear(): void {
-    console.log("1")
   }
   @State code:string = ""
   build() {

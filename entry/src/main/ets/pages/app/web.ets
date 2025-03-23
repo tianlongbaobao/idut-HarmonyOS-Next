@@ -1,6 +1,8 @@
 import { webview } from "@kit.ArkWeb";
 import {common} from "@kit.AbilityKit"
 import {startBrowser} from "../utils/browser"
+import {cookiesync} from "../backrequest/cookiemanager"
+import {Lingshui} from "../backrequest/network"
 interface mnv {
   accounts:string
   passwords:string
@@ -35,6 +37,7 @@ export struct pageweb {
     let vsf:mnv =JSON.parse(JSON.stringify(this.pathStack.getParamByName('网络自助')[0]))
     this.sso = [{ script: "$(\"#un\").val('" + vsf.accounts + "');$(\"#pd\").val('" + vsf.passwords + "');login()", scriptRules: ["*"] }]
     this.api = [{ script: "username.value='" + vsf.accounts + "';password.value='" + vsf.passwords + "';submit.disabled='';submit.click()", scriptRules: ["*"] }]
+    cookiesync()
   }
   build() {
     NavDestination() {
@@ -52,6 +55,7 @@ export struct pageweb {
             return false
           })
       }
+
     }.title("网络自助")
     .onBackPressed(() => {
       const popDestinationInfo = this.pathStack.pop()

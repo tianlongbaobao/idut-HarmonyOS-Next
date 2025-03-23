@@ -1,5 +1,5 @@
-import { webview } from "@kit.ArkWeb";
 import dataPreferences from '@ohos.data.preferences';
+import { http, statistics } from '@kit.NetworkKit';
 import { common } from '@kit.AbilityKit';
 import {responsebean} from "./utils/ResponseBean"
 import router from '@ohos.router';
@@ -65,11 +65,22 @@ import { pageteachsys } from "./app/teachsys";
 import { pagecomment } from "./app/comment";
 import { pagepan } from "./app/pan";
 import { pageai } from "./app/ai";
+import { pagepassword } from './app/password';
+import { pageselfinformation } from './app/selfinformation';
+import { galleryres } from './utils/gallerybean';
+import { pagewebgallery } from './utils/webgallery';
+import { pageschool } from './app/school';
+import { backgroundTaskManager } from '@kit.BackgroundTasksKit';
+import { AbilityConstant, UIAbility, Want } from '@kit.AbilityKit';
+import { wantAgent, WantAgent } from '@kit.AbilityKit';
+import { noticerequire, wifimanager } from './utils/wifimanager';
+import { connection } from '@kit.NetworkKit';
 
 const  account:string = (router.getParams() as Record<string, string>)['id2'];
 const  password:string = (router.getParams() as Record<string, string>)['id1'];
 const  pasz:string = (router.getParams() as Record<string, string>)['id4'];
 const  verifys:string = (router.getParams() as Record<string, string>)['id5'];
+let gallery:string = (router.getParams() as Record<string, string>)['id6'];
 
 interface mnv {
   accounts:string
@@ -83,6 +94,7 @@ let ncs:mnv ={
   verify:verifys
 }
 let context = getContext(this)
+
 @Entry
 @Component
 struct  Navigators {
@@ -92,6 +104,12 @@ struct  Navigators {
   @State head:string = ""
   @State index:number = -1
   @State doorlink:number = 0
+  @State swiperData: string[] = []
+  @State swiperurl:string[] = []
+  @State idc: number = 0
+  private netCon: connection.NetConnection = connection.createNetConnection();
+  private swiperController: SwiperController = new SwiperController()
+  @State swiperindex:number = 0
   @Provide('pathInfos') pathStack: NavPathStack = new NavPathStack();
 
   private setImmersive() {
@@ -101,6 +119,33 @@ struct  Navigators {
     });
   }
   aboutToAppear(): void {
+    if (gallery == "null") {
+      AlertDialog.show(
+        {
+          message: '无法获取轮播图',
+          autoCancel: false,
+          alignment: DialogAlignment.Bottom,
+          gridCount: 5,
+          offset: { dx: 0, dy: -20 },
+          primaryButton: {
+            value: '确认',
+            action: () => {
+            },
+            fontColor:"red"
+          },
+        }
+      )
+    } else {
+      let gaj:galleryres = JSON.parse(gallery)
+      if (gaj.errcode==0) {
+        for (let index = 0; index < gaj.data.carousel_gallery.length; index++) {
+          this.swiperurl.push(gaj.data.carousel_gallery[index].url)
+          this.swiperData.push(gaj.data.carousel_gallery[index].pic_uri)
+          console.log(gaj.data.carousel_gallery[index].url)
+        }
+
+      }
+    }
     let paszl = pasz.split(",")
     let mn = 0
     for (let index = 0; index < paszl.length; index++) {
@@ -114,6 +159,7 @@ struct  Navigators {
         let data_c:responsebean = JSON.parse(String(value))
         this.nickname = data_c.data.my_info.nick_name
         this.head = data_c.data.my_info.head
+
       })
       preferences.get("door",'default').then((value)=>{
         if (value!="default") {
@@ -125,13 +171,16 @@ struct  Navigators {
     }).catch((err:Error)=>{
 
     })
+
+
   }
+
   @Builder
   tabBuilder(){
     Flex({direction:FlexDirection.Row,justifyContent:FlexAlign.Center}) {
         Column() {
           Image($rawfile("icon_service_all.png"))
-            .width("10%")
+            .width("7.8%")
             .height("53%")
             .margin("2.5%")
           Text("我的服务")
@@ -141,7 +190,19 @@ struct  Navigators {
         .onClick(() => {
           this.selectIndex = 0;
         })
-        .margin({right:"20%"})
+      Column() {
+        Image($rawfile("icon_service_office.png"))
+          .width("10%")
+          .height("53%")
+          .margin("2.7%")
+        Text("消息通知")
+          .fontSize(12)
+          .fontWeight(FontWeight.Bold)
+      }
+      .margin({left:"10%",right:"5.5%"})
+      .onClick(() => {
+        this.selectIndex = 3;
+      })
       Column() {
         Image($rawfile("icon_service_study.png"))
           .width("8%")
@@ -151,7 +212,7 @@ struct  Navigators {
           .fontSize(12)
           .fontWeight(FontWeight.Bold)
       }
-      .margin({right:"20%"})
+      .margin({right:"10%",left:"5.5%"})
       .onClick(() => {
         this.selectIndex = 2;
       })
@@ -284,8 +345,17 @@ struct  Navigators {
       pagepan()
     }else if (name === "AI助手") {
       pageai()
+    }else if (name === "修改密码") {
+      pagepassword()
+    }else if (name === "个人资料") {
+      pageselfinformation({ nickname: $nickname })
+    }else if (name === "轮播图") {
+      pagewebgallery()
+    }else if (name === "家校通") {
+      pageschool()
     }
   }
+
 
   build() {
     Navigation(this.pathStack) {
@@ -314,6 +384,50 @@ struct  Navigators {
           }
           ListItem(){
             Flex({direction:FlexDirection.Row,justifyContent:FlexAlign.Center,alignItems:ItemAlign.End}){
+              Column() {
+                Button({ type: ButtonType.Circle, stateEffect: true }) {
+                  Image($rawfile("password.jpg"))
+                    .height("65%")
+                }
+                .onClick(() => {
+                  this.pathStack.pushPathByName("修改密码", ncs);
+                })
+                .width(80).height(80).backgroundColor("white")
+                Text("修改密码").margin({ top: "1%" })
+                  .fontSize(15)
+              }
+
+              Column() {
+                Button({ type: ButtonType.Circle, stateEffect: true }) {
+                  Image($rawfile("self.png"))
+                    .height("50%")
+                }
+                .onClick(() => {
+                  this.pathStack.pushPath({ name: "个人证件"})
+                })
+                .width(80).height(80).backgroundColor("white")
+                Text("个人证件").margin({ top: "1%" })
+                  .fontSize(15)
+              }.margin({ left: "8%" })
+              Column() {
+                Button({ type: ButtonType.Circle, stateEffect: true }) {
+                  Image($rawfile("information.jpg"))
+                    .borderRadius(35)
+                    .height("70%")
+                }
+                .onClick(() => {
+                  this.pathStack.pushPath({ name: "个人资料"})
+                })
+                .width(80).height(80).backgroundColor("white")
+
+                Text("个人资料").margin({ top: "1%" })
+                  .fontSize(15)
+              }.margin({ left: "8%" })
+            }.margin({bottom:"3%"})
+
+          }
+          ListItem(){
+            Flex({direction:FlexDirection.Row,justifyContent:FlexAlign.Center,alignItems:ItemAlign.End}){
               Column(){
                 Button({ type: ButtonType.Circle, stateEffect: true }) {
                   Image($rawfile("settings.png"))
@@ -328,16 +442,17 @@ struct  Navigators {
                 Text("设置").margin({ top: "1%" })
                   .fontSize(15)
               }
+
               Column() {
                 Button({ type: ButtonType.Circle, stateEffect: true }) {
-                  Image($rawfile("self.png"))
+                  Image($rawfile("school.jpg"))
                     .height("50%")
                 }
                 .onClick(() => {
-                  this.pathStack.pushPath({ name: "个人证件"})
+                  this.pathStack.pushPathByName("家校通", ncs);
                 })
                 .width(80).height(80).backgroundColor("white")
-                Text("个人证件").margin({ top: "1%" })
+                Text("家校通").margin({ top: "1%" })
                   .fontSize(15)
               }.margin({ left: "8%" })
               Column() {
@@ -355,6 +470,7 @@ struct  Navigators {
                   .fontSize(15)
               }.margin({ left: "8%" })
             }.margin({bottom:"3%"})
+
           }
         }
         .listDirection(Axis.Vertical)
@@ -508,6 +624,25 @@ struct  Navigators {
                     })
                   })
               }
+              Row() {
+                Text("校园网提醒（开发区校区）（敬请期待）")
+                  .height(50)
+                  .fontSize(16)
+              }
+              Row() {
+                Text("实况窗提醒")
+                  .height(50)
+                  .padding({left: 10})
+                  .fontSize(16)
+                  .textAlign(TextAlign.Start)
+                  .backgroundColor(0xFFFFFF)
+                Toggle({ type: ToggleType.Switch })
+                  .margin({left: 200, right: 10})
+                  .onChange((isOn: boolean) => {
+
+
+                  })
+              }
             }
             .width('100%')
             .height('100%')
@@ -515,6 +650,68 @@ struct  Navigators {
           }
         .listDirection(Axis.Vertical)
         .backgroundColor("white").padding(20)
+
+      }
+      else if (this.selectIndex == 3){
+        List({ space: 7 }) {
+          ListItem(){
+            Flex({ direction: FlexDirection.Row, justifyContent: FlexAlign.Center, alignItems: ItemAlign.End }) {
+              Text("消息通知")
+                .fontWeight(FontWeight.Bold)
+                .fontSize(20)
+            }.margin({top:"8%"})
+          }
+          ListItem() {
+            Column() {
+              Swiper(this.swiperController) {
+                ForEach(this.swiperData, (item: string) => {
+                  Image(item)
+                    .width('100%')
+                    .height(200)
+                    .objectFit(ImageFit.Cover)
+
+                })
+              }
+              .width('100%')
+              .height(200)
+              .loop(true) // 循环播放
+              .autoPlay(true) // 自动播放
+              .interval(3000) // 3秒间隔
+              .indicator(true) // 显示分页指示器
+              .onChange((index: number) => {
+                this.swiperindex = index
+              })
+              .onClick(()=>{
+                if (gallery != "null") {
+                  this.pathStack.pushPathByName("轮播图", this.swiperurl[this.swiperindex]);
+                }
+
+              })
+            }.margin({top:"5%"})
+          }
+          ListItem(){
+            Flex({ direction: FlexDirection.Row, justifyContent: FlexAlign.Center, alignItems: ItemAlign.End }) {
+              Text("推送消息后端服务器未适配")
+                .fontWeight(FontWeight.Bold)
+                .fontSize(20)
+            }.margin({top:"30%"})
+
+          }
+          ListItem(){
+            Flex({ direction: FlexDirection.Row, justifyContent: FlexAlign.Center, alignItems: ItemAlign.End }) {
+              Text("敬请期待")
+                .fontWeight(FontWeight.Bold)
+                .fontSize(20)
+            }.margin({top:"8%"})
+          }
+          ListItem(){
+            Flex({ direction: FlexDirection.Row, justifyContent: FlexAlign.Center, alignItems: ItemAlign.End }) {
+              Text("适配后预计支持pushkit")
+                .fontWeight(FontWeight.Bold)
+                .fontSize(20)
+            }.margin({top:"8%"})
+          }
+        }
 
       }
       else {
@@ -611,7 +808,9 @@ struct  Navigators {
     return true
   }
   onPageShow() {
+
     this.setImmersive();
+
   }
 }
 

@@ -9,6 +9,7 @@ import fileIo from "@ohos.file.fs";
 import { common } from "@kit.AbilityKit";
 import { fileUri } from "@kit.CoreFileKit";
 import {startBrowser} from "../utils/browser"
+import { cookiesync } from "../backrequest/cookiemanager";
 
 interface mnv {
   accounts:string
@@ -139,6 +140,7 @@ export struct pageclass {
   aboutToAppear(): void {
     let vsf:mnv =JSON.parse(JSON.stringify(this.pathStack.getParamByName('我的课表')[0]))
     this.sso = [{ script: "$(\"#un\").val('" + vsf.accounts + "');$(\"#pd\").val('" + vsf.passwords + "');login()", scriptRules: ["*"] }]
+    cookiesync()
     this.api = [{ script: "username.value='" + vsf.accounts + "';password.value='" + vsf.passwords + "';submit.disabled='';submit.click()", scriptRules: ["*"] }]
     if (canIUse('SystemCapability.Collaboration.HarmonyShare')) {
       this.immersiveListening();

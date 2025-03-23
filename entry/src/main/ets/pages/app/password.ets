@@ -7,10 +7,11 @@ interface mnv {
   accounts:string
   passwords:string
 }
+
 @Component
-export struct pagepan {
+export struct pagepassword {
   @State sso:Array<ScriptItem> = []
-  @State api:Array<ScriptItem> = []
+  @State vpn:Array<ScriptItem> = [{script:"document.getElementById('cas-login').click()", scriptRules: ["*"] }]
   @State URI:string = ""
   @Consume('pathInfos') pathStack: NavPathStack;
   controller: webview.WebviewController = new webview.WebviewController()
@@ -32,33 +33,27 @@ export struct pagepan {
     }
   ]
   aboutToAppear(): void {
-    let vsf:mnv =JSON.parse(JSON.stringify(this.pathStack.getParamByName('大工云盘')[0]))
-    cookiesync()
+    console.log(JSON.stringify(this.pathStack.getParamByName('修改密码')))
+    let vsf:mnv =JSON.parse(JSON.stringify(this.pathStack.getParamByName('修改密码')[0]))
     this.sso = [{ script: "$(\"#un\").val('" + vsf.accounts + "');$(\"#pd\").val('" + vsf.passwords + "');login()", scriptRules: ["*"] }]
-    this.api = [{ script: "username.value='" + vsf.accounts + "';password.value='" + vsf.passwords + "';submit.disabled='';submit.click()", scriptRules: ["*"] }]
+    cookiesync()
   }
   build() {
     NavDestination() {
       Column() {
-        Web({ src: "https://sso.dlut.edu.cn/cas/login?from=rj&service=https%3A%2F%2Fsso.dlut.edu.cn%2Fcas%2Flogin%3Fservice%3Dhttp%3A%2F%2Fpan.dlut.edu.cn%2Fcas", controller: this.controller })
+        Web({ src: "https://portal.dlut.edu.cn/tp_core/h5?act=sys/uacm/profileResetPwd&filter=app&from=rj", controller: this.controller })
           .javaScriptAccess(true)
           .fileAccess(true)
           .imageAccess(true)
           .onlineImageAccess(true)
           .domStorageAccess(true)
-          .javaScriptOnDocumentEnd(this.sso)
-          .onControllerAttached(() => {
-            let userAgent =
-              "Mozilla/ 5.0 (Linux; Android 10; EBG Build/ HUAWEIEBG; wv) AppleWebKit/ 537.36 (KHTML, like Gecko) Version/ 4.0 Chrome/ 88.0.4324.93 Mobile Safari/ 537.36 weishao(3.3.0.74633)";
-            this.controller.setCustomUserAgent(userAgent);
-          })
           .onLoadIntercept((event) => {
             let data = event.data;
             this.URI = data.getRequestUrl();
             return false
           })
       }
-    }.title("大工云盘")
+    }.title("修改密码")
     .onBackPressed(() => {
       const popDestinationInfo = this.pathStack.pop()
       return true
@@ -68,4 +63,5 @@ export struct pagepan {
     })
     .menus(this.menuItems)
   }
+
 }

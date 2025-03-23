@@ -129,12 +129,14 @@ struct appdia {
               let password = ""+value
               let values = preferences.getSync('account', 'default');
               let account = ""+values
+              let gallery = preferences.getSync("gallery","null")+""
               router.pushUrl({
                 url: 'pages/Navigators',
                 params:{
                   id1:password,
                   id2:account,
-                  id4:jksc.toString()
+                  id4:jksc.toString(),
+                  id6:gallery
                 }
               })
             })
