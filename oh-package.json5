@@ -4,7 +4,8 @@
   "dependencies": {
     "@ohos/crypto-js": "^2.0.4",
     "@cashier_alipay/cashiersdk": "^15.8.28",
-    "@ohos/axios": "^2.2.4"
+    "@ohos/axios": "^2.2.4",
+    "@tencent/wechat_open_sdk": "^1.0.7"
   },
   "devDependencies": {
     "@ohos/hypium": "1.0.19",
