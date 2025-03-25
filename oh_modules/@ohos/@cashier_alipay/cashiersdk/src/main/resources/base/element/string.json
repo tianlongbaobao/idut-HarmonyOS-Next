@@ -1,0 +1,16 @@
+{
+  "string": [
+    {
+      "name": "msp_ssl_error",
+      "value": "安全连接证书校验无效，将无法保证访问数据的安全性，请安装支付宝后重试。"
+    },
+    {
+      "name": "msp_ssl_error_title",
+      "value": "安全警告"
+    },
+    {
+      "name": "ok",
+      "value": "确定"
+    }
+  ]
+}
