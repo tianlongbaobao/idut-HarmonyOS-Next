@@ -1,0 +1,34 @@
+{
+  "shortcuts": [
+    {
+      "shortcutId": "vcard",
+      "label": "$string:card",
+      "icon": "$media:vicard",
+      "wants": [
+        {
+          "bundleName": "com.tianlongbaobao.idut",
+          "moduleName": "entry",
+          "abilityName": "EntryAbility",
+          "parameters": {
+            "shortCutKey": "CompanyPage"
+          }
+        }
+      ]
+    },
+    {
+      "shortcutId": "scancode",
+      "label": "$string:scancode",
+      "icon": "$media:scancode",
+      "wants": [
+        {
+          "bundleName": "com.tianlongbaobao.idut",
+          "moduleName": "entry",
+          "abilityName": "EntryAbility",
+          "parameters": {
+            "shortCutKey": "Scan"
+          }
+        }
+      ]
+    }
+  ]
+}

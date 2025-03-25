@@ -3,6 +3,26 @@
     {
       "name": "start_window_background",
       "value": "#FFFFFF"
+    },
+    {
+      "name": "card_list_background",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "list_item_count_background",
+      "value": "#290a59f7"
+    },
+    {
+      "name": "text",
+      "value": "#000000"
+    },
+    {
+      "name": "background",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "tab",
+      "value": "#E8E8E8"
     }
   ]
 }
