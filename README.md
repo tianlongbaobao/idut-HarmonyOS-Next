@@ -7,10 +7,6 @@
 ## **致谢&后续版本维护**
 <img src="https://github.com/tianlongbaobao/idut-HarmonyOS-Next/blob/2.0.0/demo/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20241130183925.jpg" width="210px"><img src="https://github.com/tianlongbaobao/idut-HarmonyOS-Next/blob/3.1.0/demo/qq.jpg" width="210px">
 
-## **代码统计**
-
-<img width="1249" alt="联想截图_20241219234851" src="https://github.com/tianlongbaobao/idut-HarmonyOS-Next/blob/4.0.0/demo/2.png" />
-
 ## **项目时间戳** ##
 
 ### 1.2024.11.21 1.0.0 ###
