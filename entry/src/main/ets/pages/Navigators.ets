@@ -57,6 +57,8 @@ struct  Navigators {
     url:"",
     name:""
   }
+  @StorageLink('currentWidthBreakpoint') windowWidth: number = 0;
+  @StorageLink('currentHeightBreakpoint') windowHeight: number = 0;
   onColorModeChange() {
     if (this.currentColorMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK) {
       this.darkmode = true
@@ -152,8 +154,8 @@ struct  Navigators {
     Flex({direction:FlexDirection.Row,justifyContent:FlexAlign.Center}) {
         Column() {
           Image($rawfile("icon_service_all.png"))
-            .width("7.8%")
-            .height("53%")
+            .width(35)
+            .height(35)
             .margin("2.5%")
             .fillColor("white")
           Text("我的服务")
@@ -161,28 +163,30 @@ struct  Navigators {
             .fontWeight(FontWeight.Bold)
             .fontColor($r('app.color.text'))
         }
+        .width("25%")
         .onClick(() => {
           this.selectIndex = 0;
         })
       Column() {
         Image($rawfile("icon_service_office.png"))
-          .width("10%")
-          .height("53%")
-          .margin("2.7%")
+          .width(35)
+          .height(35)
+          .margin("2.5%")
           .fillColor($r('app.color.background'))
         Text("消息通知")
           .fontSize(12)
           .fontWeight(FontWeight.Bold)
           .fontColor($r('app.color.text'))
       }
-      .margin({left:"10%",right:"5.5%"})
+      .width("25%")
+
       .onClick(() => {
         this.selectIndex = 3;
       })
       Column() {
         Image($rawfile("icon_service_study.png"))
-          .width("8%")
-          .height("53%")
+          .width(35)
+          .height(35)
           .margin("2.5%")
           .fillColor($r('app.color.background'))
         Text("工具箱")
@@ -190,21 +194,21 @@ struct  Navigators {
           .fontWeight(FontWeight.Bold)
           .fontColor($r('app.color.text'))
       }
-      .margin({right:"10%",left:"5.5%"})
+      .width("25%")
       .onClick(() => {
         this.selectIndex = 2;
       })
       Column() {
         Image($rawfile("icon_service_social.png"))
-          .width("8%")
-          .height("53%")
+          .width(35)
+          .height(35)
           .margin("2.5%")
           .fillColor($r('app.color.background'))
         Text("个人中心")
           .fontSize(12)
           .fontWeight(FontWeight.Bold)
           .fontColor($r('app.color.text'))
-      }
+      }.width("25%")
 
       .onClick(() => {
         this.selectIndex = 1;
@@ -218,7 +222,7 @@ struct  Navigators {
   @Builder
   PageMap(name: string) {
     if (name === "web"){
-      webpage({darkmode:this.darkmode})
+      webpage({darkmode:this.darkmode,vsf:this.ncs})
     }else if (name === "作者信息") {
       pageinformation()
     }else if (name === "设置") {
@@ -377,48 +381,44 @@ struct  Navigators {
             Column() {
               Row() {
                 Text("课表事项提醒")
-                  .height(50)
+                  .height("5%")
                   .fontSize(16)
                   .fontColor($r('app.color.text'))
               }
-              Row() {
+              Flex({direction:FlexDirection.Row,justifyContent:FlexAlign.SpaceEvenly}) {
                 Text("PushKit提醒")
-                  .height(50)
-                  .padding({left: 10})
+                  .margin({right: "3%"})
                   .fontSize(16)
-                  .textAlign(TextAlign.Start)
                   .fontColor($r('app.color.text'))
                 Toggle({ type: ToggleType.Switch })
-                  .margin({left: 200, right: 10})
+                  .margin({left: "55%"})
                   .onChange((isOn: boolean) => {
                     pushclass(isOn)
                     PermissionsUtil.requestCameraPermission()
                   })
-              }
+              }.height("7%")
               Row() {
                 Text("开电子房门")
-                  .height(50)
+                  .height("5%")
                   .fontSize(16)
                   .fontColor($r('app.color.text'))
-              }
-              Row(){
+              }.margin({top:"2%"})
+              Flex({direction:FlexDirection.Row,justifyContent:FlexAlign.SpaceEvenly}) {
                 Text("配置房门信息")
-                  .height(50)
-                  .padding({left: 10})
+                  .margin({right: "3%"})
                   .fontSize(16)
-                  .textAlign(TextAlign.Start)
                   .fontColor($r('app.color.text'))
                 Button(){
                   if (this.doorlink == 0) {
                     Image($rawfile("add.png"))
-                      .height("3.5%")
+                      .height(20)
                   } else {
                     Image($rawfile("deleted.png"))
-                      .height("3.5%")
+                      .height(20)
                   }
                 }
                 .backgroundColor($r('app.color.background'))
-                .margin({left: 200, right: 10})
+                .margin({left: "55%"})
                 .onClick(()=>{
                     let options: scanBarcode.ScanOptions = {
                       scanTypes: [scanCore.ScanType.ALL],
@@ -471,19 +471,17 @@ struct  Navigators {
 
                       })
                 })
-              }
-              Row(){
+              }.height("7%")
+              Flex({direction:FlexDirection.Row,justifyContent:FlexAlign.SpaceEvenly}){
                 Text("开房门")
-                  .height(50)
-                  .padding({left: 10})
+                  .margin({right: "3%"})
                   .fontSize(16)
-                  .textAlign(TextAlign.Start)
                   .fontColor($r('app.color.text'))
 
                 Button('点击开门', { type: ButtonType.Capsule, stateEffect: false })
                   .fontSize(13)
-                  .margin({left: 180, right: 10})
-                  .height("3.5%")
+                  .margin({left: '45%'})
+                  .height("45%")
                   .onClick(()=>{
                     dataPreferences.getPreferences(context, "information").then(preferences=>{
                       preferences.get("door",'default').then((value)=>{
@@ -516,39 +514,39 @@ struct  Navigators {
                     })
                   })
               }
+              .height("7%")
               Row() {
                 Text("校园网提醒（开发区校区）（敬请期待）")
                   .height(50)
                   .fontSize(16)
                   .fontColor($r('app.color.text'))
-              }
-              Row() {
+              }.height("7%")
+              .margin({top:"2%"})
+              Flex({direction:FlexDirection.Row,justifyContent:FlexAlign.SpaceEvenly}) {
                 Text("实况窗提醒")
-                  .height(50)
-                  .padding({left: 10})
+                  .margin({right: "3%"})
                   .fontSize(16)
-                  .textAlign(TextAlign.Start)
                   .fontColor($r('app.color.text'))
                 Toggle({ type: ToggleType.Switch })
-                  .margin({left: 200, right: 10})
+                  .margin({left: "55%"})
                   .onChange((isOn: boolean) => {
                   })
               }
+              .height("7%")
               Row() {
                 Text("深色模式")
                   .height(50)
                   .fontSize(16)
                   .fontColor($r('app.color.text'))
               }
-              Row() {
+              .margin({top:"2%"})
+              Flex({direction:FlexDirection.Row,justifyContent:FlexAlign.SpaceEvenly}){
                 Text("强制深色模式")
-                  .height(50)
-                  .padding({left: 10})
+                  .margin({right: "3%"})
                   .fontSize(16)
-                  .textAlign(TextAlign.Start)
                   .fontColor($r('app.color.text'))
                 Toggle({ type: ToggleType.Switch,isOn:this.darkmode})
-                  .margin({left: 180, right: 10})
+                  .margin({left: "50%"})
                   .onChange((isOn: boolean) => {
                     let applicationContext = context.getApplicationContext();
                     if (isOn) {
@@ -600,7 +598,11 @@ struct  Navigators {
               })
               .onClick(()=>{
                 if (gallery != "null") {
-                  this.pathStack.pushPathByName("轮播图", this.swiperurl[this.swiperindex]);
+                  this.ncs.accounts = account
+                  this.ncs.passwords = password
+                  this.ncs.name = "轮播图"
+                  this.ncs.url = this.swiperurl[this.swiperindex]
+                  this.pathStack.pushPathByName("web", this.ncs);
                 }
 
               })
@@ -648,6 +650,8 @@ struct  Navigators {
                 .selected(this.index)
                 .value("+")
                 .fontColor($r('app.color.text'))
+                .width("15%")
+                .height("5%")
                 .onSelect((index:number, text?: string | undefined)=>{
                   this.index = index;
                   if (this.index == 1){
@@ -684,7 +688,7 @@ struct  Navigators {
           ListItem() {
             Flex({ wrap: FlexWrap.Wrap }) {
               ForEach(this.appll, (item: number) => {
-                ChildItem({ item: item, pathStack: this.pathStack })
+                ChildItem({ item: item, pathStack: this.pathStack ,ncs:this.ncs})
                   .margin({ top: 20 })
               })
             }
@@ -718,7 +722,7 @@ struct  Navigators {
         .backgroundColor($r('app.color.background')).padding(20)
       }
     }
-    .mode(NavigationMode.Stack)
+    .mode(NavigationMode.Auto)
     .navDestination(this.PageMap)
     .toolbarConfiguration(this.tabBuilder)
     .hideTitleBar(true)
@@ -742,31 +746,30 @@ struct  Navigators {
 struct ChildItem {
   @Prop item: number;
   @Link pathStack:NavPathStack;
-  @State ncs:mnv = {
-    accounts:account,
-    passwords:password,
-    name:appList[this.item].app_name,
-    url:appList[this.item].url
-  }
+  @Link ncs:mnv ;
   build() {
     Column() {
       Button({ type: ButtonType.Circle, stateEffect: true }) {
           Image(appList[this.item].icon)
             .borderRadius(25)
-            .height("105%")
-            .width("95%")
+            .height(45)
+            .width(45)
       }
       .onClick(() => {
+        this.ncs.accounts = account
+        this.ncs.passwords = password
+        this.ncs.name = appList[this.item].app_name
+        this.ncs.url = appList[this.item].url
         this.pathStack.pushPathByName("web", this.ncs);
       })
-      .width("80%").height("70%").backgroundColor($r('app.color.background'))
+      .backgroundColor($r('app.color.background'))
       Text(appList[this.item].app_name).margin({ top: "10%" })
         .fontSize(11)
         .fontWeight(FontWeight.Bold)
         .fontColor($r('app.color.text'))
-    }.margin({ left: "2.5%" ,right:"2.5%"})
-    .height("10.5%")
-    .width("20%")
+    }.margin({ left: "2%" ,right:"2%"})
+    .height(70)
+    .width(70)
   }
 
 }

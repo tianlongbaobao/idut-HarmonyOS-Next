@@ -42,6 +42,36 @@ struct appdia {
   build() {
     Scroll() {
       Column() {
+        Flex({ justifyContent: FlexAlign.Start, alignItems: ItemAlign.Center }) {
+          Button({ type: ButtonType.Circle, stateEffect: true }) {
+            Image($r("app.media.button"))
+              .width("5%")
+              .borderRadius(35)
+          }
+          .margin({ left: "3%" })
+          .backgroundColor($r('app.color.background'))
+          .onClick(()=>{
+            dataPreferences.getPreferences(context, "information").then(preferences=> {
+              let jksc = preferences.getSync("nowdata", "default")
+              let value= preferences.getSync('password', 'default');
+              let password = ""+value
+              let values = preferences.getSync('account', 'default');
+              let account = ""+values
+              let gallery = preferences.getSync("gallery","null")+""
+              router.pushUrl({
+                url: 'pages/Navigators',
+                params:{
+                  id1:password,
+                  id2:account,
+                  id4:jksc.toString(),
+                  id6:gallery
+                }
+              })
+            })
+
+          })
+
+        }
         Flex({ justifyContent: FlexAlign.Center, alignItems: ItemAlign.Center }){
           Text("编辑我的常用服务")
             .fontSize(22)
@@ -80,7 +110,6 @@ struct appdia {
             top:"5%"
           })
           .onClick(()=>{
-            console.log(jksc.toString())
             dataPreferences.getPreferences(context, "information").then(preferences=> {
               preferences.put("nowdata", jksc.toString())
               preferences.flush()
@@ -143,12 +172,10 @@ struct ChildItem{
       }
         Image(appList[this.item].icon)
           .borderRadius(25)
-          .height("100%")
-          .width("13.5%")
+          .height(40)
       Text(appList[this.item].app_name)
         .margin({left:"8%"})
     }
-    .height("5%")
     .width("80%")
   }
 

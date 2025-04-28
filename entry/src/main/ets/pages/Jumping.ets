@@ -16,7 +16,7 @@ struct Splash {
     Stack() {
       // 背景图片
       Image($rawfile('jump.png'))
-        .size({ width: '100%', height: '100%' })
+        .size({ height: '100%' })
         .zIndex(-1); // 确保背景图片在最底层
       Column() {
         // 最右边显示
@@ -29,7 +29,7 @@ struct Splash {
    * 页面显示时，开始倒计时
    */
   onPageShow() {
-    this.setImmersive();
+    this.setImmersive()
     this.countDown();
   }
 
@@ -97,63 +97,65 @@ struct Splash {
       const  Timestamp = timestamps[0];
       const  LocalTimestamp = timestamps[1];
       const  Nonce = GetHeaderForNonce();
-      const  Sign = GetHeaderForSign((url.split(/\?/))[1], Timestamp, Nonce, a)
-      const  httpRequest = http.createHttp();
-      let promises =  httpRequest.request(
-        url,
-        {
-          method: http.RequestMethod.GET,
-          connectTimeout: 60000,
-          readTimeout: 60000,
-          header: {
-            'a': a,
-            "sign":Sign,
-            "local_timestamp": LocalTimestamp,
-            "nonce":Nonce,
-            "version": GetHeaderForVersion(),
-            "timestamp": Timestamp,
-            "Host":"service.m.dlut.edu.cn",
-            "Connection":"Keep-Alive",
-            "Cookie2":"$Version=1",
-          }
-        });
-      promises.then((datas) => {
-        if ((datas.result).toString().includes("{\"ret\":-1,\"")) {
-          dataPreferences.putSync("gallery","null")
-          router.pushUrl({
-            url: 'pages/Navigators',
-            params: {
-              id1: password,
-              id2: account,
-              id4: mnvc,
-              id5: dcz.data.verify,
-              id6:"null"
-            }
-          }, router.RouterMode.Standard,
-          ).then(() => {
-          }).catch((err: BusinessError) => {
-            console.error(`无法跳转到第二页。错误码为${err.code}, 错误消息 ${err.message}`);
-          });
+      GetHeaderForSign((url.split(/\?/))[1], Timestamp, Nonce, a)
+        .then((Sign)=> {
+          const httpRequest = http.createHttp();
+          let promises = httpRequest.request(
+            url,
+            {
+              method: http.RequestMethod.GET,
+              connectTimeout: 60000,
+              readTimeout: 60000,
+              header: {
+                'a': a,
+                "sign": Sign,
+                "local_timestamp": LocalTimestamp,
+                "nonce": Nonce,
+                "version": GetHeaderForVersion(),
+                "timestamp": Timestamp,
+                "Host": "service.m.dlut.edu.cn",
+                "Connection": "Keep-Alive",
+                "Cookie2": "$Version=1",
+              }
+            });
+          promises.then((datas) => {
+            if ((datas.result).toString().includes("{\"ret\":-1,\"")) {
+              dataPreferences.putSync("gallery", "null")
+              router.pushUrl({
+                url: 'pages/Navigators',
+                params: {
+                  id1: password,
+                  id2: account,
+                  id4: mnvc,
+                  id5: dcz.data.verify,
+                  id6: "null"
+                }
+              }, router.RouterMode.Standard,
+              ).then(() => {
+              }).catch((err: BusinessError) => {
+                console.error(`无法跳转到第二页。错误码为${err.code}, 错误消息 ${err.message}`);
+              });
 
-        } else {
-          dataPreferences.putSync("gallery",(datas.result).toString())
-          router.pushUrl({
-            url: 'pages/Navigators',
-            params: {
-              id1: password,
-              id2: account,
-              id4: mnvc,
-              id5: dcz.data.verify,
-              id6:(datas.result).toString()
+            } else {
+              dataPreferences.putSync("gallery", (datas.result).toString())
+              router.pushUrl({
+                url: 'pages/Navigators',
+                params: {
+                  id1: password,
+                  id2: account,
+                  id4: mnvc,
+                  id5: dcz.data.verify,
+                  id6: (datas.result).toString()
+                }
+              }, router.RouterMode.Standard,
+              ).then(() => {
+              }).catch((err: BusinessError) => {
+                console.error(`无法跳转到第二页。错误码为${err.code}, 错误消息 ${err.message}`);
+              });
             }
-          }, router.RouterMode.Standard,
-          ).then(() => {
-          }).catch((err: BusinessError) => {
-            console.error(`无法跳转到第二页。错误码为${err.code}, 错误消息 ${err.message}`);
-          });
-        }
 
-      })
+          })
+        })
     })
 
   }

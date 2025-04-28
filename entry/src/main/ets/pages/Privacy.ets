@@ -37,15 +37,6 @@ export  struct PrivacyDialog {
         }
         .color(Color.Blue)
       }.margin({ top: "5%" })
-      Text("请详细阅读以上协议政策并完全知晓")
-        .width("80%")
-        .fontColor($r("app.color.text"))
-        .textAlign(TextAlign.Center)
-        .fontWeight(FontWeight.Bold)
-        .fontSize(15)
-        .margin({
-          top: "5%",
-        })
       Text("i大工社区版隐私政策和服务协议：")
         .width("80%")
         .fontColor($r("app.color.text"))
@@ -69,10 +60,6 @@ export  struct PrivacyDialog {
           top: "3%",
         })
       Text("2.该软件不会将用户数据泄露到个人或其他机构的服务器，用户数据只会保留在用户本机，该软件申请联网权限目的只是与i大工服务器端建立联系")
-        .width("80%")
-        .fontColor($r("app.color.text"))
-        .fontSize(15)
-      Text("3.该软件申请的相机和图库权限只用于玉兰卡扫一扫和照片采集")
         .width("80%")
         .fontColor($r("app.color.text"))
         .fontSize(15)

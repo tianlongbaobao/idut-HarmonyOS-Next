@@ -2,8 +2,6 @@ import { webview } from "@kit.ArkWeb";
 import { common } from '@kit.AbilityKit';
 import {PrivacyDialog} from "./Privacy"
 import {LoginRequest} from "./backrequest/Login"
-const TAG = 'PrivacySubscribe';
-
 
 
 @Entry
@@ -43,16 +41,16 @@ struct Index {
         Image($rawfile('login.jpg'))
           .syncLoad(true)
           .width(150)
-          .margin({ top: "30%" })
-        TextInput({ placeholder: '职工号/学号' }).margin({ top: "10%" })
+          .margin({top:"15%"})
+        TextInput({ placeholder: '职工号/学号' }).margin({ top: "5%" })
           .onChange((value: string) => {
             this.account = value
           })
-        TextInput({ placeholder: '密码' }).type(InputType.Password).margin({ top: "10%" })
+        TextInput({ placeholder: '密码' }).type(InputType.Password).margin({ top: "5%" })
           .onChange((value: string) => {
             this.password = value
           })
-        Button('登录').width(150).margin({ top: "10%" })
+        Button('登录').width(150).margin({ top: "5%" })
           .onClick(() => {
             console.log(this.password.trim())
             console.log(this.account.trim())
@@ -60,13 +58,16 @@ struct Index {
           })
         Text() {
           Span('找回密码').fontColor("blue").onClick(() => {
-            console.log("1")
             this.pathStack.pushPath({ name: "找回密码" })
           })
-        }.padding(20)
+
+        }
+        .margin({ top: "3%" })
       }
+      .expandSafeArea([SafeAreaType.SYSTEM])
       .margin({ left: "8%", right: "8%" })
     }
+    .hideTitleBar(true)
     .mode(NavigationMode.Stack)
     .navDestination(this.PageMap)
   }

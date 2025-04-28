@@ -10,7 +10,6 @@ export struct pageself {
   @State username:string = ""
   @State name:string = ""
   @State org:string = ""
-  @State darkbutton:string = ""
 
   pathStack: NavPathStack = new NavPathStack();
   aboutToAppear(): void {
@@ -39,21 +38,24 @@ export struct pageself {
   @Builder OverlayNode() {
     Row() {
       Image(this.id_photo)
-        .width("%30").height("40%")
+        .width("30%").height("40%")
       Column(){
         Text("姓名:"+ this.name)
-          .fontSize(12)
+          .fontSize(10)
           .fontWeight(FontWeight.Bold)
+          .fontColor("black")
         Blank()
           .height("7%")
         Text("学号:"+ this.username)
-          .fontSize(12)
+          .fontSize(10)
           .fontWeight(FontWeight.Bold)
+          .fontColor("black")
         Blank()
           .height("7%")
         Text("院系:"+ this.org)
-          .fontSize(12)
+          .fontSize(10)
           .fontWeight(FontWeight.Bold)
+          .fontColor("black")
       }
       .alignItems(HorizontalAlign.Start)
       .margin({left:"5%"})
@@ -76,7 +78,7 @@ export struct pageself {
     .expandSafeArea([SafeAreaType.SYSTEM])
     .title(this.TitleBuilder,{backgroundColor:$r('app.color.background')})
     .backgroundColor($r('app.color.background'))
-    .backButtonIcon($rawfile(this.darkbutton))
+    .backButtonIcon($r("app.media.button"))
     .onBackPressed(() => {
       const popDestinationInfo = this.pathStack.pop()
       console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))

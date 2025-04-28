@@ -1097,7 +1097,7 @@ export let appList:lidy[] = [
     "icon": "https://store.m.dlut.edu.cn/group1/M00/06/97/ynZM2WfPmFSAcprQAAB3VcnibJY401.png",
     "describe": "\u200C“i大工”校园AI助手\u200C基于满血版DeepSeek大模型构建，深度融合校内知识库与实时搜索技术，为师生提供精准高效的校园服务。仅限校园网内使用。",
     "popularity": "5319",
-    "url": "http://chat.dlut.edu.cn/page/site/",
+    "url": "https://webvpn.dlut.edu.cn/http/57787a7876706e323032336b657940247b10030cb2079f5bbe02ff3c84f58629/page/site/newPc?app=1",
     "issubscription": 0
   }
 ]

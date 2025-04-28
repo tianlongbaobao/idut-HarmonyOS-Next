@@ -33,9 +33,30 @@ export struct webpage {
   @State name:string = ""
   @State js: Array<ScriptItem> = []
   @Link @Watch("change") darkmode:boolean
+  @Link @Watch("web")vsf:mnv
   @Consume('pathInfos') pathStack: NavPathStack;
   @StorageProp('currentColorMode') @Watch('onColorModeChange') currentColorMode: number =
     ConfigurationConstant.ColorMode.COLOR_MODE_LIGHT;
+  web(){
+    let vsf: mnv = JSON.parse(JSON.stringify(this.pathStack.getParamByName("web")[0]))
+    this.name = vsf.name
+    this.url = vsf.url
+    this.sso = [{
+      script: "$(\"#un\").val('" + vsf.accounts + "');$(\"#pd\").val('" + vsf.passwords + "');login()",
+      scriptRules: ["*"]
+    }]
+    this.api = [{
+      script: "username.value='" + vsf.accounts + "';password.value='" + vsf.passwords +
+        "';submit.disabled='';submit.click()",
+      scriptRules: ["*"]
+    }]
+    if (vsf.url.includes("sso")){
+      this.js = this.sso
+    } else {
+      this.js = this.api
+    }
+    cookiesync()
+  }
   change(){
     if (this.darkmode) {
       this.dark = true
@@ -308,7 +329,7 @@ export struct webpage {
               let returnUrl = result.get("returnUrl");
               this.controller.loadUrl(returnUrl);
             });
-            return result;
+            return false;
           })
       }
     }
@@ -318,7 +339,7 @@ export struct webpage {
     .backButtonIcon($r("app.media.button"))
     .menus(this.menuItems)
     .onBackPressed(() => {
-      const popDestinationInfo = this.pathStack.pop()
+      const popDestinationInfo = this.pathStack.clear()
       return true
     })
     .onReady((context: NavDestinationContext) => {
@@ -330,7 +351,7 @@ export struct webpage {
     Text(this.name)
       .fontColor($r('app.color.text'))
       .fontSize(20)
-      .margin({top:"4.5%",left:"3%"})
+      .margin({top:"4%",left:"3%"})
       .fontWeight(FontWeight.Bold)
   }
 }
