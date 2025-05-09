@@ -38,7 +38,7 @@ export struct pageself {
   @Builder OverlayNode() {
     Row() {
       Image(this.id_photo)
-        .width("30%").height("40%")
+        .height("40%")
       Column(){
         Text("姓名:"+ this.name)
           .fontSize(10)

@@ -1,6 +1,7 @@
 import router from '@ohos.router';
 import dataPreferences from '@ohos.data.preferences';
 import {appList} from "./applist"
+import { DetailDialog } from './detaildia';
 
 let  nowdata = (router.getParams() as Record<string, string>)['id3'];
 let jksc:number[] = []
@@ -27,58 +28,53 @@ struct appdia {
   @State selectedIndex: number = 0
   private searchcontroller: SearchController = new SearchController()
   @State changeValue:string = ""
-  @Builder tabBuilder(index: number, name: string) {
-    Column() {
-      Text(name)
-        .fontSize(16)
-        .fontWeight(this.selectedIndex === index ? 500 : 400)
-        .lineHeight(22)
-        .margin({ top: 17, bottom: 7 })
-      Divider()
-        .strokeWidth(2)
-        .opacity(this.selectedIndex === index ? 1 : 0)
-    }.width('100%')
-  }
   build() {
-    Scroll() {
       Column() {
-        Flex({ justifyContent: FlexAlign.Start, alignItems: ItemAlign.Center }) {
+        Flex({ justifyContent: FlexAlign.SpaceBetween, alignItems: ItemAlign.Center }) {
           Button({ type: ButtonType.Circle, stateEffect: true }) {
             Image($r("app.media.button"))
-              .width("5%")
+              .height(30)
               .borderRadius(35)
           }
-          .margin({ left: "3%" })
+          .margin({ left: "3%",top:"3%" })
           .backgroundColor($r('app.color.background'))
           .onClick(()=>{
-            dataPreferences.getPreferences(context, "information").then(preferences=> {
-              let jksc = preferences.getSync("nowdata", "default")
-              let value= preferences.getSync('password', 'default');
-              let password = ""+value
-              let values = preferences.getSync('account', 'default');
-              let account = ""+values
-              let gallery = preferences.getSync("gallery","null")+""
-              router.pushUrl({
-                url: 'pages/Navigators',
-                params:{
-                  id1:password,
-                  id2:account,
-                  id4:jksc.toString(),
-                  id6:gallery
-                }
-              })
-            })
-
+            router.back()
           })
-
-        }
-        Flex({ justifyContent: FlexAlign.Center, alignItems: ItemAlign.Center }){
           Text("编辑我的常用服务")
             .fontSize(22)
             .fontWeight(FontWeight.Bold)
+            .margin({top:"3%"})
+          Button({ type: ButtonType.Circle, stateEffect: true }){
+            Image($r("app.media.ok"))
+              .height(30)
+              .borderRadius(35)
+          }
+          .backgroundColor($r('app.color.background'))
+            .margin({
+              top:"3%",right:"3%"
+            })
+            .onClick(()=>{
+              dataPreferences.getPreferences(context, "information").then(preferences=> {
+                preferences.put("nowdata", jksc.toString())
+                preferences.flush()
+                let value= preferences.getSync('password', 'default');
+                let password = ""+value
+                let values = preferences.getSync('account', 'default');
+                let account = ""+values
+                let gallery = preferences.getSync("gallery","null")+""
+                router.pushUrl({
+                  url: 'pages/Navigators',
+                  params:{
+                    id1:password,
+                    id2:account,
+                    id4:jksc.toString(),
+                    id6:gallery
+                  }
+                })
+              })
+            })
         }
-        .height("8%")
-        .width("100%")
         Flex({ justifyContent: FlexAlign.Center, alignItems: ItemAlign.Center }){
           Search({ value: this.changeValue, placeholder: '搜索', controller: this.searchcontroller })
             .width('95%')
@@ -92,45 +88,25 @@ struct appdia {
         }
         .height("8%")
         .width("100%")
-        Flex({ justifyContent: FlexAlign.Start, alignItems: ItemAlign.Start }) {
-          Column() {
-            ForEach(this.appll, (item: number) => {
-              if (appList[item].app_name.includes(this.changeValue)) {
-                ChildItem({ item: item })
-                  .margin({ top: 15 })
-              }
-
-            })
-          }
-        }
-        .margin({ left: "5%" })
-        Button("确定")
-          .width("80%")
-          .margin({
-            top:"5%"
-          })
-          .onClick(()=>{
-            dataPreferences.getPreferences(context, "information").then(preferences=> {
-              preferences.put("nowdata", jksc.toString())
-              preferences.flush()
-              let value= preferences.getSync('password', 'default');
-              let password = ""+value
-              let values = preferences.getSync('account', 'default');
-              let account = ""+values
-              let gallery = preferences.getSync("gallery","null")+""
-              router.pushUrl({
-                url: 'pages/Navigators',
-                params:{
-                  id1:password,
-                  id2:account,
-                  id4:jksc.toString(),
-                  id6:gallery
+        Scroll() {
+          Flex({ justifyContent: FlexAlign.Start, alignItems: ItemAlign.Start }) {
+            Column() {
+              ForEach(this.appll, (item: number) => {
+                if (appList[item].app_name.includes(this.changeValue)) {
+                    ChildItem({ item: item })
+                      .margin({ top: 15 })
                 }
+
               })
-            })
-          })
+            }
+          }
+          .margin({ left: "5%" })
+        }
+        .layoutWeight(1)
+        .expandSafeArea([SafeAreaType.SYSTEM])
+
       }
-    }
+      .expandSafeArea([SafeAreaType.SYSTEM])
   }
 }
 
@@ -138,45 +114,66 @@ struct appdia {
 struct ChildItem{
   @Prop item:number;
   @State numberc:number = jksc.indexOf(this.item)
+  dialogController: CustomDialogController = new CustomDialogController({
+    builder: DetailDialog({
+      img:appList[this.item].icon,
+      name:appList[this.item].app_name,
+      de:appList[this.item].describe
+    }),
+    autoCancel:true,
+    cancel: ()=> { this.onCancel()},
+  })
+
+
+  onCancel() {
+    console.info('Callback when the first button is clicked')
+  }
+  onAccept() {
+    console.info('Callback when the second button is clicked')
+
+  }
   build() {
-    Row() {
-      if (this.numberc== -1) {
-        Checkbox({group: 'checkboxGroup' })
-          .shape(CheckBoxShape.ROUNDED_SQUARE)
-          .onChange((value: boolean) => {
-            if (value) {
-              jksc.push(this.item)
-            } else {
-              for (let index = jksc.indexOf(this.item); index < jksc.length-1; index++) {
-                jksc[index] = jksc[index+1]
+      Row() {
+        if (this.numberc == -1) {
+          Checkbox({ group: 'checkboxGroup' })
+            .shape(CheckBoxShape.ROUNDED_SQUARE)
+            .onChange((value: boolean) => {
+              if (value) {
+                jksc.push(this.item)
+              } else {
+                for (let index = jksc.indexOf(this.item); index < jksc.length - 1; index++) {
+                  jksc[index] = jksc[index+1]
+                }
+                jksc.pop()
               }
-              jksc.pop()
-            }
-          })
-          .margin({ right: "5%" })
-      } else {
-        Checkbox({ group: 'checkboxGroup' })
-          .select(true)
-          .shape(CheckBoxShape.ROUNDED_SQUARE)
-          .onChange((value: boolean) => {
-            if (value) {
-              jksc.push(this.item)
-            } else {
-              for (let index = jksc.indexOf(this.item); index < jksc.length-1; index++) {
-                jksc[index] = jksc[index+1]
+            })
+            .margin({ right: "5%" })
+        } else {
+          Checkbox({ group: 'checkboxGroup' })
+            .select(true)
+            .shape(CheckBoxShape.ROUNDED_SQUARE)
+            .onChange((value: boolean) => {
+              if (value) {
+                jksc.push(this.item)
+              } else {
+                for (let index = jksc.indexOf(this.item); index < jksc.length - 1; index++) {
+                  jksc[index] = jksc[index+1]
+                }
+                jksc.pop()
               }
-              jksc.pop()
-            }
-          })
-          .margin({ right: "5%" })
-      }
+            })
+            .margin({ right: "5%" })
+        }
         Image(appList[this.item].icon)
           .borderRadius(25)
           .height(40)
-      Text(appList[this.item].app_name)
-        .margin({left:"8%"})
-    }
-    .width("80%")
+        Text(appList[this.item].app_name)
+          .margin({ left: "8%" })
+          .onClick(()=>{
+            this.dialogController.open()
+          })
+      }
+      .width("80%")
   }
 
 }

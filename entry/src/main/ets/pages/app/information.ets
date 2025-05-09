@@ -11,7 +11,7 @@ export struct pageinformation {
             .fontWeight(FontWeight.Bold)
             .textAlign(TextAlign.Start)
           Flex({ justifyContent: FlexAlign.SpaceBetween})  {
-            Image($rawfile('self.jpg'))
+            Image($rawfile('self.png'))
               .syncLoad(true)
               .width("15%")
               .borderRadius(35)
@@ -57,24 +57,24 @@ export struct pageinformation {
             .fontWeight(FontWeight.Bold)
             .textAlign(TextAlign.Start)
           Flex({ justifyContent: FlexAlign.SpaceBetween})  {
-            Image($rawfile('self.jpg'))
+            Image($rawfile('self.png'))
               .syncLoad(true)
               .width("15%")
               .borderRadius(35)
               .margin({ left: "10%" })
 
-            Text("luzhiyi@mail.dlut.edu.cn").margin({ top: "5%", right: "10%" })
-              .fontSize(18)
+            Hyperlink("luzhiyi@mail.dlut.edu.cn").margin({ top: "5%", right: "10%" })
           }.margin({ top: "5%" })
 
           Flex({ justifyContent: FlexAlign.SpaceBetween})  {
-            Image($rawfile('naosi.png'))
+            Image($rawfile('hmos.png'))
               .syncLoad(true)
-              .width("20%")
+              .width("15%")
               .borderRadius(35)
               .margin({ left: "10%" })
-            Text("Q群:724021138").margin({ top: "5%", right: "10%" })
+            Text("Q群：541832482").margin({ top: "5%", right: "10%" })
               .fontSize(18)
+
           }.margin({ top: "10%" })
         }
       }

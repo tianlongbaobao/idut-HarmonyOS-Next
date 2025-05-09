@@ -16,14 +16,13 @@ struct Security {
     Column() {
       Image($rawfile('login.jpg'))
         .syncLoad(true)
-        .width(150)
-        .margin({ top: "30%" })
+        .height("15%")
       Text('安全验证').fontSize(25)
         .fontWeight(FontWeight.Bold)
         .margin({ top: "5%" })
       Image(img)
         .syncLoad(true)
-        .width(250)
+        .width(200)
         .margin({ top: "8%" })
       TextInput({ placeholder: '验证码' }).margin({ top: "10%" })
         .onChange((value:string)=>{

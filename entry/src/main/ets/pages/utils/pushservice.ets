@@ -34,59 +34,63 @@ export async function pushclass(con:boolean):Promise<void>{
     const  LocalTimestamp = timestamps[1];
     const  Nonce = GetHeaderForNonce();
     const requestbodystring = "app_key=20460cbb2ccf1c97&app_secret=1dcc14a227a6f8d9b37792b7b053f671&app_version=" + GetwhistleVersion() + "&grant_type=client_credentials&platform=android&scope=all";
-    const  Sign = GetHeaderForSign(requestbodystring, Timestamp, Nonce, a)
-    interface resp {
-      access_token:string
-      expires_in:string
-      scope:string
-      refresh_token:string
-      token_type:string
-    }
-    axios.post('https://api.m.dlut.edu.cn/oauth/token', requestbodystring, {
-      headers: {
-        'a': a,
-        'sign': Sign,
-        'local_timestamp': LocalTimestamp,
-        'nonce': Nonce,
-        'version': GetHeaderForVersion(),
-        'timestamp': Timestamp,
-        'Host': 'service.m.dlut.edu.cn',
-        'Connection': 'Keep-Alive',
-        'Cookie2': '$Version=1',
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-    })
-      .then((response: AxiosResponse<string>) => {
-        dataPreferences.getPreferences(context, "information").then(preferences => {
-          preferences.get("account", 'default').then((value) => {
-            let jsc: resp = JSON.parse(JSON.stringify(response.data))
-            console.log(jsc.access_token)
-            let url = "https://api.m.dlut.edu.cn/lightappapi/course/get_today_course?access_token=" + jsc.access_token +
-              "&app_version=" + GetwhistleVersion() + "&domain=dlut&identity=" + "student" +
-              "&platform=android&student_number=" + value;
-            axios<string, AxiosResponse<string>, null>({
-              method: "get",
-              url: url
-            }).then((res: AxiosResponse) => {
-              let bb: courseres = JSON.parse(JSON.stringify(res.data))
-              bb.pushtoken = pushToken
-              bb.account = value+""
-              if (con) {
-                bb.con = "0"
-              } else {
-                bb.con = "1"
-              }
-              axios.post("http://www.luzhiyidut.cn:443/push",bb,{
-                headers:{
-                  'Content-Type': 'application/json'
-                }
-              })
-                .then((rmn: AxiosResponse) =>{
-                  console.log(rmn.data)
+    GetHeaderForSign(requestbodystring, Timestamp, Nonce, a)
+      .then((Sign)=> {
+        interface resp {
+          access_token: string
+          expires_in: string
+          scope: string
+          refresh_token: string
+          token_type: string
+        }
+
+        axios.post('https://api.m.dlut.edu.cn/oauth/token', requestbodystring, {
+          headers: {
+            'a': a,
+            'sign': Sign,
+            'local_timestamp': LocalTimestamp,
+            'nonce': Nonce,
+            'version': GetHeaderForVersion(),
+            'timestamp': Timestamp,
+            'Host': 'service.m.dlut.edu.cn',
+            'Connection': 'Keep-Alive',
+            'Cookie2': '$Version=1',
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+        })
+          .then((response: AxiosResponse<string>) => {
+            dataPreferences.getPreferences(context, "information").then(preferences => {
+              preferences.get("account", 'default').then((value) => {
+                let jsc: resp = JSON.parse(JSON.stringify(response.data))
+                console.log(jsc.access_token)
+                let url =
+                  "https://api.m.dlut.edu.cn/lightappapi/course/get_today_course?access_token=" + jsc.access_token +
+                    "&app_version=" + GetwhistleVersion() + "&domain=dlut&identity=" + "student" +
+                    "&platform=android&student_number=" + value;
+                axios<string, AxiosResponse<string>, null>({
+                  method: "get",
+                  url: url
+                }).then((res: AxiosResponse) => {
+                  let bb: courseres = JSON.parse(JSON.stringify(res.data))
+                  bb.pushtoken = pushToken
+                  bb.account = value + ""
+                  if (con) {
+                    bb.con = "0"
+                  } else {
+                    bb.con = "1"
+                  }
+                  axios.post("http://www.luzhiyidut.cn:443/push", bb, {
+                    headers: {
+                      'Content-Type': 'application/json'
+                    }
+                  })
+                    .then((rmn: AxiosResponse) => {
+                      console.log(rmn.data)
+                    })
                 })
+              })
             })
           })
-        })
       })
   } catch (err) {
     let e: BusinessError = err as BusinessError;

@@ -17,7 +17,7 @@ export struct pagesettings {
           .fontSize(18)
           .fontWeight(FontWeight.Bold)
           .fontColor($r("app.color.text"))
-        Text("版本号:5.3.0").margin({ top: "5%" })
+        Text("版本号:5.3.2").margin({ top: "5%" })
           .fontSize(15)
           .fontColor($r("app.color.text"))
         Text("ArkTS版").margin({ top: "5%" })

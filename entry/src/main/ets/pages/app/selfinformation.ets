@@ -146,7 +146,7 @@ export struct pageselfinformation {
       Column() {
         Flex({ justifyContent: FlexAlign.SpaceBetween}) {
           Text("头像")
-            .margin({ left: "10%", top: "4%" })
+            .margin({ left: "5%", top: "4%" })
             .fontSize(14)
             .fontColor($r('app.color.text'))
           Image(this.id_photo)
@@ -171,7 +171,7 @@ export struct pageselfinformation {
 
         Flex({ justifyContent: FlexAlign.SpaceBetween }) {
           Text("姓名")
-            .margin({ left: "10%", top: "4%" })
+            .margin({ left: "5%", top: "4%" })
             .fontSize(14)
             .fontColor($r('app.color.text'))
           Text(this.name)
@@ -194,14 +194,14 @@ export struct pageselfinformation {
 
         Flex({ justifyContent: FlexAlign.SpaceBetween }) {
           Text("昵称")
-            .margin({ left: "10%", top: "4%" })
+            .margin({ left: "5%", top: "4%" })
             .fontSize(14)
             .fontColor($r('app.color.text'))
           Text(this.nickname)
             .height("7%")
             .margin({right:"4%"})
             .fontSize(14)
-            .fontColor($r('app.color.text'))
+            .fontColor("blue")
 
         }
         .margin({ top: "5%" })
@@ -221,7 +221,7 @@ export struct pageselfinformation {
 
         Flex({ justifyContent: FlexAlign.SpaceBetween }) {
           Text("职工号/学号")
-            .margin({ left: "10%", top: "4%" })
+            .margin({ left: "5%", top: "4%" })
             .fontSize(14)
             .fontColor($r('app.color.text'))
           Text(this.username)
@@ -244,7 +244,7 @@ export struct pageselfinformation {
 
         Flex({ justifyContent: FlexAlign.SpaceBetween}) {
           Text("单位名称")
-            .margin({ left: "10%", top: "4%" })
+            .margin({ left: "5%", top: "4%" })
             .fontSize(14)
             .fontColor($r('app.color.text'))
           Text(this.org)
@@ -267,7 +267,7 @@ export struct pageselfinformation {
 
         Flex({ justifyContent: FlexAlign.SpaceBetween }) {
           Text("身份类型")
-            .margin({ left: "10%", top: "4%" })
+            .margin({ left: "5%", top: "4%" })
             .fontSize(14)
             .fontColor($r('app.color.text'))
           Text(this.identity)
@@ -290,7 +290,7 @@ export struct pageselfinformation {
 
         Flex({ justifyContent: FlexAlign.SpaceBetween}) {
           Text("手机号")
-            .margin({ left: "10%", top: "4%" })
+            .margin({ left: "5%", top: "4%" })
             .fontSize(14)
             .fontColor($r('app.color.text'))
           Text(this.cellphone)
@@ -313,7 +313,7 @@ export struct pageselfinformation {
 
         Flex({ justifyContent: FlexAlign.SpaceBetween }) {
           Text("邮箱")
-            .margin({ left: "10%", top: "4%" })
+            .margin({ left: "5%", top: "4%" })
             .fontSize(14)
             .fontColor($r('app.color.text'))
           Text(this.email)

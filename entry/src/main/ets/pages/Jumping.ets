@@ -156,6 +156,23 @@ struct Splash {
 
           })
         })
+        .catch(()=>{
+          AlertDialog.show(
+            {
+              message: '后端服务器未响应，请检查网络连接',
+              autoCancel: false,
+              alignment: DialogAlignment.Bottom,
+              gridCount: 5,
+              offset: { dx: 0, dy: -20 },
+              primaryButton: {
+                value: '确认',
+                action: () => {
+                },
+                fontColor:"red"
+              },
+            }
+          )
+        })
     })
 
   }

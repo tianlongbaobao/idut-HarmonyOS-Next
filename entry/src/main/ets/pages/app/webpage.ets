@@ -297,13 +297,7 @@ export struct webpage {
           })
           .onLoadIntercept((event) => {
             let data = event.data;
-            this.URI = data.getRequestUrl();
             let url:string = data.getRequestUrl();
-            if (url.includes("sso")){
-              this.js = this.sso
-            } else {
-              this.js = this.api
-            }
             console.log(url)
             if (url.startsWith("weixin://")) {
               (getContext() as common.UIAbilityContext).openLink(url)
@@ -322,6 +316,7 @@ export struct webpage {
               return true;
             }
             if (!(url.startsWith("http") || url.startsWith("https"))) {
+              this.URI = url
               return false;
             }
             let result = new Pay().payInterceptorWithUrl(url, true, (result) => {
@@ -329,7 +324,7 @@ export struct webpage {
               let returnUrl = result.get("returnUrl");
               this.controller.loadUrl(returnUrl);
             });
-            return false;
+            return result;
           })
       }
     }

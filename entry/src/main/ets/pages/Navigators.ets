@@ -16,6 +16,9 @@ import { pageselfinformation } from './app/selfinformation';
 import { galleryres } from './utils/gallerybean';
 import { connection } from '@kit.NetworkKit';
 import { webpage } from './app/webpage';
+import { webview } from '@kit.ArkWeb';
+import { Lingshui } from './backrequest/network';
+import { DetailDialog } from './app/detaildia';
 
 const  account:string = (router.getParams() as Record<string, string>)['id2'];
 const  password:string = (router.getParams() as Record<string, string>)['id1'];
@@ -45,6 +48,7 @@ struct  Navigators {
   @State swiperurl:string[] = []
   @State idc: number = 0
   @State darkmode:boolean = false
+  controller: webview.WebviewController = new webview.WebviewController();
   private netCon: connection.NetConnection = connection.createNetConnection();
   private swiperController: SwiperController = new SwiperController()
   @State swiperindex:number = 0
@@ -149,6 +153,7 @@ struct  Navigators {
 
   }
 
+
   @Builder
   tabBuilder(){
     Flex({direction:FlexDirection.Row,justifyContent:FlexAlign.Center}) {
@@ -238,137 +243,149 @@ struct  Navigators {
   build() {
     Navigation(this.pathStack) {
       if (this.selectIndex === 1) {
-        List({ space: 7 }) {
-          ListItem(){
-            Flex({direction:FlexDirection.Row,justifyContent:FlexAlign.Center,alignItems:ItemAlign.End}) {
-              Text("个人中心")
-                .fontWeight(FontWeight.Bold)
-                .fontSize(20)
-                .fontColor($r('app.color.text'))
+            List({ space: 7 }) {
+              ListItem() {
+                Flex({ direction: FlexDirection.Row, justifyContent: FlexAlign.Center, alignItems: ItemAlign.End }) {
+                  Text("个人中心")
+                    .fontWeight(FontWeight.Bold)
+                    .fontSize(20)
+                    .fontColor($r('app.color.text'))
+                }
+              }
+
+              ListItem() {
+                Flex({ direction: FlexDirection.Row, justifyContent: FlexAlign.Center, alignItems: ItemAlign.End }) {
+                  Column() {
+                    Image(this.head)
+                      .height("12%")
+                      .borderRadius(35)
+                      .fillColor($r('app.color.background'))
+                    Text(this.nickname)
+                      .margin({ top: "3.5%" })
+                      .fontWeight(FontWeight.Bold)
+                      .fontSize(17)
+                      .fontColor($r('app.color.text'))
+                  }
+                  .margin({ top: "5%" })
+                }
+              }
+
+              ListItem() {
+                Flex({ direction: FlexDirection.Row, justifyContent: FlexAlign.Center, alignItems: ItemAlign.End }) {
+                  Column() {
+                    Button({ type: ButtonType.Circle, stateEffect: true }) {
+                      Image($rawfile("icon_mine_account_safe.png"))
+                        .height("65%")
+
+                    }
+                    .onClick(() => {
+                      this.ncs.url =
+                        "https://portal.dlut.edu.cn/tp_core/h5?act=sys/uacm/profileResetPwd&filter=app&from=rj"
+                      this.ncs.name = "修改密码"
+                      this.pathStack.pushPathByName("web", this.ncs);
+                    })
+                    .width(80).height(80).backgroundColor($r('app.color.background'))
+
+                    Text("修改密码").margin({ top: "1%" })
+                      .fontSize(15)
+                      .fontColor($r('app.color.text'))
+                  }
+
+                  Column() {
+                    Button({ type: ButtonType.Circle, stateEffect: true }) {
+                      Image($rawfile("icon_mine_card.png"))
+                        .height("50%")
+                    }
+                    .onClick(() => {
+                      this.pathStack.pushPath({ name: "个人证件" })
+                    })
+                    .width(80).height(80).backgroundColor($r('app.color.background'))
+
+                    Text("个人证件").margin({ top: "1%" })
+                      .fontSize(15)
+                      .fontColor($r('app.color.text'))
+                  }.margin({ left: "8%" })
+
+                  Column() {
+                    Button({ type: ButtonType.Circle, stateEffect: true }) {
+                      Image($rawfile("icon_mine_user_info.png"))
+                        .borderRadius(35)
+                        .height("70%")
+                    }
+                    .onClick(() => {
+                      this.pathStack.pushPath({ name: "个人资料" })
+                    })
+                    .width(80).height(80).backgroundColor($r('app.color.background'))
+
+                    Text("个人资料").margin({ top: "1%" })
+                      .fontSize(15)
+                      .fontColor($r('app.color.text'))
+                  }.margin({ left: "8%" })
+                }.margin({ bottom: "3%" })
+
+              }
+
+              ListItem() {
+                Flex({ direction: FlexDirection.Row, justifyContent: FlexAlign.Center, alignItems: ItemAlign.End }) {
+                  Column() {
+                    Button({ type: ButtonType.Circle, stateEffect: true }) {
+                      Image($rawfile("icon_mine_setting.png"))
+                        .borderRadius(35)
+                        .height("50%")
+                        .width("50%")
+                    }
+                    .onClick(() => {
+                      this.pathStack.pushPath({ name: "设置" })
+                    })
+                    .width(80).height(80).backgroundColor($r('app.color.background'))
+
+                    Text("设置").margin({ top: "1%" })
+                      .fontSize(15)
+                      .fontColor($r('app.color.text'))
+                  }
+
+                  Column() {
+                    Button({ type: ButtonType.Circle, stateEffect: true }) {
+                      Image($rawfile("icon_mine_school_c_parent.png"))
+                        .height("50%")
+                    }
+                    .onClick(() => {
+                      this.ncs.url = "https://apps-xiaoyuan.m.dlut.edu.cn/explain"
+                      this.ncs.name = "家校通"
+                      this.pathStack.pushPathByName("web", this.ncs);
+                    })
+                    .width(80).height(80).backgroundColor($r('app.color.background'))
+
+                    Text("家校通").margin({ top: "1%" })
+                      .fontSize(15)
+                      .fontColor($r('app.color.text'))
+                  }.margin({ left: "8%" })
+
+                  Column() {
+                    Button({ type: ButtonType.Circle, stateEffect: true }) {
+                      Image($rawfile("icon_mine_about.png"))
+                        .borderRadius(35)
+                        .height("50%")
+                    }
+                    .onClick(() => {
+                      this.pathStack.pushPath({ name: "作者信息" })
+                    })
+                    .width(80).height(80).backgroundColor($r('app.color.background'))
+
+                    Text("联系我们").margin({ top: "1%" })
+                      .fontSize(15)
+                      .fontColor($r('app.color.text'))
+                  }.margin({ left: "8%" })
+                }.margin({ bottom: "3%" })
+
+              }
             }
+            .listDirection(Axis.Vertical)
+            .backgroundColor($r('app.color.background')).padding(20)
           }
-          ListItem(){
-            Flex({direction:FlexDirection.Row,justifyContent:FlexAlign.Center,alignItems:ItemAlign.End}) {
-              Column() {
-                Image(this.head)
-                  .height("12%")
-                  .borderRadius(35)
-                  .fillColor($r('app.color.background'))
-                Text(this.nickname)
-                  .margin({top:"3.5%"})
-                  .fontWeight(FontWeight.Bold)
-                  .fontSize(17)
-                  .fontColor($r('app.color.text'))
-              }
-              .margin({top:"5%"})
-            }
-          }
-          ListItem(){
-            Flex({direction:FlexDirection.Row,justifyContent:FlexAlign.Center,alignItems:ItemAlign.End}){
-              Column() {
-                Button({ type: ButtonType.Circle, stateEffect: true }) {
-                  Image($rawfile("icon_mine_account_safe.png"))
-                    .height("65%")
-
-                }
-                .onClick(() => {
-                  this.ncs.url = "https://portal.dlut.edu.cn/tp_core/h5?act=sys/uacm/profileResetPwd&filter=app&from=rj"
-                  this.ncs.name = "修改密码"
-                  this.pathStack.pushPathByName("web", this.ncs);
-                })
-                .width(80).height(80).backgroundColor($r('app.color.background'))
-                Text("修改密码").margin({ top: "1%" })
-                  .fontSize(15)
-                  .fontColor($r('app.color.text'))
-              }
-
-              Column() {
-                Button({ type: ButtonType.Circle, stateEffect: true }) {
-                  Image($rawfile("icon_mine_card.png"))
-                    .height("50%")
-                }
-                .onClick(() => {
-                  this.pathStack.pushPath({ name: "个人证件"})
-                })
-                .width(80).height(80).backgroundColor($r('app.color.background'))
-                Text("个人证件").margin({ top: "1%" })
-                  .fontSize(15)
-                  .fontColor($r('app.color.text'))
-              }.margin({ left: "8%" })
-              Column() {
-                Button({ type: ButtonType.Circle, stateEffect: true }) {
-                  Image($rawfile("icon_mine_user_info.png"))
-                    .borderRadius(35)
-                    .height("70%")
-                }
-                .onClick(() => {
-                  this.pathStack.pushPath({ name: "个人资料"})
-                })
-                .width(80).height(80).backgroundColor($r('app.color.background'))
-
-                Text("个人资料").margin({ top: "1%" })
-                  .fontSize(15)
-                  .fontColor($r('app.color.text'))
-              }.margin({ left: "8%" })
-            }.margin({bottom:"3%"})
-
-          }
-          ListItem(){
-            Flex({direction:FlexDirection.Row,justifyContent:FlexAlign.Center,alignItems:ItemAlign.End}){
-              Column(){
-                Button({ type: ButtonType.Circle, stateEffect: true }) {
-                  Image($rawfile("icon_mine_setting.png"))
-                    .borderRadius(35)
-                    .height("50%")
-                    .width("50%")
-                }
-                .onClick(() => {
-                  this.pathStack.pushPath({ name: "设置"})
-                })
-                .width(80).height(80).backgroundColor($r('app.color.background'))
-                Text("设置").margin({ top: "1%" })
-                  .fontSize(15)
-                  .fontColor($r('app.color.text'))
-              }
-
-              Column() {
-                Button({ type: ButtonType.Circle, stateEffect: true }) {
-                  Image($rawfile("icon_mine_school_c_parent.png"))
-                    .height("50%")
-                }
-                .onClick(() => {
-                  this.ncs.url = "https://apps-xiaoyuan.m.dlut.edu.cn/explain"
-                  this.ncs.name = "家校通"
-                  this.pathStack.pushPathByName("web", this.ncs);
-                })
-                .width(80).height(80).backgroundColor($r('app.color.background'))
-                Text("家校通").margin({ top: "1%" })
-                  .fontSize(15)
-                  .fontColor($r('app.color.text'))
-              }.margin({ left: "8%" })
-              Column() {
-                Button({ type: ButtonType.Circle, stateEffect: true }) {
-                  Image($rawfile("icon_mine_about.png"))
-                    .borderRadius(35)
-                    .height("50%")
-                }
-                .onClick(() => {
-                  this.pathStack.pushPath({ name: "作者信息"})
-                })
-                .width(80).height(80).backgroundColor($r('app.color.background'))
-
-                Text("联系我们").margin({ top: "1%" })
-                  .fontSize(15)
-                  .fontColor($r('app.color.text'))
-              }.margin({ left: "8%" })
-            }.margin({bottom:"3%"})
-
-          }
-        }
-        .listDirection(Axis.Vertical)
-        .backgroundColor($r('app.color.background')).padding(20)
-      } else if (this.selectIndex == 2){
+         else if (this.selectIndex == 2){
         List({space:7}) {
+
           ListItem(){
             Flex({direction:FlexDirection.Row,justifyContent:FlexAlign.Center,alignItems:ItemAlign.End}) {
               Text("工具箱")
@@ -376,6 +393,7 @@ struct  Navigators {
                 .fontSize(20)
                 .fontColor($r('app.color.text'))
             }
+
           }
           ListItem(){
             Column() {
@@ -557,6 +575,7 @@ struct  Navigators {
                   })
 
               }
+
             }
             .width('100%')
             .height('100%')
@@ -639,54 +658,65 @@ struct  Navigators {
       else {
         List({ space: 7 }) {
           ListItem(){
-            Flex({direction:FlexDirection.Row,justifyContent:FlexAlign.End,alignItems:ItemAlign.End}) {
-              Text("我的服务")
-                .fontWeight(FontWeight.Bold)
-                .fontSize(20)
-                .margin({right:"20%"})
-                .fontColor($r('app.color.text'))
-              Select([{ value: '扫一扫', icon:$rawfile("scancode.png")  },
-                { value: '虚拟卡', icon: $rawfile("vcard.png") }])
-                .selected(this.index)
-                .value("+")
-                .fontColor($r('app.color.text'))
-                .width("15%")
-                .height("5%")
-                .onSelect((index:number, text?: string | undefined)=>{
-                  this.index = index;
-                  if (this.index == 1){
-                    this.ncs.url = "https://card.m.dlut.edu.cn/virtualcardrj/openRjQrcodePage"
-                    this.ncs.name = "虚拟卡"
-                    this.pathStack.pushPathByName("web", this.ncs);
-                  } else if (this.index == 0){
-                    let options: scanBarcode.ScanOptions = {
-                      scanTypes: [scanCore.ScanType.ALL],
-                      enableMultiMode: true,
-                      enableAlbum: true
-                    };
-                    interface ResponseBean {
-                      scanType: number;
-                      originalValue:string
-                    }
-                    scanBarcode.startScanForResult(getContext(this), options).then((result: scanBarcode.ScanResult) => {
-                      const responseBean: ResponseBean = JSON.parse(JSON.stringify(result))
-                      let value: string = responseBean.originalValue
-                      if (value.includes("qrLogin")){
-                        router.pushUrl({
-                          url: 'pages/SSO',
-                          params:{
-                            id1:value}
-                        })
-                      }
-                    })
-                  }
-                  this.index = -1
-                })
+            RelativeContainer() {
+              Row() {
+                Text("我的服务")
+                  .fontWeight(FontWeight.Bold)
+                  .fontSize(20)
+                  .fontColor($r('app.color.text'))
+              } .justifyContent(FlexAlign.Center)
+              .alignRules({'center':{ 'anchor': '__container__', 'align': VerticalAlign.Center },'middle': { 'anchor': '__container__', 'align': HorizontalAlign.Center }})
+              Row() {
+                Select([{ value: '扫一扫', icon: $rawfile("scancode.png") },
+                  { value: '虚拟卡', icon: $rawfile("vcard.png") }])
+                  .selected(this.index)
+                  .value("+")
+                  .fontColor($r('app.color.text'))
+                  .width("15%")
+                  .height("4%")
+                  .align(Alignment.End)
+                  .onSelect((index: number, text?: string | undefined) => {
+                    this.index = index;
+                    if (this.index == 1) {
+                      this.ncs.url = "https://card.m.dlut.edu.cn/virtualcardrj/openRjQrcodePage"
+                      this.ncs.name = "虚拟卡"
+                      this.pathStack.pushPathByName("web", this.ncs);
+                    } else if (this.index == 0) {
+                      let options: scanBarcode.ScanOptions = {
+                        scanTypes: [scanCore.ScanType.ALL],
+                        enableMultiMode: true,
+                        enableAlbum: true
+                      };
 
+                      interface ResponseBean {
+                        scanType: number;
+                        originalValue: string
+                      }
+
+                      scanBarcode.startScanForResult(getContext(this), options)
+                        .then((result: scanBarcode.ScanResult) => {
+                          const responseBean: ResponseBean = JSON.parse(JSON.stringify(result))
+                          let value: string = responseBean.originalValue
+                          if (value.includes("qrLogin")) {
+                            router.pushUrl({
+                              url: 'pages/SSO',
+                              params: {
+                                id1: value
+                              }
+                            })
+                          }
+                        })
+                    }
+                    this.index = -1
+                  })
+              }.alignRules({
+              'right': { 'anchor': '__container__', 'align': HorizontalAlign.End }})
             }
+            .height("8%")
+
           }
           ListItem() {
-            Flex({ wrap: FlexWrap.Wrap }) {
+            Flex({ wrap: FlexWrap.Wrap,justifyContent: FlexAlign.SpaceEvenly}) {
               ForEach(this.appll, (item: number) => {
                 ChildItem({ item: item, pathStack: this.pathStack ,ncs:this.ncs})
                   .margin({ top: 20 })
@@ -747,6 +777,7 @@ struct ChildItem {
   @Prop item: number;
   @Link pathStack:NavPathStack;
   @Link ncs:mnv ;
+
   build() {
     Column() {
       Button({ type: ButtonType.Circle, stateEffect: true }) {
@@ -767,6 +798,7 @@ struct ChildItem {
         .fontSize(11)
         .fontWeight(FontWeight.Bold)
         .fontColor($r('app.color.text'))
+
     }.margin({ left: "2%" ,right:"2%"})
     .height(70)
     .width(70)
