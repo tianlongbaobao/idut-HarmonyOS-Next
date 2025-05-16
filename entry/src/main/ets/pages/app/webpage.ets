@@ -6,10 +6,9 @@ import { BusinessError } from "@kit.BasicServicesKit";
 import { systemShare,harmonyShare } from '@kit.ShareKit';
 import { uniformTypeDescriptor as utd } from '@kit.ArkData';
 import fileIo from "@ohos.file.fs";
-import { common, ConfigurationConstant } from "@kit.AbilityKit";
+import { common, ConfigurationConstant, Want } from "@kit.AbilityKit";
 import { fileUri } from "@kit.CoreFileKit";
 import mediaQuery from '@ohos.mediaquery'
-import {startBrowser} from "../utils/browser"
 import { cookiesync } from "../backrequest/cookiemanager";
 import { browserProxy } from "../utils/Browserproxy"
 import { Pay } from "@cashier_alipay/cashiersdk";
@@ -26,36 +25,28 @@ export struct webpage {
   @State sso: Array<ScriptItem> = []
   @State api: Array<ScriptItem> = []
   @State DarkMode:WebDarkMode = WebDarkMode.Auto
+  @State webagent:string =  "Mozilla/ 5.0 (Linux; Android 10; EBG Build/ HUAWEIEBG; wv) AppleWebKit/ 537.36 (KHTML, like Gecko) Version/ 4.0 Chrome/ 88.0.4324.93 Mobile Safari/ 537.36 weishao(3.3.0.74633)"
   @State dark:boolean = false
   @State darkbutton:string = ""
   @State URI:string = ""
   @State url:string = ""
-  @State name:string = ""
+  @State name:string = "";
   @State js: Array<ScriptItem> = []
   @Link @Watch("change") darkmode:boolean
-  @Link @Watch("web")vsf:mnv
+  @Link vsf:mnv
+  @Link @Watch("useragents")useragent:boolean;
+  @State vpn:Array<ScriptItem> = [{script:"document.getElementById('cas-login').click()",scriptRules:["*"]}]
   @Consume('pathInfos') pathStack: NavPathStack;
   @StorageProp('currentColorMode') @Watch('onColorModeChange') currentColorMode: number =
     ConfigurationConstant.ColorMode.COLOR_MODE_LIGHT;
-  web(){
-    let vsf: mnv = JSON.parse(JSON.stringify(this.pathStack.getParamByName("web")[0]))
-    this.name = vsf.name
-    this.url = vsf.url
-    this.sso = [{
-      script: "$(\"#un\").val('" + vsf.accounts + "');$(\"#pd\").val('" + vsf.passwords + "');login()",
-      scriptRules: ["*"]
-    }]
-    this.api = [{
-      script: "username.value='" + vsf.accounts + "';password.value='" + vsf.passwords +
-        "';submit.disabled='';submit.click()",
-      scriptRules: ["*"]
-    }]
-    if (vsf.url.includes("sso")){
-      this.js = this.sso
-    } else {
-      this.js = this.api
+  useragents(){
+    if (this.useragent) {
+        this.webagent = "Mozilla/5.0 (PC; OpenHarmony 5.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36  ArkWeb/4.1.6.1"
+      
+    }else {
+      this.webagent = "Mozilla/ 5.0 (Linux; Android 10; EBG Build/ HUAWEIEBG; wv) AppleWebKit/ 537.36 (KHTML, like Gecko) Version/ 4.0 Chrome/ 88.0.4324.93 Mobile Safari/ 537.36 weishao(3.3.0.74633)"
     }
-    cookiesync()
+    this.controller.refresh()
   }
   change(){
     if (this.darkmode) {
@@ -119,9 +110,8 @@ export struct webpage {
                 let shareData: systemShare.SharedData = new systemShare.SharedData({
                   utd: utdTypeId,
                   uri: fileUri.getUriFromPath(dstUri),
-                  title: '我的课表', // 不传title字段时,显示图片文件名
-                  description: '我的课表', // 不传description字段时,显示图片大小
-                  // thumbnail: new Uint8Array() // 优先使用传递的缩略图预览  不传则默认使用原图做预览图
+                  title: this.name, // 不传title字段时,显示图片文件名
+                  description: this.name, // 不传description字段时,显示图片大小
                 });
                 // 进行分享面板显示
                 sharableTarget.share(shareData);
@@ -135,6 +125,7 @@ export struct webpage {
   }
   private immersiveListening() {
     harmonyShare.on('knockShare', this.immersiveCallback);
+
   }
 
   private immersiveDisablingListening() {
@@ -146,8 +137,15 @@ export struct webpage {
       value:"browser",
       icon:"/resources/rawfile/blackbrowser.png",
       action:() =>{
-        const context: common.UIAbilityContext = getContext(this) as common.UIAbilityContext;
-        startBrowser(context,this.URI)
+        let context = getContext(this) as common.UIAbilityContext;
+        let want: Want = {
+          action: "ohos.want.action.viewData",
+          bundleName: 'com.huawei.hmos.browser',
+          abilityName: 'MainAbility',
+          uri: this.URI,
+        };
+        console.log("want", want)
+        context.startAbility(want)
       },
 
     },
@@ -185,8 +183,9 @@ export struct webpage {
                     let shareData: systemShare.SharedData = new systemShare.SharedData({
                       utd: utdTypeId,
                       uri: fileUri.getUriFromPath(dstUri),
-                      title: '我的课表', // 不传title字段时,显示图片文件名
-                      description: '我的课表', // 不传description字段时,显示图片大小
+                      title: this.name, // 不传title字段时,显示图片文件名
+                      description: this.name, // 不传description字段时,显示图片大小
+                      thumbnailUri:fileUri.getUriFromPath(dstUri)
                       // thumbnail: new Uint8Array() // 优先使用传递的缩略图预览  不传则默认使用原图做预览图
                     });
                     // 进行分享面板显示
@@ -228,6 +227,19 @@ export struct webpage {
     }
   }
   aboutToAppear(): void {
+    if (this.useragent) {
+      if (this.name!="玉兰卡") {
+        this.webagent = "Mozilla/5.0 (PC; OpenHarmony 5.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36  ArkWeb/4.1.6.1"
+      }
+
+    }else {
+      this.webagent = "Mozilla/ 5.0 (Linux; Android 10; EBG Build/ HUAWEIEBG; wv) AppleWebKit/ 537.36 (KHTML, like Gecko) Version/ 4.0 Chrome/ 88.0.4324.93 Mobile Safari/ 537.36 weishao(3.3.0.74633)"
+    }
+    if (canIUse('SystemCapability.Collaboration.HarmonyShare')) {
+      this.immersiveListening();
+    }
+    let context = getContext(this);
+    context.eventHub.on('onBackGround', this.onBackGround);
     if (this.darkmode) {
       this.dark = true
       this.DarkMode = WebDarkMode.On
@@ -246,26 +258,43 @@ export struct webpage {
     this.listener.on('change', (mediaQueryResult: mediaQuery.MediaQueryResult) => {
       this.onDarkMode(mediaQueryResult)
     });
-    let vsf: mnv = JSON.parse(JSON.stringify(this.pathStack.getParamByName("web")[0]))
-    this.name = vsf.name
-    this.url = vsf.url
+
+    this.name = this.vsf.name
+    this.url = this.vsf.url
     this.sso = [{
-      script: "$(\"#un\").val('" + vsf.accounts + "');$(\"#pd\").val('" + vsf.passwords + "');login()",
+      script: "$(\"#un\").val('" + this.vsf.accounts + "');$(\"#pd\").val('" + this.vsf.passwords + "');login()",
       scriptRules: ["*"]
     }]
     this.api = [{
-      script: "username.value='" + vsf.accounts + "';password.value='" + vsf.passwords +
+      script: "username.value='" + this.vsf.accounts + "';password.value='" + this.vsf.passwords +
         "';submit.disabled='';submit.click()",
       scriptRules: ["*"]
     }]
-    if (vsf.url.includes("sso")){
+    if (this.vsf.url.includes("sso.dlut.edu.cn/cas/login?service=") || this.vsf.url.includes("webvpn.dlut.edu.cn%2Flogin%3Fcas_login%3Dtrue")){
       this.js = this.sso
     } else {
       this.js = this.api
     }
     cookiesync()
   }
+  onPageHide(): void {
+    let context = getContext(this);
+    context.eventHub.emit('onBackGround');
+  }
 
+  aboutToDisappear(): void {
+    if (canIUse('SystemCapability.Collaboration.HarmonyShare')) {
+      this.immersiveDisablingListening();
+    }
+    let context = getContext(this);
+    context.eventHub.on('onBackGround', this.onBackGround);
+  }
+
+  private onBackGround() {
+    if (canIUse('SystemCapability.Collaboration.HarmonyShare')) {
+      this.immersiveDisablingListening();
+    }
+  }
   build() {
     NavDestination() {
       Column() {
@@ -291,14 +320,20 @@ export struct webpage {
           })
           .cacheMode(CacheMode.Online)
           .onControllerAttached(() => {
-            let userAgent =
-              "Mozilla/ 5.0 (Linux; Android 10; EBG Build/ HUAWEIEBG; wv) AppleWebKit/ 537.36 (KHTML, like Gecko) Version/ 4.0 Chrome/ 88.0.4324.93 Mobile Safari/ 537.36 weishao(3.3.0.74633)";
-            this.controller.setCustomUserAgent(userAgent);
+            this.controller.setCustomUserAgent(this.webagent);
           })
           .onLoadIntercept((event) => {
             let data = event.data;
             let url:string = data.getRequestUrl();
-            console.log(url)
+            if (url.includes("sso.dlut.edu.cn/cas/login?service=") || url.includes("webvpn.dlut.edu.cn%2Flogin%3Fcas_login%3Dtrue")){
+              this.js = this.sso
+            } else if (url.includes("webvpn.dlut.edu.cn/login")) {
+              this.js = this.vpn
+            }
+            else if (url.includes("api.m.dlut.edu.cn/login?client_id=")){
+              this.js = this.api
+            }
+            this.URI = url
             if (url.startsWith("weixin://")) {
               (getContext() as common.UIAbilityContext).openLink(url)
                 .then(() => {
@@ -316,7 +351,6 @@ export struct webpage {
               return true;
             }
             if (!(url.startsWith("http") || url.startsWith("https"))) {
-              this.URI = url
               return false;
             }
             let result = new Pay().payInterceptorWithUrl(url, true, (result) => {
@@ -329,9 +363,8 @@ export struct webpage {
       }
     }
     .expandSafeArea([SafeAreaType.SYSTEM])
-    .title(this.TitleBuilder,{backgroundColor:$r('app.color.background')})
+    .title(this.name)
     .backgroundColor($r('app.color.background'))
-    .backButtonIcon($r("app.media.button"))
     .menus(this.menuItems)
     .onBackPressed(() => {
       const popDestinationInfo = this.pathStack.clear()
@@ -340,13 +373,5 @@ export struct webpage {
     .onReady((context: NavDestinationContext) => {
       this.pathStack = context.pathStack
     })
-  }
-  @Builder
-  TitleBuilder() {
-    Text(this.name)
-      .fontColor($r('app.color.text'))
-      .fontSize(20)
-      .margin({top:"4%",left:"3%"})
-      .fontWeight(FontWeight.Bold)
   }
 }

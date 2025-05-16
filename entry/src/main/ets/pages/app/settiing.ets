@@ -17,7 +17,7 @@ export struct pagesettings {
           .fontSize(18)
           .fontWeight(FontWeight.Bold)
           .fontColor($r("app.color.text"))
-        Text("版本号:5.3.2").margin({ top: "5%" })
+        Text("版本号:6.0.0").margin({ top: "5%" })
           .fontSize(15)
           .fontColor($r("app.color.text"))
         Text("ArkTS版").margin({ top: "5%" })
@@ -47,6 +47,9 @@ export struct pagesettings {
               preferences.delete("password")
               preferences.delete("data")
               preferences.delete("photo")
+              preferences.delete("gallery")
+              preferences.delete("nowdata")
+              preferences.delete("door")
               preferences.flush()
               router.pushUrl({
                 url: 'pages/Index',
@@ -65,9 +68,8 @@ export struct pagesettings {
       .backgroundColor($r("app.color.background"))
     }
     .expandSafeArea([SafeAreaType.SYSTEM])
-    .title(this.TitleBuilder,{backgroundColor:$r("app.color.background")})
+    .title("设置")
     .backgroundColor($r("app.color.background"))
-    .backButtonIcon($r("app.media.button"))
     .onBackPressed(() => {
       const popDestinationInfo = this.pathStack.pop()
       return true
@@ -75,13 +77,5 @@ export struct pagesettings {
     .onReady((context: NavDestinationContext) => {
       this.pathStack = context.pathStack
     })
-  }
-  @Builder
-  TitleBuilder() {
-    Text("设置")
-      .fontColor($r("app.color.text"))
-      .fontSize(20)
-      .margin({top:"4.5%",left:"3%"})
-      .fontWeight(FontWeight.Bold)
   }
 }

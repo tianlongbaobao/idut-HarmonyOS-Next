@@ -24,7 +24,7 @@ export struct pageinformation {
             }.margin({ top: "5%", right: "10%" })
           }.margin({ top: "5%"})
 
-          Text("特别鸣谢:").margin({ top: "10%", right: "60%" })
+          Text("特别鸣谢:").margin({ top: "10%", right: "70%" })
             .fontSize(20)
             .fontWeight(FontWeight.Bold)
             .textAlign(TextAlign.Start)
@@ -52,7 +52,7 @@ export struct pageinformation {
             }.margin({ top: "5%", right: "10%" })
           }.margin({ top: "10%" })
 
-          Text("版本运维:").margin({ top: "10%", right: "60%" })
+          Text("版本运维:").margin({ top: "10%", right: "70%" })
             .fontSize(20)
             .fontWeight(FontWeight.Bold)
             .textAlign(TextAlign.Start)

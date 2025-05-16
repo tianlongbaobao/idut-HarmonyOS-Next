@@ -59,15 +59,14 @@ export struct pageself {
       }
       .alignItems(HorizontalAlign.Start)
       .margin({left:"5%"})
-    }.margin({left:"10%",top:"1%"})
+    }.margin({left:"6%",top:"1%"})
   }
   build() {
     NavDestination() {
       Column() {
         Row() {
           Image(this.backgroundurl)
-            .height("25%")
-            .width("80%")
+            .height(200)
             .borderRadius(20)
             .overlay(this.OverlayNode(), { align: Alignment.Center })
             .objectFit(ImageFit.Contain)
@@ -76,9 +75,8 @@ export struct pageself {
       }
     }
     .expandSafeArea([SafeAreaType.SYSTEM])
-    .title(this.TitleBuilder,{backgroundColor:$r('app.color.background')})
+    .title("个人证件")
     .backgroundColor($r('app.color.background'))
-    .backButtonIcon($r("app.media.button"))
     .onBackPressed(() => {
       const popDestinationInfo = this.pathStack.pop()
       console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
@@ -88,12 +86,5 @@ export struct pageself {
       this.pathStack = context.pathStack
     })
   }
-  @Builder
-  TitleBuilder() {
-    Text("个人证件")
-      .fontColor($r('app.color.text'))
-      .fontSize(20)
-      .margin({top:"4.5%",left:"3%"})
-      .fontWeight(FontWeight.Bold)
-  }
+
 }

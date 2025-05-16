@@ -101,12 +101,12 @@ struct appdia {
             }
           }
           .margin({ left: "5%" })
+
         }
         .layoutWeight(1)
-        .expandSafeArea([SafeAreaType.SYSTEM])
 
       }
-      .expandSafeArea([SafeAreaType.SYSTEM])
+
   }
 }
 
