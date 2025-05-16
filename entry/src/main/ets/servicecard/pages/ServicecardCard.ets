@@ -40,7 +40,7 @@ struct ServicecardCard {
   };
 
   @State cardList: CardListParameter = new CardListParameter($r('app.color.background'),
-    "今日课表", '', ImageSize.Auto, $r('app.media.class'), true,
+    "今日课表", '', ImageSize.Auto, $r('app.media.class'), false,
     $r('app.color.background'), true, 0, $r('app.color.background'),
     $r('app.color.background'), '', true, $r('app.media.bottom_icon'));
   @Builder

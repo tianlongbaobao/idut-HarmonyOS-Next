@@ -35,7 +35,7 @@ struct ElecCard {
   };
   cardList: Array<number> = new Array(0, 1);
   @State cardListParameter: CardListParameter = new CardListParameter($r('sys.color.ohos_id_color_background'),
-    "余额查询", '', ImageSize.Auto, $r('app.media.check'), true,
+    "余额查询", '', ImageSize.Auto, $r('app.media.check'), false,
     $r('sys.color.ohos_id_color_background'), true, 0, $r('sys.color.ohos_id_color_emphasize'),
     $r('app.color.list_item_count_background'), '', true, $r('app.media.bottom_icon'));
 

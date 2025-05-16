@@ -1,6 +1,7 @@
 import { AbilityConstant, Configuration, ConfigurationConstant, UIAbility, Want } from '@kit.AbilityKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { Router, window } from '@kit.ArkUI';
+import deviceinfo from '@ohos.deviceInfo';
 import { UIContext } from '@kit.ArkUI'
 import { router } from '@kit.ArkUI';
 import dataPreferences from '@ohos.data.preferences';
@@ -13,7 +14,12 @@ export default class EntryAbility extends UIAbility {
   uiContext: UIContext | undefined = undefined;
   private selectPage: string = '';
   private currentWindowStage: window.WindowStage | null = null;
-
+  private onWindowSizeChange: (windowSize: window.Size) => void = (windowSize: window.Size) => {
+    let widthBp: WidthBreakpoint = this.uiContext!.getWindowWidthBreakpoint();
+    AppStorage.setOrCreate('currentWidthBreakpoint', widthBp);
+    let heightBp: HeightBreakpoint = this.uiContext!.getWindowHeightBreakpoint();
+    AppStorage.setOrCreate('currentHeightBreakpoint', heightBp);
+  };
   goToSpecifyPage(want: Want) {
     let shortCutKey = want.parameters?.shortCutKey;
     if (this.uiContext && shortCutKey && shortCutKey === 'CompanyPage') {
@@ -73,18 +79,52 @@ export default class EntryAbility extends UIAbility {
         scanType: number;
         originalValue:string
       }
-      scanBarcode.startScanForResult(getContext(this), options).then((result: scanBarcode.ScanResult) => {
-        const responseBean:ResponseBean = JSON.parse(JSON.stringify(result))
-        let value:string = responseBean.originalValue
-        console.log(value)
-        if (value.includes("whistle_info")) {
-          let url: string = "";
-          try {
-            const parts = value.split("whistle_info=");
-            if (parts.length > 1) {
-              url = parts[1];
-              ApiLogin(url)
-            } else {
+      let deviceTypeInfo: string = deviceinfo.deviceType;
+      if (deviceTypeInfo=="2in1"){
+        AlertDialog.show(
+          {
+            message: '2in1设备不支持扫一扫',
+            autoCancel: false,
+            alignment: DialogAlignment.Bottom,
+            gridCount: 5,
+            offset: { dx: 0, dy: -20 },
+            primaryButton: {
+              value: '确认',
+              action: () => {
+              }
+            },
+          }
+        )
+      }else {
+        scanBarcode.startScanForResult(getContext(this), options).then((result: scanBarcode.ScanResult) => {
+          const responseBean: ResponseBean = JSON.parse(JSON.stringify(result))
+          let value: string = responseBean.originalValue
+          console.log(value)
+          if (value.includes("whistle_info")) {
+            let url: string = "";
+            try {
+              const parts = value.split("whistle_info=");
+              if (parts.length > 1) {
+                url = parts[1];
+                ApiLogin(url)
+              } else {
+                AlertDialog.show(
+                  {
+                    message: '无效的二维码',
+                    autoCancel: false,
+                    alignment: DialogAlignment.Bottom,
+                    gridCount: 5,
+                    offset: { dx: 0, dy: -20 },
+                    primaryButton: {
+                      value: '确认',
+                      fontColor: "red",
+                      action: () => {
+                      }
+                    },
+                  }
+                )
+              }
+            } catch (e) {
               AlertDialog.show(
                 {
                   message: '无效的二维码',
@@ -94,68 +134,53 @@ export default class EntryAbility extends UIAbility {
                   offset: { dx: 0, dy: -20 },
                   primaryButton: {
                     value: '确认',
-                    fontColor:"red",
+                    fontColor: "red",
                     action: () => {
                     }
                   },
                 }
               )
             }
-          } catch (e) {
-            AlertDialog.show(
-              {
-                message: '无效的二维码',
-                autoCancel: false,
-                alignment: DialogAlignment.Bottom,
-                gridCount: 5,
-                offset: { dx: 0, dy: -20 },
-                primaryButton: {
-                  value: '确认',
-                  fontColor:"red",
-                  action: () => {
-                  }
-                },
+
+            if (url.length < 5) {
+              AlertDialog.show(
+                {
+                  message: '无效的二维码',
+                  autoCancel: false,
+                  alignment: DialogAlignment.Bottom,
+                  gridCount: 5,
+                  offset: { dx: 0, dy: -20 },
+                  primaryButton: {
+                    value: '确认',
+                    fontColor: "red",
+                    action: () => {
+                    }
+                  },
+                }
+              )
+            } else {
+              console.log("有效的 URL:", url);
+            }
+          } else if (value.includes("qrLogin")) {
+            router.pushUrl({
+              url: 'pages/SSO',
+              params: {
+                id1: value
               }
-            )
+            })
+
           }
 
-          if (url.length < 5) {
-            AlertDialog.show(
-              {
-                message: '无效的二维码',
-                autoCancel: false,
-                alignment: DialogAlignment.Bottom,
-                gridCount: 5,
-                offset: { dx: 0, dy: -20 },
-                primaryButton: {
-                  value: '确认',
-                  fontColor:"red",
-                  action: () => {
-                  }
-                },
-              }
-            )
-          } else {
-            console.log("有效的 URL:", url);
-          }
-        } else if (value.includes("qrLogin")){
-          router.pushUrl({
-            url: 'pages/SSO',
-            params:{
-              id1:value}
-          })
-
-        }
-      }).catch((error: BusinessError) => {
-        hilog.error(0x0001, '[Scan CPSample]',
-          `Failed to get ScanResult by promise with options. Code:${error.code}, message: ${error.message}`);
-      });
+        }).catch((error: BusinessError) => {
+          hilog.error(0x0001, '[Scan CPSample]',
+            `Failed to get ScanResult by promise with options. Code:${error.code}, message: ${error.message}`);
+        });
+      }
 
     }
   }
   onNewWant(want: Want, launchParam: AbilityConstant.LaunchParam): void {
     // Receive the parameters passed by UIAbility from the caller
-    console.log("1")
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onNewWant');
     if (want?.parameters?.params) {
       // want.parameters.params 对应 postCardAction() 中 params 内容
@@ -222,6 +247,12 @@ export default class EntryAbility extends UIAbility {
 
           let windowClass: window.Window;
           windowStage.getMainWindow((err, data) => {
+            this.uiContext = data.getUIContext();
+            let widthBp: WidthBreakpoint = this.uiContext.getWindowWidthBreakpoint();
+            let heightBp: HeightBreakpoint = this.uiContext.getWindowHeightBreakpoint();
+            AppStorage.setOrCreate('currentWidthBreakpoint', widthBp);
+            AppStorage.setOrCreate('currentHeightBreakpoint', heightBp);
+            data.on('windowSizeChange', this.onWindowSizeChange);
             if (err.code) {
               hilog.error(0x0000, 'testTag',
                 `Failed to obtain the main window. Code is ${err.code},message is ${err.message}`);
