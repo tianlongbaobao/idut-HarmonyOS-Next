@@ -9,7 +9,11 @@
 
 ## **鸿蒙PC效果demo**
 
-https://github.com/tianlongbaobao/idut-HarmonyOS-Next/blob/5.1.0/demo.mp4
+
+
+https://github.com/user-attachments/assets/7a37d42e-5726-464f-bf5f-17d5f781a3ea
+
+
 
 ## **下载**
 
