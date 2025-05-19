@@ -5,7 +5,8 @@
 **版本功能已经于官方版持平**
 
 ## **致谢&后续版本维护**
-<img src="https://github.com/tianlongbaobao/idut-HarmonyOS-Next/blob/2.0.0/demo/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20241130183925.jpg" width="210px"><img src="https://github.com/tianlongbaobao/idut-HarmonyOS-Next/blob/3.1.0/demo/qq.jpg" width="210px">
+![screenshot_20250519_183332](https://github.com/user-attachments/assets/28fa356e-fc59-44a3-acfe-8f291050ceb1)
+<img src="https://github.com/tianlongbaobao/idut-HarmonyOS-Next/blob/3.1.0/demo/qq.jpg" width="210px">
 
 ## **鸿蒙PC效果demo**
 
