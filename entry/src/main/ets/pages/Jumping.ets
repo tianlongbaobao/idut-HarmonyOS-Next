@@ -119,41 +119,59 @@ struct Splash {
               }
             });
           promises.then((datas) => {
-            if ((datas.result).toString().includes("{\"ret\":-1,\"")) {
-              dataPreferences.putSync("gallery", "null")
-              router.pushUrl({
-                url: 'pages/Navigators',
-                params: {
-                  id1: password,
-                  id2: account,
-                  id4: mnvc,
-                  id5: dcz.data.verify,
-                  id6: "null"
-                }
-              }, router.RouterMode.Standard,
-              ).then(() => {
-              }).catch((err: BusinessError) => {
-                console.error(`无法跳转到第二页。错误码为${err.code}, 错误消息 ${err.message}`);
-              });
+            if (datas.responseCode = http.ResponseCode.OK) {
+              if ((datas.result).toString().includes("{\"ret\":-1,\"")) {
+                dataPreferences.putSync("gallery", "null")
+                router.pushUrl({
+                  url: 'pages/Navigators',
+                  params: {
+                    id1: password,
+                    id2: account,
+                    id4: mnvc,
+                    id5: dcz.data.verify,
+                    id6: "null"
+                  }
+                }, router.RouterMode.Standard,
+                ).then(() => {
+                }).catch((err: BusinessError) => {
+                  console.error(`无法跳转到第二页。错误码为${err.code}, 错误消息 ${err.message}`);
+                });
 
-            } else {
-              dataPreferences.putSync("gallery", (datas.result).toString())
-              router.pushUrl({
-                url: 'pages/Navigators',
-                params: {
-                  id1: password,
-                  id2: account,
-                  id4: mnvc,
-                  id5: dcz.data.verify,
-                  id6: (datas.result).toString()
-                }
-              }, router.RouterMode.Standard,
-              ).then(() => {
-              }).catch((err: BusinessError) => {
-                console.error(`无法跳转到第二页。错误码为${err.code}, 错误消息 ${err.message}`);
-              });
+              } else {
+                dataPreferences.putSync("gallery", (datas.result).toString())
+                router.pushUrl({
+                  url: 'pages/Navigators',
+                  params: {
+                    id1: password,
+                    id2: account,
+                    id4: mnvc,
+                    id5: dcz.data.verify,
+                    id6: (datas.result).toString()
+                  }
+                }, router.RouterMode.Standard,
+                ).then(() => {
+                }).catch((err: BusinessError) => {
+                  console.error(`无法跳转到第二页。错误码为${err.code}, 错误消息 ${err.message}`);
+                });
+              }
             }
-
+            else {
+              AlertDialog.show(
+                {
+                  message: '后端服务器异常',
+                  autoCancel: false,
+                  alignment: DialogAlignment.Bottom,
+                  gridCount: 5,
+                  offset: { dx: 0, dy: -20 },
+                  primaryButton: {
+                    value: '确认',
+                    action: () => {
+                    },
+                    fontColor:"red"
+                  },
+                }
+              )
+            }
           })
         })
         .catch(()=>{
@@ -177,9 +195,6 @@ struct Splash {
 
   }
 
-  /**
-   * 页面销毁时，清除定时器
-   */
   onDestroy() {
     this.num = 1;
     clearInterval(this.timeId);

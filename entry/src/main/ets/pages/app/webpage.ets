@@ -9,8 +9,10 @@ import fileIo from "@ohos.file.fs";
 import { common, ConfigurationConstant, Want } from "@kit.AbilityKit";
 import { fileUri } from "@kit.CoreFileKit";
 import mediaQuery from '@ohos.mediaquery'
+import {UPPayment,UPPayResult,UPPayResultCallback} from "libuppayment"
 import { cookiesync } from "../backrequest/cookiemanager";
 import { browserProxy } from "../utils/Browserproxy"
+import { util } from "@kit.ArkTS";
 import { Pay } from "@cashier_alipay/cashiersdk";
 
 interface mnv {
@@ -27,7 +29,6 @@ export struct webpage {
   @State DarkMode:WebDarkMode = WebDarkMode.Auto
   @State webagent:string =  "Mozilla/ 5.0 (Linux; Android 10; EBG Build/ HUAWEIEBG; wv) AppleWebKit/ 537.36 (KHTML, like Gecko) Version/ 4.0 Chrome/ 88.0.4324.93 Mobile Safari/ 537.36 weishao(3.3.0.74633)"
   @State dark:boolean = false
-  @State darkbutton:string = ""
   @State URI:string = ""
   @State url:string = ""
   @State name:string = "";
@@ -52,34 +53,18 @@ export struct webpage {
     if (this.darkmode) {
       this.dark = true
       this.DarkMode = WebDarkMode.On
-      this.darkbutton = "whitebutton.png"
-      this.menuItems[1].icon = "/resources/rawfile/whiterefresh.png"
-      this.menuItems[2].icon  = "/resources/rawfile/whiteshare.png"
-      this.menuItems[0].icon  = "/resources/rawfile/whitebrowser.png"
     } else {
       this.dark = false
       this.DarkMode = WebDarkMode.Off
-      this.darkbutton = "blackbutton.svg"
-      this.menuItems[1].icon = "/resources/rawfile/blackrefresh.png"
-      this.menuItems[2].icon = "/resources/rawfile/blackshare.svg"
-      this.menuItems[0].icon  = "/resources/rawfile/blackbrowser.png"
     }
   }
   onColorModeChange(){
     if (this.currentColorMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK){
       this.dark = true
       this.DarkMode = WebDarkMode.On
-      this.darkbutton = "whitebutton.png"
-      this.menuItems[1].icon = "/resources/rawfile/whiterefresh.png"
-      this.menuItems[2].icon  = "/resources/rawfile/whiteshare.png"
-      this.menuItems[0].icon  = "/resources/rawfile/whitebrowser.png"
     } else {
       this.dark = false
       this.DarkMode = WebDarkMode.Off
-      this.darkbutton = "blackbutton.svg"
-      this.menuItems[1].icon = "/resources/rawfile/blackrefresh.png"
-      this.menuItems[2].icon = "/resources/rawfile/blackshare.svg"
-      this.menuItems[0].icon  = "/resources/rawfile/blackbrowser.png"
     }
   }
   listener: mediaQuery.MediaQueryListener = mediaQuery.matchMediaSync('(dark-mode: true)')
@@ -135,7 +120,7 @@ export struct webpage {
   private menuItems: Array<NavigationMenuItem> = [
     {
       value:"browser",
-      icon:"/resources/rawfile/blackbrowser.png",
+      icon:$r("app.media.browser"),
       action:() =>{
         let context = getContext(this) as common.UIAbilityContext;
         let want: Want = {
@@ -144,21 +129,20 @@ export struct webpage {
           abilityName: 'MainAbility',
           uri: this.URI,
         };
-        console.log("want", want)
         context.startAbility(want)
       },
 
     },
     {
       value:"refresh",
-      icon:"/resources/rawfile/blackrefresh.png",
+      icon:$r("app.media.refresh"),
       action:() =>{
         this.controller.refresh()
       }
     },
     {
       value: "share",
-      icon: "/resources/rawfile/blackshare.svg",
+      icon: $r("app.media.share"),
       action: async () => {
         componentSnapshot.get("class1", {scale : 2, waitUntilRenderFinished : true})
           .then((pixmap: image.PixelMap) => {
@@ -213,17 +197,9 @@ export struct webpage {
     if (mediaQueryResult.matches as boolean) { // /系统为深色模式时为true，否则为false。
       this.dark = true
       this.DarkMode = WebDarkMode.On
-      this.darkbutton = "whitebutton.png"
-      this.menuItems[1].icon = "/resources/rawfile/whiterefresh.png"
-      this.menuItems[2].icon  = "/resources/rawfile/whiteshare.png"
-      this.menuItems[0].icon  = "/resources/rawfile/whitebrowser.png"
     } else {
       this.dark = false
       this.DarkMode = WebDarkMode.Off
-      this.darkbutton = "blackbutton.svg"
-      this.menuItems[1].icon = "/resources/rawfile/blackrefresh.png"
-      this.menuItems[2].icon = "/resources/rawfile/blackshare.svg"
-      this.menuItems[0].icon  = "/resources/rawfile/blackbrowser.png"
     }
   }
   aboutToAppear(): void {
@@ -243,17 +219,10 @@ export struct webpage {
     if (this.darkmode) {
       this.dark = true
       this.DarkMode = WebDarkMode.On
-      this.darkbutton = "whitebutton.png"
-      this.menuItems[1].icon = "/resources/rawfile/whiterefresh.png"
-      this.menuItems[2].icon  = "/resources/rawfile/whiteshare.png"
-      this.menuItems[0].icon  = "/resources/rawfile/whitebrowser.png"
+
     } else {
       this.dark = false
       this.DarkMode = WebDarkMode.Off
-      this.darkbutton = "blackbutton.svg"
-      this.menuItems[1].icon = "/resources/rawfile/blackrefresh.png"
-      this.menuItems[2].icon = "/resources/rawfile/blackshare.svg"
-      this.menuItems[0].icon  = "/resources/rawfile/blackbrowser.png"
     }
     this.listener.on('change', (mediaQueryResult: mediaQuery.MediaQueryResult) => {
       this.onDarkMode(mediaQueryResult)
@@ -342,12 +311,17 @@ export struct webpage {
               return true;
             }
             if (url.startsWith("upwrp://")) {
-              console.log("uppaywallet://uppay" + url.substring(20))
-              let  newStr = "uppaywallet://uppay" + url.substring(20);
-              (getContext() as common.UIAbilityContext).openLink(newStr)
-                .then(() => {
-                }).catch((err: BusinessError) => {
-              });
+              const  match  = url.match(/paydata=([^&]*)/);
+              let tn:string = match ? match[1] : ""
+              const helper = new util.Base64Helper()
+              let textDecoder: util.TextDecoder = util.TextDecoder.create();
+              const tn_s:string = textDecoder.decodeToString(helper.decodeSync(tn))
+              const matches = tn_s.match(/tn=(\d+)/);
+              const tnValue = matches ? matches[1] : null;
+              let context = getContext() as common.UIAbilityContext;
+              let mode = '00';
+              let upPayment = new UPPayment();
+              upPayment.startPay(tnValue,mode,'idut',context,'')
               return true;
             }
             if (!(url.startsWith("http") || url.startsWith("https"))) {

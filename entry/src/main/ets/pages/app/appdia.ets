@@ -45,12 +45,8 @@ struct appdia {
             .fontSize(22)
             .fontWeight(FontWeight.Bold)
             .margin({top:"3%"})
-          Button({ type: ButtonType.Circle, stateEffect: true }){
-            Image($r("app.media.ok"))
-              .height(30)
-              .borderRadius(35)
-          }
-          .backgroundColor($r('app.color.background'))
+          Button("完成")
+          .backgroundColor("red")
             .margin({
               top:"3%",right:"3%"
             })

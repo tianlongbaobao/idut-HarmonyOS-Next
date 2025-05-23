@@ -50,7 +50,6 @@ export class browserProxy{
       scanBarcode.startScanForResult(getContext(this), options).then((result: scanBarcode.ScanResult) => {
         const responseBean: ResponseBean = JSON.parse(JSON.stringify(result))
         let value: string = responseBean.originalValue
-        console.log(value)
         if (value.includes("whistle_info")) {
           let url: string = "";
           try {
@@ -110,7 +109,6 @@ export class browserProxy{
               }
             )
           } else {
-            console.log("有效的 URL:", url);
           }
         } else if (value.includes("qrLogin")) {
           router.pushUrl({

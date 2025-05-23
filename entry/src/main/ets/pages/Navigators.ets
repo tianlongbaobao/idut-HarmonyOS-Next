@@ -60,6 +60,7 @@ struct  Navigators {
   @State idc: number = 0
   @State darkmode:boolean = false
   @State @Watch('useragen')useragent:boolean = false
+  @State nologin:boolean = false
   @State navigationMainModifier: NavigationMainModifier = new NavigationMainModifier();
   controller: webview.WebviewController = new webview.WebviewController();
   private netCon: connection.NetConnection = connection.createNetConnection();
@@ -135,6 +136,7 @@ struct  Navigators {
   aboutToAppear(): void {
     let deviceTypeInfo: string = deviceinfo.deviceType;
     this.devicety = deviceTypeInfo
+    if (this.nologin == false) {
     if (gallery == "null") {
       AlertDialog.show(
         {
@@ -147,22 +149,22 @@ struct  Navigators {
             value: '确认',
             action: () => {
             },
-            fontColor:"red"
+            fontColor: "red"
           },
-          backgroundColor:$r('app.color.background')
+          backgroundColor: $r('app.color.background')
         }
       )
     } else {
-      let gaj:galleryres = JSON.parse(gallery)
-      if (gaj.errcode==0) {
+      let gaj: galleryres = JSON.parse(gallery)
+      if (gaj.errcode == 0) {
         for (let index = 0; index < gaj.data.carousel_gallery.length; index++) {
           this.swiperurl.push(gaj.data.carousel_gallery[index].url)
           this.swiperData.push(gaj.data.carousel_gallery[index].pic_uri)
-          console.log(gaj.data.carousel_gallery[index].url)
         }
 
       }
     }
+  }
     let paszl = pasz.split(",")
     let mn = 0
     for (let index = 0; index < paszl.length; index++) {
@@ -184,6 +186,26 @@ struct  Navigators {
         } else {
           this.doorlink = 0
         }
+      })
+      preferences.get("pcmode",'default').then((value)=>{
+        if (value=="default") {
+          this.useragent = false
+        } else if (value == "1"){
+          this.useragent = true
+        } else {
+          this.useragent = false
+        }
+
+      })
+      preferences.get("nologin",'default').then((value)=>{
+        if (value=="default") {
+          this.nologin = false
+        } else if (value == "1"){
+          this.nologin = true
+        } else {
+          this.nologin = false
+        }
+
       })
     }).catch((err:Error)=>{
 
@@ -442,6 +464,42 @@ struct  Navigators {
 
             ListItem() {
               Column() {
+                if (this.devicety=="2in1" || this.devicety=="tablet") {
+                  Row() {
+                    Text("免登录验证")
+                      .height(50)
+                      .fontSize(16)
+                      .fontColor($r('app.color.text'))
+                  }
+                  .margin({ top: "2%" })
+
+                  Flex({ direction: FlexDirection.Row, justifyContent: FlexAlign.SpaceEvenly,alignItems:ItemAlign.Center }) {
+                    Text("关闭轮播图")
+                      .margin({ right: "3%" })
+                      .fontSize(16)
+                      .fontColor($r('app.color.text'))
+                    Toggle({ type: ToggleType.Switch, isOn: this.nologin })
+                      .margin({ left: "55%" })
+                      .onChange((isOn: boolean) => {
+                        this.nologin = isOn
+                        dataPreferences.getPreferences(context, "information").then(preferences=>{
+                          if (this.nologin) {
+                            preferences.putSync("nologin","1")
+                          } else {
+                            preferences.putSync("nologin","0")
+                          }
+                          preferences.flush()
+                        }).catch((err:Error)=>{
+
+                        })
+                      })
+
+                  }
+                  .borderRadius(20)
+                  .backgroundColor($r("app.color.information"))
+                  .height(50)
+                  .margin({top:"4%"})
+                }
                 Row() {
                   Text("课表事项提醒")
                     .fontSize(16)
@@ -449,7 +507,8 @@ struct  Navigators {
                 }
                 .margin({top:"2%"})
 
-                Flex({ direction: FlexDirection.Row, justifyContent: FlexAlign.SpaceEvenly }) {
+
+                Flex({ direction: FlexDirection.Row, justifyContent: FlexAlign.SpaceEvenly,alignItems:ItemAlign.Center }) {
                   Text("PushKit提醒")
                     .margin({ right: "3%" })
                     .fontSize(16)
@@ -461,6 +520,10 @@ struct  Navigators {
                       PermissionsUtil.requestCameraPermission()
                     })
                 }
+                .borderRadius(20)
+                .backgroundColor($r("app.color.information"))
+                .height(50)
+                .margin({top:"5%"})
                 if (this.devicety!="2in1") {
                   Row() {
                     Text("开电子房门")
@@ -469,7 +532,7 @@ struct  Navigators {
                       .fontColor($r('app.color.text'))
                   }.margin({ top: "2%" })
 
-                  Flex({ direction: FlexDirection.Row, justifyContent: FlexAlign.SpaceEvenly }) {
+                  Flex({ direction: FlexDirection.Row, justifyContent: FlexAlign.SpaceEvenly ,alignItems:ItemAlign.Center}) {
                     Text("配置房门信息")
                       .margin({ right: "3%" })
                       .fontSize(16)
@@ -539,9 +602,13 @@ struct  Navigators {
 
                         })
                     })
-                  }.margin({top:"2%"})
+                  }
+                  .borderRadius(20)
+                  .backgroundColor($r("app.color.information"))
+                  .height(50)
+                  .margin({top:"5%"})
 
-                  Flex({ direction: FlexDirection.Row, justifyContent: FlexAlign.SpaceEvenly }) {
+                  Flex({ direction: FlexDirection.Row, justifyContent: FlexAlign.SpaceEvenly ,alignItems:ItemAlign.Center}) {
                     Text("开房门")
                       .margin({ right: "3%" })
                       .fontSize(16)
@@ -554,7 +621,6 @@ struct  Navigators {
                       .onClick(() => {
                         dataPreferences.getPreferences(context, "information").then(preferences => {
                           preferences.get("door", 'default').then((value) => {
-                            console.log(value + "")
                             if (value == "default") {
                               AlertDialog.show(
                                 {
@@ -582,7 +648,10 @@ struct  Navigators {
 
                         })
                       })
-                  }.margin({ top: "3%" })
+                  }.borderRadius(20)
+                  .backgroundColor($r("app.color.information"))
+                  .height(50)
+                  .margin({top:"5%"})
                 }
 
                 Row() {
@@ -593,7 +662,7 @@ struct  Navigators {
                 }
                 .margin({ top: "2%" })
 
-                Flex({ direction: FlexDirection.Row, justifyContent: FlexAlign.SpaceEvenly }) {
+                Flex({ direction: FlexDirection.Row, justifyContent: FlexAlign.SpaceEvenly ,alignItems:ItemAlign.Center}) {
                   Text("实况窗提醒")
                     .margin({ right: "3%" })
                     .fontSize(16)
@@ -603,6 +672,10 @@ struct  Navigators {
                     .onChange((isOn: boolean) => {
                     })
                 }
+                .borderRadius(20)
+                .backgroundColor($r("app.color.information"))
+                .height(50)
+                .margin({top:"5%"})
 
                 Row() {
                   Text("深色模式")
@@ -612,7 +685,7 @@ struct  Navigators {
                 }
                 .margin({ top: "2%" })
 
-                Flex({ direction: FlexDirection.Row, justifyContent: FlexAlign.SpaceEvenly }) {
+                Flex({ direction: FlexDirection.Row, justifyContent: FlexAlign.SpaceEvenly,alignItems:ItemAlign.Center }) {
                   Text("强制深色模式")
                     .margin({ right: "3%" })
                     .fontSize(16)
@@ -629,6 +702,10 @@ struct  Navigators {
                     })
 
                 }
+                .borderRadius(20)
+                .backgroundColor($r("app.color.information"))
+                .height(50)
+                .margin({top:"5%"})
                 if (this.devicety=="2in1" || this.devicety=="tablet") {
                   Row() {
                     Text("PC模式")
@@ -638,7 +715,7 @@ struct  Navigators {
                   }
                   .margin({ top: "2%" })
 
-                  Flex({ direction: FlexDirection.Row, justifyContent: FlexAlign.SpaceEvenly }) {
+                  Flex({ direction: FlexDirection.Row, justifyContent: FlexAlign.SpaceEvenly,alignItems:ItemAlign.Center }) {
                     Text("扩屏及UA标识符替换")
                       .margin({ right: "3%" })
                       .fontSize(16)
@@ -648,9 +725,25 @@ struct  Navigators {
                       .onChange((isOn: boolean) => {
                         this.pathStack.clear()
                         this.useragent = isOn
+                        dataPreferences.getPreferences(context, "information").then(preferences=>{
+                          if (this.useragent) {
+                            preferences.putSync("pcmode","1")
+                          } else {
+                            preferences.putSync("pcmode","0")
+                          }
+                          preferences.flush()
+                        }).catch((err:Error)=>{
+
+                        })
+
+
                       })
 
                   }
+                  .borderRadius(20)
+                  .backgroundColor($r("app.color.information"))
+                  .height(50)
+                  .margin({top:"5%"})
                 }
 
               }

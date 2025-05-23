@@ -144,193 +144,138 @@ export struct pageselfinformation {
     NavDestination() {
       Scroll() {
         Column() {
-          Flex({ justifyContent: FlexAlign.SpaceBetween }) {
+          Flex({ justifyContent: FlexAlign.SpaceBetween ,alignItems:ItemAlign.Center,direction: FlexDirection.Row}) {
             Text("头像")
-              .margin({ left: "5%", top: "4%" })
+              .margin({ left: "5%"})
               .fontSize(14)
               .fontColor($r('app.color.text'))
             Image(this.id_photo)
               .height(50)
               .margin({ right: "4%" })
-
           }
-          .margin({ top: "5%" })
           .backgroundColor($r('app.color.background'))
           .onClick(() => {
             getgallery(this.username, this.idc, this.verify, this.user_id)
           })
+          .borderRadius(20)
+          .backgroundColor($r("app.color.information"))
+          .height(70)
+          .margin({right:"5%",left:"5%",top:"5%"})
 
-          Flex({ justifyContent: FlexAlign.SpaceEvenly }) {
-            Divider()
-              .strokeWidth(1)
-              .lineCap(LineCapStyle.Square)
-              .margin({ top: "3%" })
-              .color($r('app.color.text'))
-          }.margin({ right: "8%", left: "8%" })
 
-          Flex({ justifyContent: FlexAlign.SpaceBetween }) {
+          Flex({ justifyContent: FlexAlign.SpaceBetween,alignItems:ItemAlign.Center,direction: FlexDirection.Row }) {
             Text("姓名")
-              .margin({ left: "5%", top: "4%" })
+              .margin({ left: "5%"})
               .fontSize(14)
               .fontColor($r('app.color.text'))
             Text(this.name)
-              .height("7%")
               .margin({ right: "4%" })
               .fontSize(14)
               .fontColor($r('app.color.text'))
 
           }
-          .margin({ top: "5%" })
-          .backgroundColor($r('app.color.background'))
+          .borderRadius(20)
+          .backgroundColor($r("app.color.information"))
+          .height(70)
+          .margin({right:"5%",left:"5%",top:"5%"})
 
-          Flex({ justifyContent: FlexAlign.SpaceEvenly }) {
-            Divider()
-              .strokeWidth(1)
-              .lineCap(LineCapStyle.Square)
-              .margin({ top: "3%" })
-              .color($r('app.color.text'))
-          }.margin({ right: "8%", left: "8%" })
 
-          Flex({ justifyContent: FlexAlign.SpaceBetween }) {
+          Flex({ justifyContent: FlexAlign.SpaceBetween,alignItems:ItemAlign.Center,direction: FlexDirection.Row }) {
             Text("昵称")
-              .margin({ left: "5%", top: "4%" })
+              .margin({ left: "5%" })
               .fontSize(14)
               .fontColor($r('app.color.text'))
             Text(this.nickname)
-              .height("7%")
               .margin({ right: "4%" })
               .fontSize(14)
               .fontColor("blue")
 
           }
-          .margin({ top: "5%" })
           .onClick(() => {
             this.dialogController.open()
 
           })
-          .backgroundColor($r('app.color.background'))
+          .borderRadius(20)
+          .backgroundColor($r("app.color.information"))
+          .height(70)
+          .margin({right:"5%",left:"5%",top:"5%"})
 
-          Flex({ justifyContent: FlexAlign.SpaceEvenly }) {
-            Divider()
-              .strokeWidth(1)
-              .lineCap(LineCapStyle.Square)
-              .margin({ top: "3%" })
-              .color($r('app.color.text'))
-          }.margin({ right: "8%", left: "8%" })
-
-          Flex({ justifyContent: FlexAlign.SpaceBetween }) {
+          Flex({ justifyContent: FlexAlign.SpaceBetween,alignItems:ItemAlign.Center,direction: FlexDirection.Row }) {
             Text("职工号/学号")
-              .margin({ left: "5%", top: "4%" })
+              .margin({ left: "5%"})
               .fontSize(14)
               .fontColor($r('app.color.text'))
             Text(this.username)
-              .height("7%")
               .margin({ right: "4%" })
               .fontSize(14)
               .fontColor($r('app.color.text'))
 
           }
-          .margin({ top: "5%" })
-          .backgroundColor($r('app.color.background'))
+          .borderRadius(20)
+          .backgroundColor($r("app.color.information"))
+          .height(70)
+          .margin({right:"5%",left:"5%",top:"5%"})
 
-          Flex({ justifyContent: FlexAlign.SpaceEvenly }) {
-            Divider()
-              .strokeWidth(1)
-              .lineCap(LineCapStyle.Square)
-              .margin({ top: "3%" })
-              .color($r('app.color.text'))
-          }.margin({ right: "8%", left: "8%" })
-
-          Flex({ justifyContent: FlexAlign.SpaceBetween }) {
+          Flex({ justifyContent: FlexAlign.SpaceBetween,alignItems:ItemAlign.Center,direction: FlexDirection.Row }) {
             Text("单位名称")
-              .margin({ left: "5%", top: "4%" })
+              .margin({ left: "5%" })
               .fontSize(14)
               .fontColor($r('app.color.text'))
             Text(this.org)
-              .height("7%")
-
               .margin({ right: "4%" })
               .fontSize(14)
               .fontColor($r('app.color.text'))
           }
-          .margin({ top: "5%" })
-          .backgroundColor($r('app.color.background'))
+          .borderRadius(20)
+          .backgroundColor($r("app.color.information"))
+          .height(70)
+          .margin({right:"5%",left:"5%",top:"5%"})
 
-          Flex({ justifyContent: FlexAlign.SpaceEvenly }) {
-            Divider()
-              .strokeWidth(1)
-              .lineCap(LineCapStyle.Square)
-              .margin({ top: "3%" })
-              .color($r('app.color.text'))
-          }.margin({ right: "8%", left: "8%" })
 
-          Flex({ justifyContent: FlexAlign.SpaceBetween }) {
+          Flex({ justifyContent: FlexAlign.SpaceBetween ,alignItems:ItemAlign.Center,direction: FlexDirection.Row}) {
             Text("身份类型")
-              .margin({ left: "5%", top: "4%" })
+              .margin({ left: "5%" })
               .fontSize(14)
               .fontColor($r('app.color.text'))
             Text(this.identity)
-              .height("7%")
-
               .margin({ right: "4%" })
               .fontSize(14)
               .fontColor($r('app.color.text'))
           }
-          .margin({ top: "5%" })
-          .backgroundColor($r('app.color.background'))
+          .borderRadius(20)
+          .backgroundColor($r("app.color.information"))
+          .height(70)
+          .margin({right:"5%",left:"5%",top:"5%"})
 
-          Flex({ justifyContent: FlexAlign.SpaceEvenly }) {
-            Divider()
-              .strokeWidth(1)
-              .lineCap(LineCapStyle.Square)
-              .margin({ top: "3%" })
-              .color($r('app.color.text'))
-          }.margin({ right: "8%", left: "8%" })
-
-          Flex({ justifyContent: FlexAlign.SpaceBetween }) {
+          Flex({ justifyContent: FlexAlign.SpaceBetween,alignItems:ItemAlign.Center,direction: FlexDirection.Row }) {
             Text("手机号")
-              .margin({ left: "5%", top: "4%" })
+              .margin({ left: "5%"})
               .fontSize(14)
               .fontColor($r('app.color.text'))
             Text(this.cellphone)
-              .height("7%")
-
               .margin({ right: "4%" })
               .fontSize(14)
               .fontColor($r('app.color.text'))
           }
-          .margin({ top: "5%" })
-          .backgroundColor($r('app.color.background'))
+          .borderRadius(20)
+          .backgroundColor($r("app.color.information"))
+          .height(70)
+          .margin({right:"5%",left:"5%",top:"5%"})
 
-          Flex({ justifyContent: FlexAlign.SpaceEvenly }) {
-            Divider()
-              .strokeWidth(1)
-              .lineCap(LineCapStyle.Square)
-              .margin({ top: "3%" })
-              .color($r('app.color.text'))
-          }.margin({ right: "8%", left: "8%" })
-
-          Flex({ justifyContent: FlexAlign.SpaceBetween }) {
+          Flex({ justifyContent: FlexAlign.SpaceBetween,alignItems:ItemAlign.Center,direction: FlexDirection.Row }) {
             Text("邮箱")
-              .margin({ left: "5%", top: "4%" })
+              .margin({ left: "5%" })
               .fontSize(14)
               .fontColor($r('app.color.text'))
             Text(this.email)
-              .height("7%")
               .fontSize(14)
               .margin({ right: "4%" })
               .fontColor($r('app.color.text'))
           }
-          .margin({ top: "5%" })
-          .backgroundColor($r('app.color.background'))
-
-          Flex({ justifyContent: FlexAlign.Start, alignItems: ItemAlign.Start }) {
-            Divider()
-              .strokeWidth(1)
-              .lineCap(LineCapStyle.Square)
-              .margin({ top: "3%" })
-              .color($r('app.color.text'))
-          }.margin({ right: "8%", left: "8%" })
+          .borderRadius(20)
+          .backgroundColor($r("app.color.information"))
+          .height(70)
+          .margin({right:"5%",left:"5%",top:"5%"})
         }
       }
     }

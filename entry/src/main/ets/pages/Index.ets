@@ -19,53 +19,50 @@ struct Index {
   }
   dialogController: CustomDialogController = new CustomDialogController({
     builder: PrivacyDialog({
-      cancel: ()=> { this.onCancel() },
-      confirm: ()=> { this.onAccept() },
+    password:this.password,account:this.account
     }),
-    autoCancel:true,
-    cancel: ()=> { this.onCancel()},
+    alignment: DialogAlignment.Bottom,
+    customStyle: true,
+    autoCancel: false,
+    cornerRadius:20,
   })
-
-
-  onCancel() {
-    console.info('Callback when the first button is clicked')
-  }
-  onAccept() {
-    LoginRequest(this.password.trim(), this.account.trim())
-    console.info('Callback when the second button is clicked')
-
-  }
   build() {
     Navigation(this.pathStack) {
-      Column() {
-        Image($rawfile('login.jpg'))
-          .syncLoad(true)
-          .width(150)
-          .margin({top:"15%"})
-        TextInput({ placeholder: '职工号/学号' }).margin({ top: "5%" })
-          .onChange((value: string) => {
-            this.account = value
-          })
-        TextInput({ placeholder: '密码' }).type(InputType.Password).margin({ top: "5%" })
-          .onChange((value: string) => {
-            this.password = value
-          })
-        Button('登录').width(150).margin({ top: "5%" })
-          .onClick(() => {
-            console.log(this.password.trim())
-            console.log(this.account.trim())
-            this.dialogController.open()
-          })
-        Text() {
-          Span('找回密码').fontColor("blue").onClick(() => {
-            this.pathStack.pushPath({ name: "找回密码" })
-          })
+      RelativeContainer() {
+        Column() {
+          Image($rawfile('login.jpg'))
+            .syncLoad(true)
+            .width(150)
+          TextInput({ placeholder: '职工号/学号' }).margin({ top: 30,left: "8%", right: "8%"  })
+            .onChange((value: string) => {
+              this.account = value
+            })
+            .constraintSize({
+              maxWidth:500
+            })
+          TextInput({ placeholder: '密码' }).type(InputType.Password).margin({ top: 50,left: "8%", right: "8%"  })
+            .onChange((value: string) => {
+              this.password = value
+            })
+            .constraintSize({
+              maxWidth:500
+            })
+          Button('登录').width(150).margin({ top: 50  })
+            .onClick(() => {
+              this.dialogController.open()
+            })
+          Text() {
+            Span('找回密码').fontColor("blue").onClick(() => {
+              this.pathStack.pushPath({ name: "找回密码" })
+            })
 
+          }
+          .margin({ top: 30,left: "8%", right: "8%"  })
         }
-        .margin({ top: "3%" })
+        .alignRules({center: { anchor: '__container__', align: VerticalAlign.Center },
+          middle: { anchor: '__container__', align: HorizontalAlign.Center }})
       }
-      .expandSafeArea([SafeAreaType.SYSTEM])
-      .margin({ left: "8%", right: "8%" })
+
     }
     .hideTitleBar(true)
     .mode(NavigationMode.Stack)

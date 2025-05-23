@@ -23,8 +23,6 @@ struct Classes {
         preferences.get("password", "default").then((ljc) => {
           account = String(value)
           password = String(ljc)
-          console.log(account)
-          console.log("account")
           api = [{ script: "username.value='" + account + "';password.value='" + password + "';submit.disabled='';submit.click()", scriptRules: ["*"] }]
         })
       })

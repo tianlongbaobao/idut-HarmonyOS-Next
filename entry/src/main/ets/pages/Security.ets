@@ -13,27 +13,33 @@ struct Security {
   }
   @State code:string = ""
   build() {
-    Column() {
-      Image($rawfile('login.jpg'))
-        .syncLoad(true)
-        .height("15%")
-      Text('安全验证').fontSize(25)
-        .fontWeight(FontWeight.Bold)
-        .margin({ top: "5%" })
-      Image(img)
-        .syncLoad(true)
-        .width(200)
-        .margin({ top: "8%" })
-      TextInput({ placeholder: '验证码' }).margin({ top: "10%" })
-        .onChange((value:string)=>{
-          this.code = value
-        })
+    RelativeContainer() {
+      Column() {
+        Image($rawfile('login.jpg'))
+          .syncLoad(true)
+          .height(150)
+        Text('安全验证').fontSize(25)
+          .fontWeight(FontWeight.Bold)
+          .margin({ top: "5%" })
+        Image(img)
+          .syncLoad(true)
+          .width(200)
+          .margin({ top: "8%" })
+        TextInput({ placeholder: '验证码' }).margin({ top: "10%" })
+          .onChange((value: string) => {
+            this.code = value
+          })
+          .constraintSize({
+            maxWidth:350
+          })
 
-      Button('确认').width(150).margin({ top: "10%" })
-        .onClick(() =>{
-          CodeRequest(password,account,this.code.trim())
-        })
-    }.margin({left:"8%",right:"8%"})
-
+        Button('确认').width(150).margin({ top: "10%" })
+          .onClick(() => {
+            CodeRequest(password, account, this.code.trim())
+          })
+      }.margin({ left: "8%", right: "8%" })
+      .alignRules({center: { anchor: '__container__', align: VerticalAlign.Center },
+        middle: { anchor: '__container__', align: HorizontalAlign.Center }})
+    }
   }
 }

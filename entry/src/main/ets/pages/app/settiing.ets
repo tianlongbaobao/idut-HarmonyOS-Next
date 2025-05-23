@@ -1,13 +1,42 @@
 import router from '@ohos.router';
 import dataPreferences from '@ohos.data.preferences';
 import {updatedata} from "../backrequest/Update"
+import { UpdateDialog } from './Update';
+import axios, { AxiosError, AxiosResponse } from '@ohos/axios';
+import { GitHubRelease } from '../utils/githubbean';
+import { http } from '@kit.NetworkKit';
+import { bundleManager } from '@kit.AbilityKit';
 
 let context = getContext(this)
 @Component
 export struct pagesettings {
+  @State name:string = ""
+  @State body:string = ""
+  @State version:string = ""
+  @State downurl:string = ""
   pathStack: NavPathStack = new NavPathStack();
+  commonSettingDialogController: CustomDialogController = new CustomDialogController({
+    builder: UpdateDialog({
+      name:this.name,
+      body:this.body,
+      download:this.downurl,
+      versionname:this.version
+    }),
+    alignment: DialogAlignment.Bottom,
+    customStyle: true,
+    autoCancel: false,
+    cornerRadius:20,
+
+  });
+  aboutToAppear(): void {
+    let bundleFlags = bundleManager.BundleFlag.GET_BUNDLE_INFO_DEFAULT
+    bundleManager.getBundleInfoForSelf(bundleFlags).then((data) => {
+      this.version = data.versionName
+    })
+  }
   build() {
     NavDestination() {
+      Scroll(){
       Column() {
         Image($r('app.media.start'))
           .syncLoad(true)
@@ -17,7 +46,7 @@ export struct pagesettings {
           .fontSize(18)
           .fontWeight(FontWeight.Bold)
           .fontColor($r("app.color.text"))
-        Text("版本号:6.0.0").margin({ top: "5%" })
+        Text("版本号:"+this.version).margin({ top: "5%" })
           .fontSize(15)
           .fontColor($r("app.color.text"))
         Text("ArkTS版").margin({ top: "5%" })
@@ -27,22 +56,54 @@ export struct pagesettings {
         }
         .color(Color.Blue)
         .margin({ top: "5%" })
+
         Hyperlink('https://luzhiyidut.cn/', '作者主页(校园网环境无法访问)') {
         }
         .color(Color.Blue)
         .margin({ top: "5%" })
+
         Button("检查更新")
           .margin({ top: "8%" })
           .backgroundColor("blue")
           .onClick(() => {
-            updatedata()
+            const httpRequest = http.createHttp();
+            let promises = httpRequest.request(
+              "https://api.github.com/repos/tianlongbaobao/idut-HarmonyOS-Next/releases/latest",
+              {
+                method: http.RequestMethod.GET,
+                connectTimeout: 60000,
+                readTimeout: 60000,
+              });
+            promises.then((res) => {
+              let details:GitHubRelease = JSON.parse(res.result.toString())
+              this.name = details.name
+              this.body = details.body
+              this.downurl = details.assets[0].browser_download_url
+              this.commonSettingDialogController.open()
+            }).catch(() => {
+              AlertDialog.show(
+                {
+                  message: '连接GitHub失败',
+                  autoCancel: false,
+                  alignment: DialogAlignment.Bottom,
+                  gridCount: 5,
+                  offset: { dx: 0, dy: -20 },
+                  primaryButton: {
+                    value: '确认',
+                    action: () => {
+                    },
+                    fontColor:"red"
+                  },
+                }
+              )
+            })
           })
           .width('80%')
         Button("退出登录")
           .margin({ top: "8%" })
           .backgroundColor("red")
           .onClick(() => {
-            dataPreferences.getPreferences(context, "information").then(preferences=>{
+            dataPreferences.getPreferences(context, "information").then(preferences => {
               preferences.delete("account")
               preferences.delete("password")
               preferences.delete("data")
@@ -54,18 +115,16 @@ export struct pagesettings {
               router.pushUrl({
                 url: 'pages/Index',
               })
-            }).catch((err:Error)=>{
+            }).catch((err: Error) => {
 
             })
 
           })
           .width('80%')
-        Text("此与i大工官方版无关，由校内独立开发者开发，方便在鸿蒙Next上使用相关服务，仅供交流！").margin({top:"80%",left:"10%",right:"10%"})
-          .fontSize(13)
-          .fontColor($r("app.color.text"))
 
       }
       .backgroundColor($r("app.color.background"))
+    }
     }
     .expandSafeArea([SafeAreaType.SYSTEM])
     .title("设置")

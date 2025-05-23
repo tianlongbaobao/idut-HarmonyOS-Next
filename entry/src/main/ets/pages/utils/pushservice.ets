@@ -85,7 +85,6 @@ export async function pushclass(con:boolean):Promise<void>{
                     }
                   })
                     .then((rmn: AxiosResponse) => {
-                      console.log(rmn.data)
                     })
                 })
               })
