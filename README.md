@@ -1,8 +1,9 @@
 # **原生鸿蒙i大工社区版**
 
-## **目前版本6.0.0**
+## **目前版本6.2.0**
 
-**版本功能已经于官方版持平**
+**版本功能已经于官方版持平：** 缺少家校通，积分兑换（即将淘汰不准备适配）
+
 
 ## **致谢&后续版本维护**
 <img src="https://github.com/user-attachments/assets/28fa356e-fc59-44a3-acfe-8f291050ceb1" width="210px"><img src="https://github.com/tianlongbaobao/idut-HarmonyOS-Next/blob/3.1.0/demo/qq.jpg" width="210px">
