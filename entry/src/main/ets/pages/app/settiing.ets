@@ -14,13 +14,24 @@ export struct pagesettings {
   @State body:string = ""
   @State version:string = ""
   @State downurl:string = ""
+  @State release:boolean = false
+  @State name_re:string = ""
+  @State body_re:string = ""
+  @State version_re:string = ""
+  @State downurl_re:string = ""
+  @State release_re:boolean = false
   pathStack: NavPathStack = new NavPathStack();
   commonSettingDialogController: CustomDialogController = new CustomDialogController({
     builder: UpdateDialog({
       name:this.name,
       body:this.body,
       download:this.downurl,
-      versionname:this.version
+      versionname:this.version,
+      release:this.release,
+      name_re:this.name_re,
+      body_re:this.body_re,
+      download_re:this.downurl_re,
+      release_re:this.release_re
     }),
     alignment: DialogAlignment.Bottom,
     customStyle: true,
@@ -68,18 +79,35 @@ export struct pagesettings {
           .onClick(() => {
             const httpRequest = http.createHttp();
             let promises = httpRequest.request(
-              "https://api.github.com/repos/tianlongbaobao/idut-HarmonyOS-Next/releases/latest",
+              "https://api.github.com/repos/tianlongbaobao/idut-HarmonyOS-Next/releases?per_page=1",
               {
                 method: http.RequestMethod.GET,
                 connectTimeout: 60000,
                 readTimeout: 60000,
               });
             promises.then((res) => {
-              let details:GitHubRelease = JSON.parse(res.result.toString())
-              this.name = details.name
-              this.body = details.body
-              this.downurl = details.assets[0].browser_download_url
-              this.commonSettingDialogController.open()
+              let details:GitHubRelease[] = JSON.parse(res.result.toString())
+              this.name = details[0].name
+              this.body = details[0].body
+              this.downurl = details[0].assets[0].browser_download_url
+              this.release = details[0].prerelease
+              let cda = httpRequest.request(
+                "https://api.github.com/repos/tianlongbaobao/idut-HarmonyOS-Next/releases/latest",
+                {
+                  method: http.RequestMethod.GET,
+                  connectTimeout: 60000,
+                  readTimeout: 60000,
+                }
+              )
+              cda.then((res)=>{
+                let details:GitHubRelease = JSON.parse(res.result.toString())
+                this.name_re = details.name
+                this.body_re = details.body
+                this.downurl_re = details.assets[0].browser_download_url
+                this.release_re = details.prerelease
+                this.commonSettingDialogController.open()
+              })
+
             }).catch(() => {
               AlertDialog.show(
                 {
@@ -111,6 +139,8 @@ export struct pagesettings {
               preferences.delete("gallery")
               preferences.delete("nowdata")
               preferences.delete("door")
+              preferences.delete("pcmode")
+              preferences.delete("nologin")
               preferences.flush()
               router.pushUrl({
                 url: 'pages/Index',
@@ -123,6 +153,7 @@ export struct pagesettings {
           .width('80%')
 
       }
+      .width("100%")
       .backgroundColor($r("app.color.background"))
     }
     }

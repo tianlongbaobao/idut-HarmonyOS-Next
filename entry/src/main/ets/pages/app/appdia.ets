@@ -10,6 +10,8 @@ let context = getContext(this)
 @Entry
 @Component
 struct appdia {
+  private Tabcontroller: TabsController = new TabsController();
+  @StorageProp('currentBreakpoint') curBp: string = 'sm';
   aboutToAppear(): void {
     let mn = 0
     let nowdatas = nowdata.split(",")
@@ -30,7 +32,7 @@ struct appdia {
   @State changeValue:string = ""
   build() {
       Column() {
-        Flex({ justifyContent: FlexAlign.SpaceBetween, alignItems: ItemAlign.Center }) {
+        Flex({ justifyContent: FlexAlign.SpaceBetween, alignItems: ItemAlign.Center,direction: FlexDirection.Row }) {
           Button({ type: ButtonType.Circle, stateEffect: true }) {
             Image($r("app.media.button"))
               .height(30)
@@ -80,26 +82,178 @@ struct appdia {
             .onChange((value: string) => {
               this.changeValue = value.trim()
             })
-            .margin(20)
+            .margin({top:20})
         }
         .height("8%")
-        .width("100%")
-        Scroll() {
-          Flex({ justifyContent: FlexAlign.Start, alignItems: ItemAlign.Start }) {
-            Column() {
-              ForEach(this.appll, (item: number) => {
-                if (appList[item].app_name.includes(this.changeValue)) {
-                    ChildItem({ item: item })
-                      .margin({ top: 15 })
+        Tabs({ barPosition: BarPosition.Start, controller: this.Tabcontroller }) {
+            TabContent() {
+              Column() {
+                Scroll() {
+                  Flex({
+                    justifyContent: FlexAlign.Start,
+                    alignItems: ItemAlign.Start,
+                    direction: FlexDirection.Column
+                  }) {
+                    ForEach(this.appll, (item: number) => {
+                      if (appList[item].app_name.includes(this.changeValue)) {
+                        ChildItem({ item: item })
+                          .margin({ top: 15 })
+                          .width("100%")
+                      }
+
+                    })
+
+                  }
                 }
+              }
+              .height("100%")
+            }.tabBar(SubTabBarStyle.of("全部"))
 
-              })
+            TabContent() {
+              Column() {
+                Scroll() {
+                  Flex({
+                    justifyContent: FlexAlign.Start,
+                    alignItems: ItemAlign.Start,
+                    direction: FlexDirection.Column
+                  }) {
+                    ForEach(this.appll, (item: number) => {
+                      if (appList[item].category == "study") {
+                        if (appList[item].app_name.includes(this.changeValue)) {
+                          ChildItem({ item: item })
+                            .margin({ top: 15 })
+                            .width("100%")
+                        }
+                      }
+
+                    })
+
+                  }
+                }
+              }.height("100%")
+            }.tabBar(SubTabBarStyle.of("学习"))
+            TabContent() {
+              Column() {
+                Scroll() {
+                  Flex({
+                    justifyContent: FlexAlign.Start,
+                    alignItems: ItemAlign.Start,
+                    direction: FlexDirection.Column
+                  }) {
+                    ForEach(this.appll, (item: number) => {
+                      if (appList[item].category == "life") {
+                        if (appList[item].app_name.includes(this.changeValue)) {
+                          ChildItem({ item: item })
+                            .margin({ top: 15 })
+                            .width("100%")
+                        }
+                      }
+
+                    })
+
+                  }
+                }
+              }.height("100%")
+            }.tabBar(SubTabBarStyle.of("生活"))
+            TabContent() {
+              Column() {
+                Scroll() {
+                  Flex({
+                    justifyContent: FlexAlign.Start,
+                    alignItems: ItemAlign.Start,
+                    direction: FlexDirection.Column
+                  }) {
+                    ForEach(this.appll, (item: number) => {
+                      if (appList[item].category == "office") {
+                        if (appList[item].app_name.includes(this.changeValue)) {
+                          ChildItem({ item: item })
+                            .margin({ top: 15 })
+                            .width("100%")
+                        }
+                      }
+
+                    })
+
+                  }
+                }
+              }.height("100%")
+            }.tabBar(SubTabBarStyle.of("工作"))
+            TabContent() {
+              Column() {
+                Scroll() {
+                  Flex({
+                    justifyContent: FlexAlign.Start,
+                    alignItems: ItemAlign.Start,
+                    direction: FlexDirection.Column
+                  }) {
+                    ForEach(this.appll, (item: number) => {
+                      if (appList[item].category == "life") {
+                        if (appList[item].app_name.includes(this.changeValue)) {
+                          ChildItem({ item: item })
+                            .margin({ top: 15 })
+                            .width("100%")
+                        }
+                      }
+
+                    })
+
+                  }
+                }
+              }
+              .height("100%")
+            }.tabBar(SubTabBarStyle.of("生活"))
+            TabContent() {
+              Column() {
+                Scroll() {
+                  Flex({
+                    justifyContent: FlexAlign.Start,
+                    alignItems: ItemAlign.Start,
+                    direction: FlexDirection.Column
+                  }) {
+                    ForEach(this.appll, (item: number) => {
+                      if (appList[item].category == "social") {
+                        if (appList[item].app_name.includes(this.changeValue)) {
+                          ChildItem({ item: item })
+                            .margin({ top: 15 })
+                            .width("100%")
+                        }
+                      }
+
+                    })
+
+                  }
+                  .constraintSize({ minHeight: '100%' })
+                }
+              }.height("100%")
+            }.tabBar(SubTabBarStyle.of("社交"))
+            TabContent() {
+              Column(){
+              Scroll() {
+                Flex({
+                  justifyContent: FlexAlign.Start,
+                  alignItems: ItemAlign.Start,
+                  direction: FlexDirection.Column
+                }) {
+                  ForEach(this.appll, (item: number) => {
+                    if (appList[item].category == "fun") {
+                      if (appList[item].app_name.includes(this.changeValue)) {
+                        ChildItem({ item: item })
+                          .margin({ top: 15 })
+                          .width("100%")
+                      }
+                    }
+
+                  })
+
+                }
+              }
+              }.height("100%")
+            }.tabBar(SubTabBarStyle.of("游戏"))
+            .height("100%")
             }
-          }
-          .margin({ left: "5%" })
-
-        }
-        .layoutWeight(1)
+            .barMode(BarMode.Scrollable)
+            .layoutWeight(1)
+        .vertical(this.curBp === 'lg')
 
       }
 
@@ -124,10 +278,6 @@ struct ChildItem{
   onCancel() {
     console.info('Callback when the first button is clicked')
   }
-  onAccept() {
-    console.info('Callback when the second button is clicked')
-
-  }
   build() {
       Row() {
         if (this.numberc == -1) {
@@ -143,7 +293,7 @@ struct ChildItem{
                 jksc.pop()
               }
             })
-            .margin({ right: "5%" })
+            .margin({right:"5%",left:"5%"})
         } else {
           Checkbox({ group: 'checkboxGroup' })
             .select(true)
@@ -158,7 +308,7 @@ struct ChildItem{
                 jksc.pop()
               }
             })
-            .margin({ right: "5%" })
+            .margin({right:"5%",left:"5%"})
         }
         Image(appList[this.item].icon)
           .borderRadius(25)

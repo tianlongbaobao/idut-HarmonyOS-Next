@@ -58,8 +58,8 @@ export struct pageself {
           .fontColor("black")
       }
       .alignItems(HorizontalAlign.Start)
-      .margin({left:"5%"})
-    }.margin({left:"6%",top:"1%"})
+      .margin({left:10})
+    }.margin({left:23,top:"1%"})
   }
   build() {
     NavDestination() {

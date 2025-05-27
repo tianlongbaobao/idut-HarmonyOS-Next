@@ -314,14 +314,13 @@ export struct webpage {
               const  match  = url.match(/paydata=([^&]*)/);
               let tn:string = match ? match[1] : ""
               const helper = new util.Base64Helper()
-              let textDecoder: util.TextDecoder = util.TextDecoder.create();
+              const  textDecoder: util.TextDecoder = util.TextDecoder.create();
               const tn_s:string = textDecoder.decodeToString(helper.decodeSync(tn))
               const matches = tn_s.match(/tn=(\d+)/);
               const tnValue = matches ? matches[1] : null;
               let context = getContext() as common.UIAbilityContext;
-              let mode = '00';
               let upPayment = new UPPayment();
-              upPayment.startPay(tnValue,mode,'idut',context,'')
+              upPayment.startPay(tnValue,"00",'idut',context,'04')
               return true;
             }
             if (!(url.startsWith("http") || url.startsWith("https"))) {
