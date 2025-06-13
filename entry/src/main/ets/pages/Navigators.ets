@@ -1,7 +1,6 @@
 import dataPreferences from '@ohos.data.preferences';
 import deviceinfo from '@ohos.deviceInfo';
 import { common, ConfigurationConstant } from '@kit.AbilityKit';
-import { NavigationModifier } from "@kit.ArkUI";
 import {responsebean} from "./utils/ResponseBean"
 import router from '@ohos.router';
 import window from '@ohos.window';
@@ -19,6 +18,11 @@ import { galleryres } from './utils/gallerybean';
 import { connection } from '@kit.NetworkKit';
 import { webpage } from './app/webpage';
 import { webview } from '@kit.ArkWeb';
+import { getnoticehistory } from './backrequest/NoticeHistory';
+import { relationalStore } from '@kit.ArkData';
+import { taskpool } from '@kit.ArkTS';
+import { queryall } from './utils/db';
+import { NoticeContentBean } from './utils/NoticeContentbean';
 
 
 const  account:string = (router.getParams() as Record<string, string>)['id2'];
@@ -35,17 +39,6 @@ interface mnv {
 
 
 let context = getContext(this)
-
-
-class NavigationMainModifier implements AttributeModifier<NavigationModifier> {
-  navigationMode: NavigationMode = NavigationMode.Auto;
-
-  // 成员变量navigationMode的值改变时，会自动调用此方法
-  applyNormalAttribute(instance: NavigationModifier): void {
-    instance.mode(this.navigationMode)
-  }
-}
-
 @Entry
 @Component
 struct  Navigators {
@@ -62,9 +55,10 @@ struct  Navigators {
   @State useragent:boolean = false
   @State nologin:boolean = false
   private Tabcontroller: TabsController = new TabsController();
-  controller: webview.WebviewController = new webview.WebviewController();
+  private controller: webview.WebviewController = new webview.WebviewController();
   private netCon: connection.NetConnection = connection.createNetConnection();
   private swiperController: SwiperController = new SwiperController()
+  private scroller: Scroller = new Scroller();
   @State swiperindex:number = 0
   @StorageProp('currentColorMode') @Watch('onColorModeChange') currentColorMode: number =
     ConfigurationConstant.ColorMode.COLOR_MODE_LIGHT;
@@ -77,6 +71,7 @@ struct  Navigators {
     url:"",
     name:""
   }
+  @State notice:Array<relationalStore.ValuesBucket> = []
   @State devicety:string = ""
   @StorageLink('currentWidthBreakpoint') windowWidth: number = 0;
   @StorageLink('currentHeightBreakpoint') windowHeight: number = 0;
@@ -112,38 +107,24 @@ struct  Navigators {
       });
     });
   }
-  aboutToAppear(): void {
+  noticetrans(item:relationalStore.ValuesBucket):NoticeContentBean[]{
+    let noticecontent:NoticeContentBean[] = JSON.parse(decodeURIComponent(`${item.CONTENT}`))
+    return noticecontent
+  }
+  timetrans(item:relationalStore.ValuesBucket):string{
+    let noticecontentdate = new Date(Number(`${item.TIME}`)*1000)
+    const year = noticecontentdate.getFullYear();
+    const month = (noticecontentdate.getMonth() + 1).toString().padStart(2, '0');
+    const day = noticecontentdate.getDate().toString().padStart(2, '0');
+    const hours = noticecontentdate.getHours().toString().padStart(2, '0');
+    const minutes = noticecontentdate.getMinutes().toString().padStart(2, '0');
+    const seconds = noticecontentdate.getSeconds().toString().padStart(2, '0');
+    let datestr:string=`${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
+    return datestr
+  }
+  async aboutToAppear(): Promise<void> {
     let deviceTypeInfo: string = deviceinfo.deviceType;
     this.devicety = deviceTypeInfo
-    if (this.nologin == false) {
-    if (gallery == "null") {
-      AlertDialog.show(
-        {
-          message: '无法获取轮播图',
-          autoCancel: false,
-          alignment: DialogAlignment.Bottom,
-          gridCount: 5,
-          offset: { dx: 0, dy: -20 },
-          primaryButton: {
-            value: '确认',
-            action: () => {
-            },
-            fontColor: "red"
-          },
-          backgroundColor: $r('app.color.background')
-        }
-      )
-    } else {
-      let gaj: galleryres = JSON.parse(gallery)
-      if (gaj.errcode == 0) {
-        for (let index = 0; index < gaj.data.carousel_gallery.length; index++) {
-          this.swiperurl.push(gaj.data.carousel_gallery[index].url)
-          this.swiperData.push(gaj.data.carousel_gallery[index].pic_uri)
-        }
-
-      }
-    }
-  }
     let paszl = pasz.split(",")
     let mn = 0
     for (let index = 0; index < paszl.length; index++) {
@@ -157,6 +138,9 @@ struct  Navigators {
         let data_c:responsebean = JSON.parse(String(value))
         this.nickname = data_c.data.my_info.nick_name
         this.head = data_c.data.my_info.head
+        if (this.nologin == false) {
+          getnoticehistory(data_c.data.my_info.identity,data_c.data.my_info.student_number,data_c.data.verify,data_c.data.my_info.user_id)
+        }
 
       })
       preferences.get("door",'default').then((value)=>{
@@ -189,10 +173,39 @@ struct  Navigators {
     }).catch((err:Error)=>{
 
     })
+    if (this.nologin == false) {
+      if (gallery == "null") {
+        AlertDialog.show(
+          {
+            message: '无法获取轮播图',
+            autoCancel: false,
+            alignment: DialogAlignment.Bottom,
+            gridCount: 5,
+            offset: { dx: 0, dy: -20 },
+            primaryButton: {
+              value: '确认',
+              action: () => {
+              },
+              fontColor: "red"
+            },
+            backgroundColor: $r('app.color.background')
+          }
+        )
+      } else {
+        let gaj: galleryres = JSON.parse(gallery)
+        if (gaj.errcode == 0) {
+          for (let index = 0; index < gaj.data.carousel_gallery.length; index++) {
+            this.swiperurl.push(gaj.data.carousel_gallery[index].url)
+            this.swiperData.push(gaj.data.carousel_gallery[index].pic_uri)
+          }
+
+        }
+      }
+      this.notice = await taskpool.execute(queryall, context) as Array<relationalStore.ValuesBucket>
+    }
 
 
   }
-
   @Builder
   PageMap(name: string) {
     if (name === "web"){
@@ -207,214 +220,307 @@ struct  Navigators {
       pageself()
     }
   }
+  @Builder
+  deleteItemAction(value: relationalStore.ValuesBucket) {
+    Flex({ direction: FlexDirection.Column, justifyContent: FlexAlign.Center, alignItems: ItemAlign.Center })  {
+      Image($r("app.media.delete"))
+          .height(25)
+      .onClick(() => {
+        this.notice = this.notice.filter(item => item !== value)
+        const STORE_CONFIG: relationalStore.StoreConfig= {
+          name: 'message.db', // 数据库文件名
+          securityLevel: relationalStore.SecurityLevel.S3, // 数据库安全级别
+          encrypt: false,
+          isReadOnly: false
+        };
+        relationalStore.getRdbStore(context, STORE_CONFIG, (err, store) => {
+          const valueBucket: relationalStore.ValuesBucket = {
+            'MSGID': `${value.MSGID}`,
+            'TIME': `${value.TIME}`,
+            'APPID': `${value.APPID}`,
+            'ISREAD': 1,
+            'TITLE': `${value.TITLE}`,
+            'CONTENT': `${value.CONTENT}`
+          };
+          let predicates = new relationalStore.RdbPredicates("NOTICE")
+          predicates.equalTo("MSGID", `${value.MSGID}`)
+          store.update(valueBucket, predicates, (err: BusinessError, rows: number) => {
+            if (err) {
+              console.info("Updated failed, err: " + err)
+              return
+            }
+            console.log("Updated row count: " + rows)
+          })
+        })
+      })
+    }
+  }
 
 
   build() {
     Navigation(this.pathStack) {
       Tabs({ barPosition: BarPosition.End, controller: this.Tabcontroller }) {
         TabContent() {
-          List({ space: 7 }) {
-            ListItem() {
-              RelativeContainer() {
+          Column() {
+            RelativeContainer() {
+              Row() {
+                Text("我的服务")
+                  .fontWeight(FontWeight.Bold)
+                  .fontSize(20)
+                  .fontColor($r('app.color.text'))
+              }
+
+              .alignRules({
+                'center': { 'anchor': '__container__', 'align': VerticalAlign.Center },
+                'middle': { 'anchor': '__container__', 'align': HorizontalAlign.Center }
+              })
+
+              if (this.devicety != "2in1") {
                 Row() {
-                  Text("我的服务")
-                    .fontWeight(FontWeight.Bold)
-                    .fontSize(20)
+                  Select([{ value: '扫一扫', icon: $rawfile("scancode.png") },
+                    { value: '虚拟卡', icon: $rawfile("vcard.png") }])
+                    .selected(this.index)
+                    .value("+")
                     .fontColor($r('app.color.text'))
-                    .margin({ top: "4%" })
-                }.justifyContent(FlexAlign.Center)
+                    .width("15%")
 
-                .alignRules({
-                  'center': { 'anchor': '__container__', 'align': VerticalAlign.Center },
-                  'middle': { 'anchor': '__container__', 'align': HorizontalAlign.Center }
-                })
-
-                if (this.devicety != "2in1") {
-                  Row() {
-                    Select([{ value: '扫一扫', icon: $rawfile("scancode.png") },
-                      { value: '虚拟卡', icon: $rawfile("vcard.png") }])
-                      .selected(this.index)
-                      .value("+")
-                      .fontColor($r('app.color.text'))
-                      .width("15%")
-                      .height("4%")
-                      .align(Alignment.End)
-                      .onSelect(async (index: number, text?: string | undefined) => {
-                        this.index = index;
-                        if (this.index == 1) {
-                          this.ncs.url = "https://card.m.dlut.edu.cn/virtualcardrj/openRjQrcodePage"
-                          this.ncs.name = "虚拟卡"
-                          this.pathStack.pushPathByName("web", this.ncs);
-                        } else if (this.index == 0) {
-                          let options: scanBarcode.ScanOptions = {
-                            scanTypes: [scanCore.ScanType.ALL],
-                            enableMultiMode: true,
-                            enableAlbum: true
-                          };
+                    .align(Alignment.End)
+                    .onSelect(async (index: number, text?: string | undefined) => {
+                      this.index = index;
+                      if (this.index == 1) {
+                        this.ncs.url = "https://card.m.dlut.edu.cn/virtualcardrj/openRjQrcodePage"
+                        this.ncs.name = "虚拟卡"
+                        this.pathStack.pushPathByName("web", this.ncs);
+                      } else if (this.index == 0) {
+                        let options: scanBarcode.ScanOptions = {
+                          scanTypes: [scanCore.ScanType.ALL],
+                          enableMultiMode: true,
+                          enableAlbum: true
+                        };
 
 
-                          interface ResponseBean {
-                            scanType: number;
-                            originalValue: string
-                          }
-
-                          scanBarcode.startScanForResult(getContext(this), options)
-                            .then((result: scanBarcode.ScanResult) => {
-                              const responseBean: ResponseBean = JSON.parse(JSON.stringify(result))
-                              let value: string = responseBean.originalValue
-                              if (value.includes("qrLogin")) {
-                                router.pushUrl({
-                                  url: 'pages/SSO',
-                                  params: {
-                                    id1: value
-                                  }
-                                })
-                              }
-                            })
+                        interface ResponseBean {
+                          scanType: number;
+                          originalValue: string
                         }
-                        this.index = -1
-                      })
-                  }.alignRules({
-                    'right': { 'anchor': '__container__', 'align': HorizontalAlign.End }
+
+                        scanBarcode.startScanForResult(getContext(this), options)
+                          .then((result: scanBarcode.ScanResult) => {
+                            const responseBean: ResponseBean = JSON.parse(JSON.stringify(result))
+                            let value: string = responseBean.originalValue
+                            if (value.includes("qrLogin")) {
+                              router.pushUrl({
+                                url: 'pages/SSO',
+                                params: {
+                                  id1: value
+                                }
+                              })
+                            }
+                          })
+                      }
+                      this.index = -1
+                    })
+                }.alignRules({
+                  'right': { 'anchor': '__container__', 'align': HorizontalAlign.End }
+                })
+                .padding({right:"3%"})
+              }
+            }
+            .height("7%")
+            .margin({top:"3%"})
+            List({ space: 7 }) {
+              ListItem() {
+                Column() {
+                  Swiper(this.swiperController) {
+                    ForEach(this.swiperData, (item: string) => {
+                      Image(item)
+                        .width('100%')
+                        .objectFit(ImageFit.Cover)
+                    })
+                  }
+                  .width('100%')
+                  .loop(true) // 循环播放
+                  .autoPlay(true) // 自动播放
+                  .interval(3000) // 3秒间隔
+                  .indicator(true) // 显示分页指示器
+                  .onChange((index: number) => {
+                    this.swiperindex = index
+                  })
+                  .onClick(() => {
+                    if (gallery != "null") {
+                      if (this.swiperurl[this.swiperindex] != "") {
+                        this.ncs.accounts = account
+                        this.ncs.passwords = password
+                        this.ncs.name = "轮播图"
+                        this.ncs.url = this.swiperurl[this.swiperindex]
+                        this.pathStack.pushPathByName("web", this.ncs);
+                      }
+
+                    }
+
                   })
                 }
               }
-              .height("5%")
 
-            }
-
-            ListItem() {
-              Flex({ wrap: FlexWrap.Wrap, justifyContent: FlexAlign.SpaceEvenly }) {
-                ForEach(this.appll, (item: number) => {
-                  ChildItem({ item: item, pathStack: this.pathStack, ncs: this.ncs })
-                    .margin({ top: 20 })
-                })
-              }
-            }
-
-            ListItem() {
-              Flex({ direction: FlexDirection.Row, justifyContent: FlexAlign.Center }) {
-                Button() {
-                  Text("编辑我的常用服务")
-                    .fontWeight(FontWeight.Bold)
-                    .fontColor("white")
-                    .fontSize(15)
+              ListItem() {
+                Flex({ wrap: FlexWrap.Wrap, justifyContent: FlexAlign.SpaceEvenly }) {
+                  ForEach(this.appll, (item: number) => {
+                    ChildItem({ item: item, pathStack: this.pathStack, ncs: this.ncs })
+                      .margin({ top: 20 })
+                  })
                 }
-                .height(30)
-                .width("80%")
-                .margin({ top: "5%" })
-                .onClick(() => {
-                  router.pushUrl(
-                    {
-                      url: "pages/app/appdia",
-                      params: {
-                        id3: this.appll.toString(),
+              }
+
+              ListItem() {
+                Flex({ direction: FlexDirection.Row, justifyContent: FlexAlign.Center }) {
+                  Button() {
+                    Text("编辑我的常用服务")
+                      .fontWeight(FontWeight.Bold)
+                      .fontColor("white")
+                      .fontSize(15)
+                  }
+                  .height(35)
+                  .width("80%")
+                  .margin({ top: "5%" })
+                  .padding({left:"8%",right:"8%"})
+                  .onClick(() => {
+                    router.pushUrl(
+                      {
+                        url: "pages/app/appdia",
+                        params: {
+                          id3: this.appll.toString(),
+                        }
                       }
-                    }
-                  )
-                })
+                    )
+                  })
+                }
               }
             }
+            .listDirection(Axis.Vertical)
+            .backgroundColor($r('app.color.background')).padding({ top: 20, bottom: 20 })
+            .layoutWeight(1)
           }
-          .listDirection(Axis.Vertical)
-          .backgroundColor($r('app.color.background')).padding(20)
         }
         .tabBar(BottomTabBarStyle.of($rawfile("icon_service_all.png"),"我的服务").labelStyle({font:{size:13}}))
         .align(Alignment.Top)
         TabContent() {
-          List({ space: 7 }) {
-            ListItem() {
-              Flex({ direction: FlexDirection.Row, justifyContent: FlexAlign.Center, alignItems: ItemAlign.End }) {
-                Text("消息通知")
-                  .fontWeight(FontWeight.Bold)
-                  .fontSize(20)
-                  .fontColor($r('app.color.text'))
-                  .margin({ top: "4%" })
-              }
-
+          Column() {
+            Flex({ direction: FlexDirection.Row, justifyContent: FlexAlign.Center, alignItems: ItemAlign.Center }) {
+              Text("消息通知")
+                .fontWeight(FontWeight.Bold)
+                .fontSize(20)
+                .fontColor($r('app.color.text'))
             }
+            .height("7%")
+            .margin({top:"3%"})
+            List({ initialIndex:this.notice.length , space: 7, scroller: this.scroller }) {
+              ForEach(this.notice, (item: relationalStore.ValuesBucket) => {
+                if (Number(`${item.ISREAD}`) == 0) {
+                  ListItem() {
+                    Column() {
+                      Flex({
+                        direction: FlexDirection.Row,
+                        justifyContent: FlexAlign.Center,
+                        alignItems: ItemAlign.Center
+                      }) {
+                        Text(this.timetrans(item))
+                          .fontSize(12)
+                      }.margin({ top: "8%" })
 
-            ListItem() {
-              Column() {
-                Swiper(this.swiperController) {
-                  ForEach(this.swiperData, (item: string) => {
-                    Image(item)
-                      .width('100%')
-                      .objectFit(ImageFit.Cover)
+                      ForEach(this.noticetrans(item), (noticesi: NoticeContentBean) => {
+                        Column() {
+                          Flex({
+                            direction: FlexDirection.Row,
+                            alignItems: ItemAlign.Start
+                          }) {
+                            Text(noticesi.title)
+                              .fontSize(15)
+                              .fontColor($r('app.color.text'))
+                          }
+                          .margin({ top: "5%", right: "5%", left: "5%" })
+
+                          if (noticesi.description.length != 0 && noticesi.description != "++") {
+                            Flex({
+                              direction: FlexDirection.Row,
+                              alignItems: ItemAlign.Start
+                            }) {
+                              Text(noticesi.description)
+                                .fontSize(10)
+                                .fontColor($r('app.color.text'))
+                            }
+                            .margin({
+                              top: "5%",
+                              right: "5%",
+                              left: "5%",
+                              bottom: "2%"
+                            })
+
+                          }
+                          if (noticesi.picurl != null) {
+                            Image(noticesi.picurl)
+                              .width("90%")
+                              .constraintSize({ maxHeight: 200 })
+                              .margin({
+                                top: "2%",
+                                right: "5%",
+                                left: "5%",
+                                bottom: "2%"
+                              })
+                          }
+                        }
+                        .backgroundColor($r("app.color.information"))
+                        .borderWidth(1)
+                        .borderRadius(15)
+                        .borderColor($r("app.color.tab"))
+                        .margin({ top: "2%", right: "2%", left: "2%" })
+                        .onClick(() => {
+                          if (noticesi.url != null) {
+                            this.ncs.accounts = account
+                            this.ncs.passwords = password
+                            this.ncs.name = "消息通知"
+                            this.ncs.url = noticesi.url
+                            this.pathStack.pushPathByName("web", this.ncs);
+                          }
+                        })
+                      })
+
+
+                    }
+
+                  }
+                  .swipeAction({
+                    end: {
+                      builder: () => {
+                        this.deleteItemAction(item)
+                      },
+                      actionAreaDistance: '56vp'
+                    },
+                    edgeEffect: SwipeEdgeEffect.None
                   })
                 }
-                .width('100%')
-                .loop(true) // 循环播放
-                .autoPlay(true) // 自动播放
-                .interval(3000) // 3秒间隔
-                .indicator(true) // 显示分页指示器
-                .onChange((index: number) => {
-                  this.swiperindex = index
-                })
-                .onClick(() => {
-                  if (gallery != "null") {
-                    this.ncs.accounts = account
-                    this.ncs.passwords = password
-                    this.ncs.name = "轮播图"
-                    this.ncs.url = this.swiperurl[this.swiperindex]
-                    this.pathStack.pushPathByName("web", this.ncs);
-                  }
-
-                })
-                .margin({ top: "5%" })
-              }
+              })
             }
-
-            ListItem() {
-              Flex({ direction: FlexDirection.Row, justifyContent: FlexAlign.Center, alignItems: ItemAlign.End }) {
-                Text("推送消息后端服务器未适配")
-                  .fontWeight(FontWeight.Bold)
-                  .fontSize(20)
-                  .fontColor($r('app.color.text'))
-              }.margin({ top: "30%" })
-
-            }
-
-            ListItem() {
-              Flex({ direction: FlexDirection.Row, justifyContent: FlexAlign.Center, alignItems: ItemAlign.End }) {
-                Text("敬请期待")
-                  .fontWeight(FontWeight.Bold)
-                  .fontSize(20)
-                  .fontColor($r('app.color.text'))
-              }.margin({ top: "8%" })
-            }
-
-            ListItem() {
-              Flex({ direction: FlexDirection.Row, justifyContent: FlexAlign.Center, alignItems: ItemAlign.End }) {
-                Text("适配后预计支持pushkit")
-                  .fontWeight(FontWeight.Bold)
-                  .fontSize(20)
-                  .fontColor($r('app.color.text'))
-              }.margin({ top: "6%" })
-            }
-
+            .onAppear(()=>{
+              this.scroller.scrollEdge(Edge.Bottom)
+            })
+            .listDirection(Axis.Vertical)
+            .backgroundColor($r('app.color.background')).padding(20)
+            .layoutWeight(1)
           }
-          .listDirection(Axis.Vertical)
-          .backgroundColor($r('app.color.background')).padding(20)
-
         }.tabBar(BottomTabBarStyle.of($rawfile("icon_service_office.png"),"消息通知").labelStyle({font:{size:13}}))
         .align(Alignment.Top)
 
         TabContent() {
-          Scroll() {
+          Column() {
+            Flex({ direction: FlexDirection.Row, justifyContent: FlexAlign.Center, alignItems: ItemAlign.Center }) {
+              Text("工具箱")
+                .fontWeight(FontWeight.Bold)
+                .fontSize(20)
+                .fontColor($r('app.color.text'))
+            }
+            .height("7%")
+            .margin({top:"3%"})
             List({ space: 7 }) {
-
-              ListItem() {
-                Flex({ direction: FlexDirection.Row, justifyContent: FlexAlign.Center, alignItems: ItemAlign.End }) {
-                  Text("工具箱")
-                    .fontWeight(FontWeight.Bold)
-                    .fontSize(20)
-                    .fontColor($r('app.color.text'))
-                    .margin({ top: "4%" })
-                }
-
-              }
-
               ListItem() {
                 Column() {
                   if (this.devicety == "2in1" || this.devicety == "tablet") {
@@ -508,9 +614,11 @@ struct  Navigators {
                         if (this.doorlink == 0) {
                           Image($rawfile("add.png"))
                             .height(20)
+                            .syncLoad(true)
                         } else {
                           Image($rawfile("deleted.png"))
                             .height(20)
+                            .syncLoad(true)
                         }
                       }
                       .backgroundColor($r('app.color.background'))
@@ -626,7 +734,7 @@ struct  Navigators {
                   }
 
                   Row() {
-                    Text("校园网提醒（开发区校区）（敬请期待）")
+                    Text("校园网（开发区校区）")
                       .height(50)
                       .fontSize(16)
                       .fontColor($r('app.color.text'))
@@ -638,13 +746,20 @@ struct  Navigators {
                     justifyContent: FlexAlign.SpaceEvenly,
                     alignItems: ItemAlign.Center
                   }) {
-                    Text("实况窗提醒")
+                    Text("监控面板")
                       .margin({ right: "3%" })
                       .fontSize(16)
                       .fontColor($r('app.color.text'))
-                    Toggle({ type: ToggleType.Switch })
-                      .margin({ left: "55%" })
-                      .onChange((isOn: boolean) => {
+                    Button('打开', { type: ButtonType.Capsule, stateEffect: false })
+                      .fontSize(13)
+                      .height(25)
+                      .margin({ left: "50%" })
+                      .onClick((event) => {
+                        this.ncs.accounts = account
+                        this.ncs.passwords = password
+                        this.ncs.name = "校园网状态监控"
+                        this.ncs.url = "http://172.20.30.3/"
+                        this.pathStack.pushPathByName("web", this.ncs);
                       })
                   }
                   .borderRadius(20)
@@ -731,27 +846,27 @@ struct  Navigators {
                   }
 
                 }
+
               }
             }
             .listDirection(Axis.Vertical)
             .backgroundColor($r('app.color.background')).padding(20)
-
+            .layoutWeight(1)
           }
+
         }.tabBar(BottomTabBarStyle.of($rawfile("icon_service_study.png"),"工具箱").labelStyle({font:{size:13}}))
         .align(Alignment.Top)
         TabContent() {
-          Scroll() {
+          Column(){
+            Flex({ direction: FlexDirection.Row, justifyContent: FlexAlign.Center, alignItems: ItemAlign.Center }) {
+              Text("个人中心")
+                .fontWeight(FontWeight.Bold)
+                .fontSize(20)
+                .fontColor($r('app.color.text'))
+            }
+            .height("7%")
+            .margin({top:"3%"})
             List({ space: 7 }) {
-              ListItem() {
-                Flex({ direction: FlexDirection.Row, justifyContent: FlexAlign.Center, alignItems: ItemAlign.End }) {
-                  Text("个人中心")
-                    .fontWeight(FontWeight.Bold)
-                    .fontSize(20)
-                    .fontColor($r('app.color.text'))
-                    .margin({ top: "4%" })
-                }
-              }
-
               ListItem() {
                 Flex({ direction: FlexDirection.Row, justifyContent: FlexAlign.Center, alignItems: ItemAlign.End }) {
                   Column() {
@@ -774,18 +889,18 @@ struct  Navigators {
                   Column() {
                     Button({ type: ButtonType.Circle, stateEffect: true }) {
                       Image($rawfile("icon_mine_account_safe.png"))
-                        .height("65%")
+                        .height("50%")
 
                     }
                     .onClick(() => {
                       this.ncs.url =
                         "https://portal.dlut.edu.cn/tp_core/h5?act=sys/uacm/profileResetPwd&filter=app&from=rj"
-                      this.ncs.name = "修改密码"
+                      this.ncs.name = "账号安全"
                       this.pathStack.pushPathByName("web", this.ncs);
                     })
                     .width(80).height(80).backgroundColor($r('app.color.background'))
 
-                    Text("修改密码").margin({ top: "1%" })
+                    Text("账号安全").margin({ top: "1%" })
                       .fontSize(15)
                       .fontColor($r('app.color.text'))
                   }
@@ -809,7 +924,7 @@ struct  Navigators {
                     Button({ type: ButtonType.Circle, stateEffect: true }) {
                       Image($rawfile("icon_mine_user_info.png"))
                         .borderRadius(35)
-                        .height("70%")
+                        .height("50%")
                     }
                     .onClick(() => {
                       this.pathStack.pushPath({ name: "个人资料" })
@@ -831,7 +946,7 @@ struct  Navigators {
                       Image($rawfile("icon_mine_setting.png"))
                         .borderRadius(35)
                         .height("50%")
-                        .width("50%")
+
                     }
                     .onClick(() => {
                       this.pathStack.pushPath({ name: "设置" })
@@ -879,6 +994,8 @@ struct  Navigators {
 
               }
             }
+
+            .layoutWeight(1)
             .listDirection(Axis.Vertical)
             .backgroundColor($r('app.color.background')).padding(20)
           }
@@ -886,7 +1003,9 @@ struct  Navigators {
         .align(Alignment.Top)
 
       }
+      .scrollable(false)
       .vertical(this.curBp === 'lg' && this.useragent == true)
+
     }
     .mode(this.useragent?NavigationMode.Stack:NavigationMode.Auto)
     .navDestination(this.PageMap)
@@ -902,7 +1021,6 @@ struct  Navigators {
     return true
   }
   onPageShow() {
-
     this.setImmersive();
 
   }
@@ -921,6 +1039,40 @@ struct ChildItem {
             .borderRadius(25)
             .height(45)
             .width(45)
+      }
+      .onClick(() => {
+        this.ncs.accounts = account
+        this.ncs.passwords = password
+        this.ncs.name = appList[this.item].app_name
+        this.ncs.url = appList[this.item].url
+        this.pathStack.pushPathByName("web", this.ncs);
+
+      })
+      .backgroundColor($r('app.color.background'))
+      Text(appList[this.item].app_name).margin({ top: "10%" })
+        .fontSize(11)
+        .fontWeight(FontWeight.Bold)
+        .fontColor($r('app.color.text'))
+
+    }.margin({ left: "2%" ,right:"2%"})
+    .height(70)
+    .width(70)
+  }
+
+}
+@Component
+struct NoticeItem {
+  @Prop item: number;
+  @Link pathStack:NavPathStack;
+  @Link ncs:mnv ;
+
+  build() {
+    Column() {
+      Button({ type: ButtonType.Circle, stateEffect: true }) {
+        Image(appList[this.item].icon)
+          .borderRadius(25)
+          .height(45)
+          .width(45)
       }
       .onClick(() => {
         this.ncs.accounts = account

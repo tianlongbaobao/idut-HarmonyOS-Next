@@ -1,8 +1,6 @@
 import router from '@ohos.router';
 import dataPreferences from '@ohos.data.preferences';
-import {updatedata} from "../backrequest/Update"
 import { UpdateDialog } from './Update';
-import axios, { AxiosError, AxiosResponse } from '@ohos/axios';
 import { GitHubRelease } from '../utils/githubbean';
 import { http } from '@kit.NetworkKit';
 import { bundleManager } from '@kit.AbilityKit';
@@ -131,7 +129,7 @@ export struct pagesettings {
           .margin({ top: "8%" })
           .backgroundColor("red")
           .onClick(() => {
-            dataPreferences.getPreferences(context, "information").then(preferences => {
+            dataPreferences.getPreferences(context, "information").then(async preferences => {
               preferences.delete("account")
               preferences.delete("password")
               preferences.delete("data")

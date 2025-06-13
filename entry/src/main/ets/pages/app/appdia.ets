@@ -11,6 +11,7 @@ let context = getContext(this)
 @Component
 struct appdia {
   private Tabcontroller: TabsController = new TabsController();
+  private scroller: Scroller = new Scroller();
   @StorageProp('currentBreakpoint') curBp: string = 'sm';
   aboutToAppear(): void {
     let mn = 0
@@ -87,8 +88,8 @@ struct appdia {
         .height("8%")
         Tabs({ barPosition: BarPosition.Start, controller: this.Tabcontroller }) {
             TabContent() {
-              Column() {
-                Scroll() {
+              Stack({ alignContent: Alignment.BottomEnd }) {
+                Scroll(this.scroller) {
                   Flex({
                     justifyContent: FlexAlign.Start,
                     alignItems: ItemAlign.Start,
@@ -105,8 +106,16 @@ struct appdia {
 
                   }
                 }
+                Flex({ direction: FlexDirection.Column, justifyContent: FlexAlign.End,alignItems:ItemAlign.End }) {
+                  Button('回到顶部')
+                    .height('5%')
+                    .onClick(() => { // 点击后回到顶部
+                      this.scroller.scrollEdge(Edge.Top)
+                    })
+                    .margin({right:"3%",bottom:"3%"})
+                }
+
               }
-              .height("100%")
             }.tabBar(SubTabBarStyle.of("全部"))
 
             TabContent() {

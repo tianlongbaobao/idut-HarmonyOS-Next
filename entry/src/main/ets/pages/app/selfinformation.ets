@@ -154,9 +154,6 @@ export struct pageselfinformation {
               .margin({ right: "4%" })
           }
           .backgroundColor($r('app.color.background'))
-          .onClick(() => {
-            getgallery(this.username, this.idc, this.verify, this.user_id)
-          })
           .borderRadius(20)
           .backgroundColor($r("app.color.information"))
           .height(70)
@@ -284,7 +281,6 @@ export struct pageselfinformation {
     .backgroundColor($r('app.color.background'))
     .onBackPressed(() => {
       const popDestinationInfo = this.pathStack.pop()
-      console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
       return true
     })
     .onReady((context: NavDestinationContext) => {

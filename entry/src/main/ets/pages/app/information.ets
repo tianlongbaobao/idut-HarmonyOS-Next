@@ -98,7 +98,6 @@ export struct pageinformation {
     }.title("联系我们")
     .onBackPressed(() => {
       const popDestinationInfo = this.pathStack.pop()
-      console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
       return true
     })
     .onReady((context: NavDestinationContext) => {

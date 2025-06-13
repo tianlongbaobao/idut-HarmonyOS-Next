@@ -40,6 +40,7 @@ export struct webpage {
   @Consume('pathInfos') pathStack: NavPathStack;
   @StorageProp('currentColorMode') @Watch('onColorModeChange') currentColorMode: number =
     ConfigurationConstant.ColorMode.COLOR_MODE_LIGHT;
+  @State progressvalue:number = 0
   useragents(){
     if (this.useragent) {
         this.webagent = "Mozilla/5.0 (PC; OpenHarmony 5.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36  ArkWeb/4.1.6.1"
@@ -267,6 +268,10 @@ export struct webpage {
   build() {
     NavDestination() {
       Column() {
+        if (this.progressvalue<100) {
+          Progress({ value: 0, total: 100, type: ProgressType.Linear })
+            .value(this.progressvalue)
+        }
         Web({
           src: this.url,
           controller: this.controller
@@ -279,6 +284,7 @@ export struct webpage {
           .darkMode(this.DarkMode)
           .forceDarkAccess(this.dark)
           .javaScriptOnDocumentEnd(this.js)
+          .password(false)
           .id("class1")
           .layoutMode(0)
           .javaScriptProxy({
@@ -291,9 +297,32 @@ export struct webpage {
           .onControllerAttached(() => {
             this.controller.setCustomUserAgent(this.webagent);
           })
+          .onProgressChange((event) => {
+            if (event) {
+              this.progressvalue = event.newProgress
+            }
+          })
           .onLoadIntercept((event) => {
             let data = event.data;
             let url:string = data.getRequestUrl();
+            if (url.startsWith("https://card.m.dlut.edu.cn/cardpay/autoRecharge?")){
+              AlertDialog.show(
+                {
+                  message: '自动充值请打开微信小程序i大工',
+                  autoCancel: false,
+                  alignment: DialogAlignment.Bottom,
+                  gridCount: 5,
+                  offset: { dx: 0, dy: -20 },
+                  primaryButton: {
+                    value: '确认',
+                    action: () => {
+                    },
+                    fontColor: "red"
+                  },
+                  backgroundColor: $r('app.color.background')
+                }
+              )
+            }
             if (url.includes("sso.dlut.edu.cn/cas/login?service=") || url.includes("webvpn.dlut.edu.cn%2Flogin%3Fcas_login%3Dtrue")){
               this.js = this.sso
             } else if (url.includes("webvpn.dlut.edu.cn/login")) {

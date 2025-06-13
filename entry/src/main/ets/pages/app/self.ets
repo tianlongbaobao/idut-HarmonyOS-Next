@@ -1,6 +1,6 @@
 import dataPreferences from '@ohos.data.preferences';
 import {responsebean} from "../utils/ResponseBean"
-import {PhotoBean} from "../utils/photobean"
+import {MsgResult} from "../utils/MSG"
 
 let context = getContext(this)
 @Component
@@ -26,10 +26,10 @@ export struct pageself {
         }else {
           this.backgroundurl= "https://store.m.dlut.edu.cn/group1/M00/00/08/ynZM2VkeWmeATT1oAAJ416V6N7k0520839"
         }
-        preferences.get("photo",'default').then((value)=>{
-          let photo_in:PhotoBean = JSON.parse(String(value))
-          this.id_photo = "data:image/png;base64," + photo_in.data.id_photo.replace(/\\\//g, "/")
-        })
+        let value_in = preferences.getSync("photo",'default')+""
+        console.log(value_in)
+        let photo_in:MsgResult = JSON.parse(String(value_in))
+        this.id_photo = "data:image/png;base64," + photo_in.data.id_photo.replace(/\\\//g, "/")
       })
     }).catch((err:Error)=>{
 
@@ -39,21 +39,22 @@ export struct pageself {
     Row() {
       Image(this.id_photo)
         .height("40%")
+        .syncLoad(true)
       Column(){
         Text("姓名:"+ this.name)
-          .fontSize(10)
+          .fontSize(12)
           .fontWeight(FontWeight.Bold)
           .fontColor("black")
         Blank()
           .height("7%")
         Text("学号:"+ this.username)
-          .fontSize(10)
+          .fontSize(12)
           .fontWeight(FontWeight.Bold)
           .fontColor("black")
         Blank()
           .height("7%")
         Text("院系:"+ this.org)
-          .fontSize(10)
+          .fontSize(12)
           .fontWeight(FontWeight.Bold)
           .fontColor("black")
       }
@@ -79,7 +80,6 @@ export struct pageself {
     .backgroundColor($r('app.color.background'))
     .onBackPressed(() => {
       const popDestinationInfo = this.pathStack.pop()
-      console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
       return true
     })
     .onReady((context: NavDestinationContext) => {
