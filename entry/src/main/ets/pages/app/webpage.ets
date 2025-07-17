@@ -32,6 +32,7 @@ export struct webpage {
   @State URI:string = ""
   @State url:string = ""
   @State name:string = "";
+  @Prop noaccount:string
   @State js: Array<ScriptItem> = []
   @Link @Watch("change") darkmode:boolean
   @Link vsf:mnv
@@ -245,7 +246,10 @@ export struct webpage {
     } else {
       this.js = this.api
     }
-    cookiesync()
+    if (this.noaccount == "0") {
+       cookiesync()
+    }
+    webview.WebviewController.prepareForPageLoad(this.url, true, 2);
   }
   onPageHide(): void {
     let context = getContext(this);
@@ -277,6 +281,11 @@ export struct webpage {
           controller: this.controller
         })
           .javaScriptAccess(true)
+          .onAppear(() => {
+            // Specify that the second parameter is true, which means to pre-connect. If it is false, the interface will only pre-resolve the URL.
+            // The third parameter is the number of socket to be pre-connected. A maximum of six are allowed.
+            webview.WebviewController.prepareForPageLoad(this.url, true, 2);
+          })
           .fileAccess(true)
           .imageAccess(true)
           .onlineImageAccess(true)

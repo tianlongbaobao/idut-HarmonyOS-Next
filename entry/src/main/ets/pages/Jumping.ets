@@ -129,7 +129,8 @@ struct Splash {
                     id2: account,
                     id4: mnvc,
                     id5: dcz.data.verify,
-                    id6: "null"
+                    id6: "null",
+                    id7:"0"
                   }
                 }, router.RouterMode.Standard,
                 ).then(() => {
@@ -146,7 +147,8 @@ struct Splash {
                     id2: account,
                     id4: mnvc,
                     id5: dcz.data.verify,
-                    id6: (datas.result).toString()
+                    id6: (datas.result).toString(),
+                    id7:"0"
                   }
                 }, router.RouterMode.Standard,
                 ).then(() => {

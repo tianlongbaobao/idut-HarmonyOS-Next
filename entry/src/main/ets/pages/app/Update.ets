@@ -36,10 +36,10 @@ export struct UpdateDialog {
         .margin({ top: 20, left: "5%" })
 
         Flex({ justifyContent: FlexAlign.SpaceEvenly, alignItems: ItemAlign.Center, direction: FlexDirection.Row }) {
-          Image($r('app.media.start'))
+          Image($r('app.media.alticon'))
             .syncLoad(true)
             .width(40)
-          Text("i大工社区版")
+          Text("DUT Box")
             .fontSize(18)
             .fontWeight(FontWeight.Bold)
             .fontColor($r("app.color.text"))
@@ -66,10 +66,10 @@ export struct UpdateDialog {
           .margin({ top: 20, left: "5%" })
 
           Flex({ justifyContent: FlexAlign.SpaceEvenly, alignItems: ItemAlign.Center, direction: FlexDirection.Row }) {
-            Image($r('app.media.start'))
+            Image($r('app.media.alticon'))
               .syncLoad(true)
               .width(40)
-            Text("i大工社区版")
+            Text("DUT Box")
               .fontSize(18)
               .fontWeight(FontWeight.Bold)
               .fontColor($r("app.color.text"))

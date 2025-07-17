@@ -15,7 +15,7 @@ struct Security {
   build() {
     RelativeContainer() {
       Column() {
-        Image($rawfile('login.jpg'))
+        Image($r("app.media.alticon"))
           .syncLoad(true)
           .height(150)
         Text('安全验证').fontSize(25)

@@ -1,7 +1,8 @@
 import { webview } from "@kit.ArkWeb";
 import { common } from '@kit.AbilityKit';
 import {PrivacyDialog} from "./Privacy"
-import {LoginRequest} from "./backrequest/Login"
+import { router } from "@kit.ArkUI";
+import { BusinessError } from "@kit.BasicServicesKit";
 
 
 @Entry
@@ -30,7 +31,7 @@ struct Index {
     Navigation(this.pathStack) {
       RelativeContainer() {
         Column() {
-          Image($rawfile('login.jpg'))
+          Image($r("app.media.alticon"))
             .syncLoad(true)
             .width(150)
           TextInput({ placeholder: '职工号/学号' }).margin({ top: 30,left: "8%", right: "8%"  })
@@ -51,10 +52,35 @@ struct Index {
             .onClick(() => {
               this.dialogController.open()
             })
-          Text() {
-            Span('找回密码').fontColor("blue").onClick(() => {
-              this.pathStack.pushPath({ name: "找回密码" })
-            })
+          Row() {
+            Text() {
+              Span('找回密码').fontColor("blue").onClick(() => {
+                this.pathStack.pushPath({ name: "找回密码" })
+              })
+
+            }
+            .margin({right:"5%"})
+
+            Text() {
+              Span('访客模式').fontColor("blue").onClick(() => {
+                router.pushUrl({
+                  url: 'pages/Navigators',
+                  params: {
+                    id1: "",
+                    id2: "",
+                    id4: "",
+                    id5: "",
+                    id6: "null",
+                    id7: "1"
+                  }
+                }, router.RouterMode.Standard,
+                ).then(() => {
+                }).catch((err: BusinessError) => {
+                  console.error(`无法跳转到第二页。错误码为${err.code}, 错误消息 ${err.message}`);
+                });
+              })
+
+            }.margin({left:"5%"})
 
           }
           .margin({ top: 30,left: "8%", right: "8%"  })

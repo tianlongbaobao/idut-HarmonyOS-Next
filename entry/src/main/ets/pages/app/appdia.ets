@@ -62,13 +62,15 @@ struct appdia {
                 let values = preferences.getSync('account', 'default');
                 let account = ""+values
                 let gallery = preferences.getSync("gallery","null")+""
+                let noaccount = preferences.getSync("noaccount","default")+""
                 router.pushUrl({
                   url: 'pages/Navigators',
                   params:{
                     id1:password,
                     id2:account,
                     id4:jksc.toString(),
-                    id6:gallery
+                    id6:gallery,
+                    id7:noaccount
                   }
                 })
               })
@@ -88,34 +90,36 @@ struct appdia {
         .height("8%")
         Tabs({ barPosition: BarPosition.Start, controller: this.Tabcontroller }) {
             TabContent() {
-              Stack({ alignContent: Alignment.BottomEnd }) {
-                Scroll(this.scroller) {
-                  Flex({
-                    justifyContent: FlexAlign.Start,
-                    alignItems: ItemAlign.Start,
-                    direction: FlexDirection.Column
-                  }) {
-                    ForEach(this.appll, (item: number) => {
-                      if (appList[item].app_name.includes(this.changeValue)) {
-                        ChildItem({ item: item })
-                          .margin({ top: 15 })
-                          .width("100%")
+                Stack({ alignContent: Alignment.BottomEnd }) {
+                  Column() {
+                    Scroll(this.scroller) {
+                      Flex({
+                        justifyContent: FlexAlign.Start,
+                        alignItems: ItemAlign.Start,
+                        direction: FlexDirection.Column
+                      }) {
+                        ForEach(this.appll, (item: number) => {
+                          if (appList[item].app_name.includes(this.changeValue)) {
+                            ChildItem({ item: item })
+                              .margin({ top: 15 })
+                              .width("100%")
+                          }
+                        })
                       }
+                    }
+                  }.height("100%")
 
-                    })
-
+                  Flex({ direction: FlexDirection.Column, justifyContent: FlexAlign.End, alignItems: ItemAlign.End }) {
+                    Button('回到顶部')
+                      .height('5%')
+                      .onClick(() => { // 点击后回到顶部
+                        this.scroller.scrollEdge(Edge.Top)
+                      })
+                      .margin({ right: "3%", bottom: "3%" })
                   }
-                }
-                Flex({ direction: FlexDirection.Column, justifyContent: FlexAlign.End,alignItems:ItemAlign.End }) {
-                  Button('回到顶部')
-                    .height('5%')
-                    .onClick(() => { // 点击后回到顶部
-                      this.scroller.scrollEdge(Edge.Top)
-                    })
-                    .margin({right:"3%",bottom:"3%"})
+
                 }
 
-              }
             }.tabBar(SubTabBarStyle.of("全部"))
 
             TabContent() {

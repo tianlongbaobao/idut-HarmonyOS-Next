@@ -595,17 +595,6 @@ export let appList:lidy[] = [
     "issubscription": 0
   },
   {
-    "id": 53,
-    "app_id": "74e66df77a9a3f7f",
-    "category": "life",
-    "app_name": "互帮互助",
-    "icon": "https://store.m.dlut.edu.cn/group1/M00/01/22/ynZM2VvyhUSAY2kwAAAguGXRhgI468.png",
-    "describe": "顺手带、借东西、图书交换、兼职工作、实习工作、联合创业都可以在互帮互助通过积分寻求帮助。你也可以通过此应用施助于人，并获取悬赏金积分。",
-    "popularity": "26403",
-    "url": "https://api.m.dlut.edu.cn/oauth/authorize?client_id=9qXqHnRQuhhViycC&redirect_uri=https%3a%2f%2flightapp.m.dlut.edu.cn%2fcheck%2fhelp&response_type=code&scope=base_api&state=dlut",
-    "issubscription": 0
-  },
-  {
     "id": 54,
     "app_id": "c02a69e148dfdef4",
     "category": "office",
@@ -889,17 +878,6 @@ export let appList:lidy[] = [
     "describe": "开课信息查询（教务系统）",
     "popularity": "16060060",
     "url": "https://webvpn.dlut.edu.cn/http/57787a7876706e323032336b6579402472000514b2079f5bbe02ff3c84f58629/student/ucas-sso/login?filter=app&from=rj",
-    "issubscription": 0
-  },
-  {
-    "id": 80,
-    "app_id": "3bdc684ff91b3049",
-    "category": "life",
-    "app_name": "校园网状态（校内访问）",
-    "icon": "https://store.m.dlut.edu.cn/group1/M00/00/5B/ynZM2VmyW9mAGzv_AAAXfJXYcgw8899921",
-    "describe": "CERNET网络监控，仅校园网内可以访问，实时显示校园网线路负载以及流量情况",
-    "popularity": "16060060",
-    "url": "file:///android_asset/Monitor.html",
     "issubscription": 0
   },
   {

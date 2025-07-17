@@ -15,20 +15,20 @@ import {pageinformation} from "./app/information"
 import {pagesettings} from "./app/settiing"
 import { pageselfinformation } from './app/selfinformation';
 import { galleryres } from './utils/gallerybean';
-import { connection } from '@kit.NetworkKit';
 import { webpage } from './app/webpage';
-import { webview } from '@kit.ArkWeb';
 import { getnoticehistory } from './backrequest/NoticeHistory';
 import { relationalStore } from '@kit.ArkData';
 import { taskpool } from '@kit.ArkTS';
 import { queryall } from './utils/db';
 import { NoticeContentBean } from './utils/NoticeContentbean';
+import { appupdate } from './backrequest/galleryupdate';
 
 
 const  account:string = (router.getParams() as Record<string, string>)['id2'];
 const  password:string = (router.getParams() as Record<string, string>)['id1'];
 const  pasz:string = (router.getParams() as Record<string, string>)['id4'];
 let gallery:string = (router.getParams() as Record<string, string>)['id6'];
+let  isnoaccount:string = (router.getParams() as Record<string, string>)['id7'];
 
 interface mnv {
   accounts: string
@@ -55,10 +55,9 @@ struct  Navigators {
   @State useragent:boolean = false
   @State nologin:boolean = false
   private Tabcontroller: TabsController = new TabsController();
-  private controller: webview.WebviewController = new webview.WebviewController();
-  private netCon: connection.NetConnection = connection.createNetConnection();
   private swiperController: SwiperController = new SwiperController()
   private scroller: Scroller = new Scroller();
+  @State noaccount:string = isnoaccount
   @State swiperindex:number = 0
   @StorageProp('currentColorMode') @Watch('onColorModeChange') currentColorMode: number =
     ConfigurationConstant.ColorMode.COLOR_MODE_LIGHT;
@@ -108,6 +107,7 @@ struct  Navigators {
     });
   }
   noticetrans(item:relationalStore.ValuesBucket):NoticeContentBean[]{
+    console.log(decodeURIComponent(`${item.CONTENT}`))
     let noticecontent:NoticeContentBean[] = JSON.parse(decodeURIComponent(`${item.CONTENT}`))
     return noticecontent
   }
@@ -133,12 +133,14 @@ struct  Navigators {
         mn=mn+1
       }
     }
+    appupdate()
     dataPreferences.getPreferences(context, "information").then(preferences=>{
+      preferences.putSync("noaccount",this.noaccount)
       preferences.get("data",'default').then((value)=>{
         let data_c:responsebean = JSON.parse(String(value))
         this.nickname = data_c.data.my_info.nick_name
         this.head = data_c.data.my_info.head
-        if (this.nologin == false) {
+        if (this.nologin == false || this.noaccount == "1") {
           getnoticehistory(data_c.data.my_info.identity,data_c.data.my_info.student_number,data_c.data.verify,data_c.data.my_info.user_id)
         }
 
@@ -173,7 +175,7 @@ struct  Navigators {
     }).catch((err:Error)=>{
 
     })
-    if (this.nologin == false) {
+    if (this.nologin == false && this.noaccount == "0") {
       if (gallery == "null") {
         AlertDialog.show(
           {
@@ -209,7 +211,7 @@ struct  Navigators {
   @Builder
   PageMap(name: string) {
     if (name === "web"){
-      webpage({darkmode:this.darkmode,vsf:this.ncs,useragent:this.useragent})
+      webpage({darkmode:this.darkmode,vsf:this.ncs,useragent:this.useragent,noaccount:this.noaccount})
     }else if (name === "作者信息") {
       pageinformation()
     }else if (name === "设置") {
@@ -274,7 +276,6 @@ struct  Navigators {
                 'center': { 'anchor': '__container__', 'align': VerticalAlign.Center },
                 'middle': { 'anchor': '__container__', 'align': HorizontalAlign.Center }
               })
-
               if (this.devicety != "2in1") {
                 Row() {
                   Select([{ value: '扫一扫', icon: $rawfile("scancode.png") },
@@ -283,7 +284,6 @@ struct  Navigators {
                     .value("+")
                     .fontColor($r('app.color.text'))
                     .width("15%")
-
                     .align(Alignment.End)
                     .onSelect(async (index: number, text?: string | undefined) => {
                       this.index = index;
@@ -297,13 +297,10 @@ struct  Navigators {
                           enableMultiMode: true,
                           enableAlbum: true
                         };
-
-
                         interface ResponseBean {
                           scanType: number;
                           originalValue: string
                         }
-
                         scanBarcode.startScanForResult(getContext(this), options)
                           .then((result: scanBarcode.ScanResult) => {
                             const responseBean: ResponseBean = JSON.parse(JSON.stringify(result))
@@ -361,7 +358,6 @@ struct  Navigators {
                   })
                 }
               }
-
               ListItem() {
                 Flex({ wrap: FlexWrap.Wrap, justifyContent: FlexAlign.SpaceEvenly }) {
                   ForEach(this.appll, (item: number) => {
@@ -474,7 +470,7 @@ struct  Navigators {
                         .borderColor($r("app.color.tab"))
                         .margin({ top: "2%", right: "2%", left: "2%" })
                         .onClick(() => {
-                          if (noticesi.url != null) {
+                          if (noticesi.url != "") {
                             this.ncs.accounts = account
                             this.ncs.passwords = password
                             this.ncs.name = "消息通知"
@@ -537,7 +533,7 @@ struct  Navigators {
                       justifyContent: FlexAlign.SpaceEvenly,
                       alignItems: ItemAlign.Center
                     }) {
-                      Text("关闭轮播图")
+                      Text("关闭轮播图和消息通知")
                         .margin({ right: "3%" })
                         .fontSize(16)
                         .fontColor($r('app.color.text'))
@@ -732,7 +728,39 @@ struct  Navigators {
                     .height(50)
                     .margin({ top: "5%" })
                   }
+                  Row() {
+                    Text("校园门户")
+                      .height(50)
+                      .fontSize(16)
+                      .fontColor($r('app.color.text'))
+                  }
+                  .margin({ top: "2%" })
 
+                  Flex({
+                    direction: FlexDirection.Row,
+                    justifyContent: FlexAlign.SpaceEvenly,
+                    alignItems: ItemAlign.Center
+                  }) {
+                    Text("免验证码进入")
+                      .margin({ right: "3%" })
+                      .fontSize(16)
+                      .fontColor($r('app.color.text'))
+                    Button('打开', { type: ButtonType.Capsule, stateEffect: false })
+                      .fontSize(13)
+                      .height(25)
+                      .margin({ left: "43%" })
+                      .onClick((event) => {
+                        this.ncs.accounts = account
+                        this.ncs.passwords = password
+                        this.ncs.name = "校园门户"
+                        this.ncs.url = "https://portal.dlut.edu.cn/"
+                        this.pathStack.pushPathByName("web", this.ncs);
+                      })
+                  }
+                  .borderRadius(20)
+                  .backgroundColor($r("app.color.information"))
+                  .height(50)
+                  .margin({ top: "5%" })
                   Row() {
                     Text("校园网（开发区校区）")
                       .height(50)
@@ -870,111 +898,84 @@ struct  Navigators {
               ListItem() {
                 Flex({ direction: FlexDirection.Row, justifyContent: FlexAlign.Center, alignItems: ItemAlign.End }) {
                   Column() {
-                    Image(this.head)
-                      .height(100)
-                      .borderRadius(35)
-                      .fillColor($r('app.color.background'))
-                    Text(this.nickname)
-                      .margin({ top: "3.5%" })
-                      .fontWeight(FontWeight.Bold)
-                      .fontSize(17)
-                      .fontColor($r('app.color.text'))
+                    if (this.noaccount == "0") {
+                      Image(this.head)
+                        .height(100)
+                        .borderRadius(35)
+                        .fillColor($r('app.color.background'))
+                      Text(this.nickname)
+                        .margin({ top: "3.5%" })
+                        .fontWeight(FontWeight.Bold)
+                        .fontSize(17)
+                        .fontColor($r('app.color.text'))
+                    }else {
+                      Text("访客")
+                        .margin({ top: "3.5%" })
+                        .fontWeight(FontWeight.Bold)
+                        .fontSize(17)
+                        .fontColor($r('app.color.text'))
+                    }
                   }
                   .margin({ top: "5%" })
+                }
+              }
+              if (this.noaccount == "0") {
+                ListItem() {
+                  Flex({ direction: FlexDirection.Row, justifyContent: FlexAlign.Center, alignItems: ItemAlign.End }) {
+                    Column() {
+                      Button({ type: ButtonType.Circle, stateEffect: true }) {
+                        Image($rawfile("icon_mine_setting.png"))
+                          .height("50%")
+
+                      }
+                      .onClick(() => {
+                        this.ncs.name = "设置"
+                        this.pathStack.pushPath({ name: "设置" })
+                      })
+                      .width(80).height(80).backgroundColor($r('app.color.background'))
+
+                      Text("设置").margin({ top: "1%" })
+                        .fontSize(15)
+                        .fontColor($r('app.color.text'))
+                    }
+
+                    Column() {
+                      Button({ type: ButtonType.Circle, stateEffect: true }) {
+                        Image($rawfile("icon_mine_card.png"))
+                          .height("50%")
+                      }
+                      .onClick(() => {
+                        this.pathStack.pushPath({ name: "个人证件" })
+                      })
+                      .width(80).height(80).backgroundColor($r('app.color.background'))
+
+                      Text("个人证件").margin({ top: "1%" })
+                        .fontSize(15)
+                        .fontColor($r('app.color.text'))
+                    }.margin({ left: "8%" })
+
+                    Column() {
+                      Button({ type: ButtonType.Circle, stateEffect: true }) {
+                        Image($rawfile("icon_mine_user_info.png"))
+                          .borderRadius(35)
+                          .height("50%")
+                      }
+                      .onClick(() => {
+                        this.pathStack.pushPath({ name: "个人资料" })
+                      })
+                      .width(80).height(80).backgroundColor($r('app.color.background'))
+
+                      Text("个人资料").margin({ top: "1%" })
+                        .fontSize(15)
+                        .fontColor($r('app.color.text'))
+                    }.margin({ left: "8%" })
+                  }.margin({ bottom: "3%" })
+
                 }
               }
 
               ListItem() {
                 Flex({ direction: FlexDirection.Row, justifyContent: FlexAlign.Center, alignItems: ItemAlign.End }) {
-                  Column() {
-                    Button({ type: ButtonType.Circle, stateEffect: true }) {
-                      Image($rawfile("icon_mine_account_safe.png"))
-                        .height("50%")
-
-                    }
-                    .onClick(() => {
-                      this.ncs.url =
-                        "https://portal.dlut.edu.cn/tp_core/h5?act=sys/uacm/profileResetPwd&filter=app&from=rj"
-                      this.ncs.name = "账号安全"
-                      this.pathStack.pushPathByName("web", this.ncs);
-                    })
-                    .width(80).height(80).backgroundColor($r('app.color.background'))
-
-                    Text("账号安全").margin({ top: "1%" })
-                      .fontSize(15)
-                      .fontColor($r('app.color.text'))
-                  }
-
-                  Column() {
-                    Button({ type: ButtonType.Circle, stateEffect: true }) {
-                      Image($rawfile("icon_mine_card.png"))
-                        .height("50%")
-                    }
-                    .onClick(() => {
-                      this.pathStack.pushPath({ name: "个人证件" })
-                    })
-                    .width(80).height(80).backgroundColor($r('app.color.background'))
-
-                    Text("个人证件").margin({ top: "1%" })
-                      .fontSize(15)
-                      .fontColor($r('app.color.text'))
-                  }.margin({ left: "8%" })
-
-                  Column() {
-                    Button({ type: ButtonType.Circle, stateEffect: true }) {
-                      Image($rawfile("icon_mine_user_info.png"))
-                        .borderRadius(35)
-                        .height("50%")
-                    }
-                    .onClick(() => {
-                      this.pathStack.pushPath({ name: "个人资料" })
-                    })
-                    .width(80).height(80).backgroundColor($r('app.color.background'))
-
-                    Text("个人资料").margin({ top: "1%" })
-                      .fontSize(15)
-                      .fontColor($r('app.color.text'))
-                  }.margin({ left: "8%" })
-                }.margin({ bottom: "3%" })
-
-              }
-
-              ListItem() {
-                Flex({ direction: FlexDirection.Row, justifyContent: FlexAlign.Center, alignItems: ItemAlign.End }) {
-                  Column() {
-                    Button({ type: ButtonType.Circle, stateEffect: true }) {
-                      Image($rawfile("icon_mine_setting.png"))
-                        .borderRadius(35)
-                        .height("50%")
-
-                    }
-                    .onClick(() => {
-                      this.pathStack.pushPath({ name: "设置" })
-                    })
-                    .width(80).height(80).backgroundColor($r('app.color.background'))
-
-                    Text("设置").margin({ top: "1%" })
-                      .fontSize(15)
-                      .fontColor($r('app.color.text'))
-                  }
-
-                  Column() {
-                    Button({ type: ButtonType.Circle, stateEffect: true }) {
-                      Image($rawfile("icon_mine_school_c_parent.png"))
-                        .height("50%")
-                    }
-                    .onClick(() => {
-                      this.ncs.url = "https://apps-xiaoyuan.m.dlut.edu.cn/explain"
-                      this.ncs.name = "家校通"
-                      this.pathStack.pushPathByName("web", this.ncs);
-                    })
-                    .width(80).height(80).backgroundColor($r('app.color.background'))
-
-                    Text("家校通").margin({ top: "1%" })
-                      .fontSize(15)
-                      .fontColor($r('app.color.text'))
-                  }.margin({ left: "8%" })
-
                   Column() {
                     Button({ type: ButtonType.Circle, stateEffect: true }) {
                       Image($rawfile("icon_mine_about.png"))
@@ -989,12 +990,11 @@ struct  Navigators {
                     Text("联系我们").margin({ top: "1%" })
                       .fontSize(15)
                       .fontColor($r('app.color.text'))
-                  }.margin({ left: "8%" })
+                  }
                 }.margin({ bottom: "3%" })
 
               }
             }
-
             .layoutWeight(1)
             .listDirection(Axis.Vertical)
             .backgroundColor($r('app.color.background')).padding(20)

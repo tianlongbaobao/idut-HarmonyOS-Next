@@ -47,18 +47,15 @@ export struct pagesettings {
     NavDestination() {
       Scroll(){
       Column() {
-        Image($r('app.media.start'))
+        Image($r('app.media.alticon'))
           .syncLoad(true)
           .width(100)
           .margin({ top: "15%" })
-        Text("i大工社区版").margin({ top: "5%" })
+        Text("DUT Box").margin({ top: "5%" })
           .fontSize(18)
           .fontWeight(FontWeight.Bold)
           .fontColor($r("app.color.text"))
         Text("版本号:"+this.version).margin({ top: "5%" })
-          .fontSize(15)
-          .fontColor($r("app.color.text"))
-        Text("ArkTS版").margin({ top: "5%" })
           .fontSize(15)
           .fontColor($r("app.color.text"))
         Hyperlink('https://github.com/tianlongbaobao/idut-HarmonyOS-Next', 'Github源码') {
