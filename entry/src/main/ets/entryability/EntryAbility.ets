@@ -379,11 +379,13 @@ export default class EntryAbility extends UIAbility {
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onWindowStageCreate');
     dataPreferences.getPreferences(this.context, "information").then(preferences=>{
       preferences.get("account",'default').then((value)=>{
+        let noaccount:string = preferences.getSync("noaccount","default")+""
+        console.log(noaccount)
         let path: string | undefined = 'page/Index';
         if (this.funcAbilityWant?.parameters?.shortCutKey === 'CompanyPage') {
           path = 'pages/Vcard';
         }
-        if (value == 'default') {
+        if (value == 'default' && noaccount!="1") {
           path = "pages/Index"
         } else  {
           switch (this.selectPage) {
@@ -450,7 +452,6 @@ export default class EntryAbility extends UIAbility {
   }
 
   onConfigurationUpdate(newConfig: Configuration): void {
-
     let newColorMode = newConfig.colorMode;
     let currentColorMode = AppStorage.get<ConfigurationConstant.ColorMode>('currentColorMode');
     if (newColorMode === currentColorMode) {
