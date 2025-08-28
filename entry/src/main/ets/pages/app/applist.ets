@@ -37,11 +37,11 @@ export let appList:lidy[] = [
     "id": 2,
     "app_id": "f8df3d5f67fa5048",
     "category": "life",
-    "app_name": "图书馆预约",
-    "icon": "https://store.m.dlut.edu.cn/group1/M00/02/03/ynZM2V8hIHuAakGbAABHogF7lj8252.png",
-    "describe": "图书馆入馆预约系统为读者提供座位和研修间的预约使用服务，请读者按图书馆的座位和研修间的使用规则合理预约使用空间资源。",
+    "app_name": "智慧图书馆",
+    "icon": "https://store.m.dlut.edu.cn/group1/M00/06/D4/ynZM2WitIOKAIEhiAACo7L558s4846.png",
+    "describe": "智慧图书馆服务平台集虚拟导览、资源检索、图书定位、座位预约、研修间预约、存包柜预约等服务于一体。请读者按图书馆资源使用规则合理使用该服务。负责单位：图书馆，联系电话：84707459",
     "popularity": "13430254",
-    "url": "https://sso.dlut.edu.cn/cas/login?from=rj&service=https%3A%2F%2Fsso.dlut.edu.cn%2Fcas%2Flogin%3Fservice%3Dhttp%253A%252F%252Fseat.lib.dlut.edu.cn%252Fyanxiujian%252Fclient%252Flogin.php%253Fredirect%253Dindex.php",
+    "url": "https://smart.lib.dlut.edu.cn/caslogin/",
     "issubscription": 0
   },
   {
@@ -107,7 +107,7 @@ export let appList:lidy[] = [
     "icon": "https://store.m.dlut.edu.cn/group1/M00/00/09/ynZM2VlnDrGAZ4zkAAAXPSNRMjc4254667",
     "describe": "负责迎新教师可以查看接站信息、花名册、报到率、绿色通道情况；新入学的同学可以查看自己室友、同班同学、迎新快讯、迎新通知；",
     "popularity": "2721606",
-    "url": "http://yxxt.dlut.edu.cn:8080/yx/login/app/sso?from=rj",
+    "url": "https://dutyx.dlut.edu.cn/ydyx/",
     "issubscription": 0
   },
   {
@@ -195,7 +195,7 @@ export let appList:lidy[] = [
     "icon": "https://store.m.dlut.edu.cn/group1/M00/00/09/ynZM2VlVDfOAH_FlAAAQiDCdlzs0313949",
     "describe": "图书借阅、委托、账目清单、遗失赔偿信息查询",
     "popularity": "769498",
-    "url": "https://sso.dlut.edu.cn/cas/login?service=https%3A%2F%2Fopac.lib.dlut.edu.cn%3A443%2Fmeta-local%2Fopac%2Fcas%2Frosetta&from=rj",
+    "url": "https://opac.lib.dlut.edu.cn/meta-local/opac/cas/rosetta",
     "issubscription": 0
   },
   {
@@ -1073,9 +1073,42 @@ export let appList:lidy[] = [
     "category": "life",
     "app_name": "AI助手",
     "icon": "https://store.m.dlut.edu.cn/group1/M00/06/97/ynZM2WfPmFSAcprQAAB3VcnibJY401.png",
-    "describe": "\u200C“i大工”校园AI助手\u200C基于满血版DeepSeek大模型构建，深度融合校内知识库与实时搜索技术，为师生提供精准高效的校园服务。仅限校园网内使用。",
+    "describe": "i大工校园AI助手基于满血版DeepSeek大模型构建，深度融合校内知识库与实时搜索技术，为师生提供精准高效的校园服务。仅限校园网内使用。",
     "popularity": "5319",
     "url": "https://webvpn.dlut.edu.cn/http/57787a7876706e323032336b657940247b10030cb2079f5bbe02ff3c84f58629/page/site/newPc?app=1",
     "issubscription": 0
-  }
+  },
+  {
+    "id": 99,
+    "app_id": "65ef05d6bc24023b",
+    "category": "study",
+    "app_name": "经管学院考勤系统",
+    "icon": "https://store.m.dlut.edu.cn/group1/M00/06/94/ynZM2We9ePCALL1tAAAN_zNSW3w783.png",
+    "describe": "用于经管学院研究生、博士后考勤。",
+    "popularity": "5319",
+    "url": "https://webvpn.dlut.edu.cn/http/57787a7876706e323032336b657940246b1d0f13ed4d9742bf58b43d95aecb2475/ssoOauth?from=rj&filter=app",
+    "issubscription": 0
+  },
+  {
+    "id": 100,
+    "app_id": "023ce08a4e6ba04f",
+    "category": "office",
+    "app_name": "WPS云文档",
+    "icon": "https://store.m.dlut.edu.cn/group1/M00/06/A6/ynZM2WhSFSaAVuCqAAAZBqQdKaI851.png",
+    "describe": "WPS云文档",
+    "popularity": "5319",
+    "url": "https://open.wps.cn/oauth/v1/auth?app_id=CN20240913MJNKUL&cb=https%3A%2F%2Fkdocs.cn",
+    "issubscription": 0
+  },
+  {
+    "id": 101,
+    "app_id": "376cfa23bd660be6",
+    "category": "office",
+    "app_name": "共享电动自行车管理",
+    "icon": "https://store.m.dlut.edu.cn/group1/M00/06/6C/ynZM2WbO3lyADQAUAAAokmyy1Jc080.png",
+    "describe": "加强安全教育，提高安全意识，规范共享电动自行车骑行行为",
+    "popularity": "5319",
+    "url": "https://webvpn.dlut.edu.cn/http/57787a7876706e323032336b6579402429484c40b252c019e41dad69/cas/mtBicycle",
+    "issubscription": 0
+  },
 ]
