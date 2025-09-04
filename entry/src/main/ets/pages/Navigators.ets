@@ -22,6 +22,7 @@ import { taskpool } from '@kit.ArkTS';
 import { queryall } from './utils/db';
 import { NoticeContentBean } from './utils/NoticeContentbean';
 import { appupdate } from './backrequest/galleryupdate';
+import { DetailDialog } from './app/detaildia';
 
 
 const  account:string = (router.getParams() as Record<string, string>)['id2'];
@@ -64,6 +65,7 @@ struct  Navigators {
   @Provide('pathInfos') pathStack: NavPathStack = new NavPathStack();
   @StorageProp('currentBreakpoint') curBp: string = 'sm';
   @State nav:NavigationMode = NavigationMode.Auto
+  private  servicetab:TabsController = new TabsController()
   @State ncs:mnv = {
     passwords:password,
     accounts:account,
@@ -74,6 +76,9 @@ struct  Navigators {
   @State devicety:string = ""
   @StorageLink('currentWidthBreakpoint') windowWidth: number = 0;
   @StorageLink('currentHeightBreakpoint') windowHeight: number = 0;
+  private searchcontroller: SearchController = new SearchController()
+  @State changeValue:string = ""
+  @State applist:number[] = []
   onColorModeChange() {
     if (this.currentColorMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK) {
       this.darkmode = true
@@ -133,6 +138,9 @@ struct  Navigators {
         mn=mn+1
       }
     }
+    for (let index = 0;index < appList.length;index++){
+      this.applist[index] = index
+    }
     appupdate()
     dataPreferences.getPreferences(context, "information").then(preferences=>{
       preferences.putSync("noaccount",this.noaccount)
@@ -172,6 +180,7 @@ struct  Navigators {
         }
 
       })
+      preferences.flush()
     }).catch((err:Error)=>{
 
     })
@@ -276,7 +285,7 @@ struct  Navigators {
                 'center': { 'anchor': '__container__', 'align': VerticalAlign.Center },
                 'middle': { 'anchor': '__container__', 'align': HorizontalAlign.Center }
               })
-              if (this.devicety != "2in1") {
+              if (this.devicety != "2in1" && this.devicety!="tv") {
                 Row() {
                   Select([{ value: '扫一扫', icon: $rawfile("scancode.png") },
                     { value: '虚拟卡', icon: $rawfile("vcard.png") }])
@@ -397,7 +406,7 @@ struct  Navigators {
             .layoutWeight(1)
           }
         }
-        .tabBar(BottomTabBarStyle.of($rawfile("icon_service_all.png"),"我的服务").labelStyle({font:{size:13}}))
+        .tabBar(BottomTabBarStyle.of($rawfile("icon_service_life.png"),"我的服务").labelStyle({font:{size:13}}))
         .align(Alignment.Top)
         TabContent() {
           Column() {
@@ -505,6 +514,198 @@ struct  Navigators {
           }
         }.tabBar(BottomTabBarStyle.of($rawfile("icon_service_office.png"),"消息通知").labelStyle({font:{size:13}}))
         .align(Alignment.Top)
+        TabContent(){
+          Column(){
+            Flex({ direction: FlexDirection.Row, justifyContent: FlexAlign.Center, alignItems: ItemAlign.Center }) {
+              Text("服务大厅")
+                .fontWeight(FontWeight.Bold)
+                .fontSize(20)
+                .fontColor($r('app.color.text'))
+            }
+            .height("7%")
+            .margin({top:"3%"})
+            Flex({ justifyContent: FlexAlign.Center, alignItems: ItemAlign.Center }){
+              Search({ value: this.changeValue, placeholder: '搜索', controller: this.searchcontroller })
+                .width('95%')
+                .height(40)
+                .placeholderFont({ size: 14, weight: 400 })
+                .textFont({ size: 14, weight: 400 })
+                .onChange((value: string) => {
+                  this.changeValue = value.trim()
+                })
+                .margin({top:20})
+            }
+            .height("8%")
+            Tabs({ barPosition: BarPosition.Start, controller: this.servicetab }) {
+              TabContent() {
+                  Column() {
+                    Scroll(this.scroller) {
+                      Flex({
+                        justifyContent: FlexAlign.Start,
+                        alignItems: ItemAlign.Start,
+                        direction: FlexDirection.Column
+                      }) {
+                        ForEach(this.applist, (item: number) => {
+                          if (appList[item].app_name.includes(this.changeValue)) {
+                            APPItem({ item: item,pathStack: this.pathStack, ncs: this.ncs })
+                              .margin({ top: 15 })
+                              .width("100%")
+                          }
+                        })
+                      }
+                    }
+                  }.height("100%")
+              }.tabBar(SubTabBarStyle.of("全部"))
+
+              TabContent() {
+                Column() {
+                  Scroll() {
+                    Flex({
+                      justifyContent: FlexAlign.Start,
+                      alignItems: ItemAlign.Start,
+                      direction: FlexDirection.Column
+                    }) {
+                      ForEach(this.applist, (item: number) => {
+                        if (appList[item].category == "study") {
+                          if (appList[item].app_name.includes(this.changeValue)) {
+                            APPItem({ item: item , pathStack: this.pathStack, ncs: this.ncs})
+                              .margin({ top: 15 })
+                              .width("100%")
+                          }
+                        }
+
+                      })
+
+                    }
+                  }
+                }.height("100%")
+              }.tabBar(SubTabBarStyle.of("学习"))
+              TabContent() {
+                Column() {
+                  Scroll() {
+                    Flex({
+                      justifyContent: FlexAlign.Start,
+                      alignItems: ItemAlign.Start,
+                      direction: FlexDirection.Column
+                    }) {
+                      ForEach(this.applist, (item: number) => {
+                        if (appList[item].category == "life") {
+                          if (appList[item].app_name.includes(this.changeValue)) {
+                            APPItem({ item: item, pathStack: this.pathStack, ncs: this.ncs })
+                              .margin({ top: 15 })
+                              .width("100%")
+                          }
+                        }
+
+                      })
+
+                    }
+                  }
+                }.height("100%")
+              }.tabBar(SubTabBarStyle.of("生活"))
+              TabContent() {
+                Column() {
+                  Scroll() {
+                    Flex({
+                      justifyContent: FlexAlign.Start,
+                      alignItems: ItemAlign.Start,
+                      direction: FlexDirection.Column
+                    }) {
+                      ForEach(this.applist, (item: number) => {
+                        if (appList[item].category == "office") {
+                          if (appList[item].app_name.includes(this.changeValue)) {
+                            APPItem({ item: item , pathStack: this.pathStack, ncs: this.ncs})
+                              .margin({ top: 15 })
+                              .width("100%")
+                          }
+                        }
+
+                      })
+
+                    }
+                  }
+                }.height("100%")
+              }.tabBar(SubTabBarStyle.of("工作"))
+              TabContent() {
+                Column() {
+                  Scroll() {
+                    Flex({
+                      justifyContent: FlexAlign.Start,
+                      alignItems: ItemAlign.Start,
+                      direction: FlexDirection.Column
+                    }) {
+                      ForEach(this.applist, (item: number) => {
+                        if (appList[item].category == "life") {
+                          if (appList[item].app_name.includes(this.changeValue)) {
+                            APPItem({ item: item, pathStack: this.pathStack, ncs: this.ncs })
+                              .margin({ top: 15 })
+                              .width("100%")
+                          }
+                        }
+
+                      })
+
+                    }
+                  }
+                }
+                .height("100%")
+              }.tabBar(SubTabBarStyle.of("生活"))
+              TabContent() {
+                Column() {
+                  Scroll() {
+                    Flex({
+                      justifyContent: FlexAlign.Start,
+                      alignItems: ItemAlign.Start,
+                      direction: FlexDirection.Column
+                    }) {
+                      ForEach(this.applist, (item: number) => {
+                        if (appList[item].category == "social") {
+                          if (appList[item].app_name.includes(this.changeValue)) {
+                            APPItem({ item: item, pathStack: this.pathStack, ncs: this.ncs })
+                              .margin({ top: 15 })
+                              .width("100%")
+                          }
+                        }
+
+                      })
+
+                    }
+                    .constraintSize({ minHeight: '100%' })
+                  }
+                }.height("100%")
+              }.tabBar(SubTabBarStyle.of("社交"))
+              TabContent() {
+                Column(){
+                  Scroll() {
+                    Flex({
+                      justifyContent: FlexAlign.Start,
+                      alignItems: ItemAlign.Start,
+                      direction: FlexDirection.Column
+                    }) {
+                      ForEach(this.applist, (item: number) => {
+                        if (appList[item].category == "fun") {
+                          if (appList[item].app_name.includes(this.changeValue)) {
+                            APPItem({ item: item , pathStack: this.pathStack, ncs: this.ncs})
+                              .margin({ top: 15 })
+                              .width("100%")
+                          }
+                        }
+
+                      })
+
+                    }
+                  }
+                }.height("100%")
+              }.tabBar(SubTabBarStyle.of("游戏"))
+              .height("100%")
+            }
+            .layoutWeight(1)
+            .scrollable(true)
+
+          }
+          .padding(5)
+        }.tabBar(BottomTabBarStyle.of($rawfile("icon_service_all.png"),"服务大厅").labelStyle({font:{size:13}}))
+        .align(Alignment.Top)
 
         TabContent() {
           Column() {
@@ -519,7 +720,7 @@ struct  Navigators {
             List({ space: 7 }) {
               ListItem() {
                 Column() {
-                  if (this.devicety == "2in1" || this.devicety == "tablet") {
+                  if (this.devicety == "2in1" || this.devicety == "tablet" || this.devicety == "tv") {
                     Row() {
                       Text("免登录验证")
                         .height(50)
@@ -589,7 +790,7 @@ struct  Navigators {
                   .height(50)
                   .margin({ top: "5%" })
 
-                  if (this.devicety != "2in1") {
+                  if (this.devicety != "2in1"&& this.devicety!="tv") {
                     Row() {
                       Text("开电子房门")
                         .height(50)
@@ -829,7 +1030,7 @@ struct  Navigators {
                   .height(50)
                   .margin({ top: "5%" })
 
-                  if (this.devicety == "2in1" || this.devicety == "tablet") {
+                  if (this.devicety == "2in1" || this.devicety == "tablet" || this.devicety == "tv") {
                     Row() {
                       Text("PC模式")
                         .height(50)
@@ -903,12 +1104,17 @@ struct  Navigators {
                         .height(100)
                         .borderRadius(35)
                         .fillColor($r('app.color.background'))
+                        .syncLoad(true)
                       Text(this.nickname)
                         .margin({ top: "3.5%" })
                         .fontWeight(FontWeight.Bold)
                         .fontSize(17)
                         .fontColor($r('app.color.text'))
                     }else {
+                      Image($rawfile("login.jpg"))
+                        .height(100)
+                        .borderRadius(35)
+                        .fillColor($r('app.color.background'))
                       Text("访客")
                         .margin({ top: "3.5%" })
                         .fontWeight(FontWeight.Bold)
@@ -972,27 +1178,64 @@ struct  Navigators {
                   }.margin({ bottom: "3%" })
 
                 }
-              }
+                ListItem() {
+                  Flex({ direction: FlexDirection.Row, justifyContent: FlexAlign.Center, alignItems: ItemAlign.End }) {
+                    Column() {
+                      Button({ type: ButtonType.Circle, stateEffect: true }) {
+                        Image($rawfile("icon_mine_about.png"))
+                          .borderRadius(35)
+                          .height("50%")
+                      }
+                      .onClick(() => {
+                        this.pathStack.pushPath({ name: "作者信息" })
+                      })
+                      .width(80).height(80).backgroundColor($r('app.color.background'))
 
-              ListItem() {
-                Flex({ direction: FlexDirection.Row, justifyContent: FlexAlign.Center, alignItems: ItemAlign.End }) {
-                  Column() {
-                    Button({ type: ButtonType.Circle, stateEffect: true }) {
-                      Image($rawfile("icon_mine_about.png"))
-                        .borderRadius(35)
-                        .height("50%")
+                      Text("联系我们").margin({ top: "1%" })
+                        .fontSize(15)
+                        .fontColor($r('app.color.text'))
                     }
-                    .onClick(() => {
-                      this.pathStack.pushPath({ name: "作者信息" })
-                    })
-                    .width(80).height(80).backgroundColor($r('app.color.background'))
+                  }.margin({ bottom: "3%" })
 
-                    Text("联系我们").margin({ top: "1%" })
-                      .fontSize(15)
-                      .fontColor($r('app.color.text'))
-                  }
-                }.margin({ bottom: "3%" })
+                }
+              } else {
 
+                ListItem() {
+                  Flex({ direction: FlexDirection.Row, justifyContent: FlexAlign.Center, alignItems: ItemAlign.End }) {
+                    Column() {
+                      Button({ type: ButtonType.Circle, stateEffect: true }) {
+                        Image($rawfile("icon_mine_setting.png"))
+                          .height("50%")
+
+                      }
+                      .onClick(() => {
+                        this.ncs.name = "设置"
+                        this.pathStack.pushPath({ name: "设置" })
+                      })
+                      .width(80).height(80).backgroundColor($r('app.color.background'))
+
+                      Text("设置").margin({ top: "1%" })
+                        .fontSize(15)
+                        .fontColor($r('app.color.text'))
+                    }
+                    Column() {
+                      Button({ type: ButtonType.Circle, stateEffect: true }) {
+                        Image($rawfile("icon_mine_about.png"))
+                          .borderRadius(35)
+                          .height("50%")
+                      }
+                      .onClick(() => {
+                        this.pathStack.pushPath({ name: "作者信息" })
+                      })
+                      .width(80).height(80).backgroundColor($r('app.color.background'))
+
+                      Text("联系我们").margin({ top: "1%" })
+                        .fontSize(15)
+                        .fontColor($r('app.color.text'))
+                    }.margin({left:"12%"})
+                  }.margin({ bottom: "3%"})
+
+                }
               }
             }
             .layoutWeight(1)
@@ -1060,39 +1303,51 @@ struct ChildItem {
   }
 
 }
+
+
 @Component
-struct NoticeItem {
-  @Prop item: number;
+struct APPItem{
+  @Prop item:number;
   @Link pathStack:NavPathStack;
   @Link ncs:mnv ;
+  dialogController: CustomDialogController = new CustomDialogController({
+    builder: DetailDialog({
+      img:appList[this.item].icon,
+      name:appList[this.item].app_name,
+      de:appList[this.item].describe
+    }),
+    autoCancel:true,
+    cancel: ()=> { this.onCancel()},
+  })
 
+
+  onCancel() {
+  }
   build() {
-    Column() {
-      Button({ type: ButtonType.Circle, stateEffect: true }) {
+    Flex({ justifyContent: FlexAlign.SpaceBetween,alignItems:ItemAlign.Center,direction: FlexDirection.Row}) {
+      Row() {
         Image(appList[this.item].icon)
           .borderRadius(25)
-          .height(45)
-          .width(45)
+          .height(40)
+        Text(appList[this.item].app_name)
+          .margin({ left: "8%" })
+          .onClick(() => {
+            this.dialogController.open()
+          })
       }
-      .onClick(() => {
-        this.ncs.accounts = account
-        this.ncs.passwords = password
-        this.ncs.name = appList[this.item].app_name
-        this.ncs.url = appList[this.item].url
-        this.pathStack.pushPathByName("web", this.ncs);
+        Button('打开', { type: ButtonType.Capsule, stateEffect: false })
+          .fontSize(13)
+          .height(25)
+          .onClick((event) => {
+            this.ncs.accounts = account
+            this.ncs.passwords = password
+            this.ncs.name = appList[this.item].app_name
+            this.ncs.url = appList[this.item].url
+            this.pathStack.pushPathByName("web", this.ncs);
+          })
 
-      })
-      .backgroundColor($r('app.color.background'))
-      Text(appList[this.item].app_name).margin({ top: "10%" })
-        .fontSize(11)
-        .fontWeight(FontWeight.Bold)
-        .fontColor($r('app.color.text'))
-
-    }.margin({ left: "2%" ,right:"2%"})
-    .height(70)
-    .width(70)
+    }
+    .padding({left:"5%",right:"5%"})
   }
 
 }
-
-
