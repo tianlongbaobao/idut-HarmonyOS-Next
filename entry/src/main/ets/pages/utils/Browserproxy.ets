@@ -5,6 +5,8 @@ import { webview } from "@kit.ArkWeb";
 import router from '@ohos.router';
 import {ApiLogin} from "../backrequest/apiqr"
 import deviceinfo from '@ohos.deviceInfo';
+import { UPPayment } from 'libuppayment';
+import { common } from '@kit.AbilityKit';
 
 export class browserProxy{
   controller: webview.WebviewController;
@@ -13,10 +15,10 @@ export class browserProxy{
   }
   issueCommand(cmdId:string, cmdName:string, paras:string) {
     let deviceTypeInfo: string = deviceinfo.deviceType;
-    if (deviceTypeInfo=="2in1") {
+    if (deviceTypeInfo=="2in1" || deviceTypeInfo=="tv") {
       AlertDialog.show(
         {
-          message: '2in1设备不支持扫一扫',
+          message: deviceTypeInfo+'设备不支持扫一扫',
           autoCancel: false,
           alignment: DialogAlignment.Bottom,
           gridCount: 5,
@@ -146,4 +148,14 @@ export class browserProxy{
     console.info(sb)
   }
 
+}
+
+export class autocharge{
+  constructor() {
+  }
+  startPay(tn:string){
+    let upPayment = new UPPayment();
+    let context = getContext() as common.UIAbilityContext;
+    upPayment.startPay(tn,"00",'idut',context)
+  }
 }
