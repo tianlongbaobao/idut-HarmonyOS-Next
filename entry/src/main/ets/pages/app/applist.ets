@@ -162,7 +162,7 @@ export let appList:lidy[] = [
     "icon": "https://store.m.dlut.edu.cn/group1/M00/01/2B/ynZM2VwcpHeADVLoAAAxsF8nPV0948.png",
     "describe": "研究生管理信息系统移动版本",
     "popularity": "1804558",
-    "url": "https://api.m.dlut.edu.cn/oauth/authorize?client_id=abccc53d6b78cb01&redirect_uri=http%3a%2f%2fdutgs.dlut.edu.cn%3a8443%2fSmartWap%2foAuth.do&response_type=code&scope=base_api&state=dlut",
+    "url": "https://dutgs.dlut.edu.cn:8443/SmartWap/login.do",
     "issubscription": 0
   },
   {
